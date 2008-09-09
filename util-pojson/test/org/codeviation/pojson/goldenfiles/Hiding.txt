@@ -1,0 +1,12 @@
+{
+    "fBoolean": false,
+    "fDouble": 66.6,
+    "fString": "ping",
+    "fEnum": "CLASS",
+    "fCharacter": "c",
+    "fByte": 1,
+    "fShort": 2,
+    "fInteger": 3,
+    "fLong": 4,
+    "fFloat": 5.5
+}

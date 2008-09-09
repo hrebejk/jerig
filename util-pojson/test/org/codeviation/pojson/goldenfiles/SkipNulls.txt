@@ -1,0 +1,9 @@
+{
+    "fCharacter": "c",
+    "fShort": 2,
+    "fInteger": null,
+    "fLong": 4,
+    "fFloat": 5.5,
+    "fDouble": 6.6,
+    "fString": "string"
+}

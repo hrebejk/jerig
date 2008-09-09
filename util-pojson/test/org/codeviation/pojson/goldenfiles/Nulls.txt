@@ -1,0 +1,12 @@
+{
+    "fBoolean": null,
+    "fCharacter": null,
+    "fByte": null,
+    "fShort": null,
+    "fInteger": null,
+    "fLong": null,
+    "fFloat": null,
+    "fDouble": null,
+    "fString": null,
+    "fEnum": null
+}

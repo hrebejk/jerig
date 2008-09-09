@@ -1,0 +1,8 @@
+{
+    "charArray": null,
+    "intArray": null,
+    "stringArray": null,
+    "enumArray": null,
+    "objectArray": null,
+    "empty": null
+}

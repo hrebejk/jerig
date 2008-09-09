@@ -1,0 +1,12 @@
+{
+    "fBoolean": true,
+    "fCharacter": "c",
+    "fByte": 1,
+    "fShort": 2,
+    "fInteger": 3,
+    "fLong": 4,
+    "fFloat": 5.5,
+    "fDouble": 6.6,
+    "fString": "string",
+    "fEnum": "SOURCE"
+}
