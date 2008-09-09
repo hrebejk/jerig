@@ -195,7 +195,26 @@ public final class FileUtil {
         return name.substring(0, ild);
         
     }
-        
+
+    /** Returns filenane with absolutely no extension. I.e. all after
+     * first dot will be striped off.
+     * @param name
+     */
+    public static String extension(String name) {
+
+        if (name == null) {
+            return null;
+        }
+
+        int ild = name.indexOf('.');
+        if ( ild == -1 ) {
+            return null;
+        }
+
+        return name.substring(ild + 1, name.length());
+
+    }
+
     
     public static URL toURL(File file) throws MalformedURLException {
         return file.toURI().toURL();
