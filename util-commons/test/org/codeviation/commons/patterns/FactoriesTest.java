@@ -150,11 +150,11 @@ public class FactoriesTest {
         Factory<Integer,Point> factoryX = Factories.field(Point.class, "x");
         Factory<Integer,Point> factoryY = Factories.field(Point.class, "y");
         
-        assertEquals(1, factoryX.create(p1));
-        assertEquals(10, factoryY.create(p1));
+        assertEquals(Integer.valueOf(1), factoryX.create(p1));
+        assertEquals(Integer.valueOf(10), factoryY.create(p1));
         
-        assertEquals(2, factoryX.create(p2));
-        assertEquals(20, factoryY.create(p2));
+        assertEquals(Integer.valueOf(2), factoryX.create(p2));
+        assertEquals(Integer.valueOf(20), factoryY.create(p2));
         
     } 
       
@@ -185,9 +185,9 @@ public class FactoriesTest {
         Factory<Integer,String> factory = Factories.method(String.class, StaticMethodTestClass.class, "get");
         //Factory<Integer,String> factory = Factories.<Integer,String>method(String.class, Point.class, "get");
         
-        assertEquals(1, factory.create("1"));
-        assertEquals(2, factory.create("2"));
-        assertEquals(254, factory.create("254"));
+        assertEquals(Integer.valueOf(1), factory.create("1"));
+        assertEquals(Integer.valueOf(2), factory.create("2"));
+        assertEquals(Integer.valueOf(254), factory.create("254"));
     } 
     
     @Test
