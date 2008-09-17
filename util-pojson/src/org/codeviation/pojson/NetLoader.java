@@ -66,6 +66,14 @@ public class NetLoader {
         return loader.load( UrlUriUtil.getInputStream(url), clazz );
     }
 
+    public Object toCollections(URL url) throws IOException {
+        return loader.toCollections( UrlUriUtil.getInputStream(url) ) ;
+    }
+
+    public Object toCollections(URI uri) throws IOException {
+        return loader.toCollections( UrlUriUtil.getInputStream(uri) ) ;
+    }
+
 
 //  maybe add later
 

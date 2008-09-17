@@ -64,13 +64,8 @@ public class PojsonLoad {
         return i.getValue();
     }
     
-    public Object toCollections(String s) throws IOException {
-        try {
-            return toCollections( new ByteArrayInputStream(s.getBytes())) ;
-        }
-        catch( IOException ex ) {
-            throw new IllegalStateException();
-        }
+    public Object toCollections(String s) throws IOException {        
+        return toCollections( new ByteArrayInputStream(s.getBytes())) ;        
     }
     
     /** XXX for now does not handle arrays correctly
