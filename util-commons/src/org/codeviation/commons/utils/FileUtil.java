@@ -144,7 +144,7 @@ public final class FileUtil {
      * @return
      */
     public static File resolve( String parent, String path) {
-        return resolve( new File(parent), new File(path));
+        return resolve( new File(parent), path == null ? null : new File(path));
     }
 
     /** If f is absoulte returns f else it returns new File(parent, f.getParh())
@@ -154,7 +154,7 @@ public final class FileUtil {
      * @return
      */
     public static File resolve( File parent, String path) {
-        return resolve( parent, new File(path));
+        return resolve( parent, path == null ? null : new File(path));
     }
 
     
@@ -166,7 +166,10 @@ public final class FileUtil {
      */
     public static File resolve( File parent, File path) {
 
-        if ( path.isAbsolute() ) {
+        if ( path == null ) {
+            return parent;
+        }
+        else if ( path.isAbsolute() ) {
             return path;
         }
         else {
