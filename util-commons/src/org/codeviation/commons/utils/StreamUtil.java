@@ -42,12 +42,16 @@
 package org.codeviation.commons.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  *
@@ -102,5 +106,40 @@ public final class StreamUtil {
         br.close();        
         
     }
-    
+
+    public static void unzip( InputStream is, File target ) throws IOException {
+
+        ZipInputStream zis = new ZipInputStream(is);
+
+        byte buffer[] = new byte[BUFFER_SIZE];
+
+        ZipEntry ze = zis.getNextEntry();
+        while( ze != null ) {
+            System.out.println("" + ze.getName() + ":" + " " + ze.getSize() );
+
+            if ( ze.isDirectory() ) {
+                new File(target, ze.getName()).mkdirs();
+            }
+            else {
+                File f = new File(target, ze.getName());
+                f.createNewFile();
+                OutputStream os = new FileOutputStream(f);
+                int read = -1;
+                do {
+                    read = zis.read(buffer);
+                    if ( read != -1 ) {
+                        os.write(buffer, 0, read);
+                        os.flush();
+                    }
+                }
+                while( read != -1 );
+                os.close();
+            }
+
+            zis.closeEntry();
+            ze = zis.getNextEntry();
+        }
+        
+    }
+
 }
