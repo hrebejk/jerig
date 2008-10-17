@@ -109,7 +109,26 @@ public final class FileUtil {
         os.close();
     }
     
-    
+    public static boolean delete(File what) {
+
+        boolean result = true;
+
+        if (what.isDirectory() ) {
+            File[] files = what.listFiles();
+            if ( files != null && files.length != 0 ) {
+                for( File f : files ) {
+                    result = result ? delete(f) : false;
+                }
+            }
+        }
+
+        result = result ? what.delete() : false;
+        
+        return result;
+    }
+
+
+
     public static Factory<File,String> fileFactory(File root) {
         return new FileFactory(root, null);
     }
