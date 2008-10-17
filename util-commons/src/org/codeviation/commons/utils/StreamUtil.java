@@ -103,14 +103,18 @@ public final class StreamUtil {
         
     }
 
-    public OutputStream nullOutputStream() {
+    public static OutputStream nullOutputStream() {
         return new NullOutputStream();
+    }
+    
+    public static Writer nullWriter() {
+        return new OutputStreamWriter( new NullOutputStream() );
     }
 
     private static class NullOutputStream extends OutputStream {
         @Override
         public void write(int b) throws IOException {
-            // Intentionallt empty
+            // Intentionally empty
         }
     }
 
