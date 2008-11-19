@@ -84,7 +84,7 @@ public final class StreamUtil {
         return sb.toString();
     }
 
-    public static Iterator<String> asLines(InputStream is) {
+    public static Iterator<String> asLines(InputStream is) throws IOException {
         return new LineIterator(is);
     }
     
@@ -133,9 +133,10 @@ public final class StreamUtil {
         private InputStream is;
         private BufferedReader br;
 
-        public LineIterator(InputStream is) {
+        public LineIterator(InputStream is) throws IOException {
             this.is = is;
             this.br = new BufferedReader(new InputStreamReader(is));
+            this.line = getNextLine();
         }
 
         public boolean hasNext() {
