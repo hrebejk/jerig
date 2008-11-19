@@ -46,6 +46,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Iterator;
 
 /**
  *
@@ -88,6 +89,14 @@ public final class UrlUriUtil {
         finally {
             is.close();
         }
+    }
+
+    public static Iterator<String> asLines( URL url ) throws IOException {
+        return StreamUtil.asLines(getInputStream(url));
+    }
+
+    public static Iterator<String> asLines( URI uri ) throws IOException {
+        return StreamUtil.asLines(getInputStream(uri));
     }
 
 }

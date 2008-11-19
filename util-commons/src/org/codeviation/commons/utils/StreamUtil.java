@@ -47,7 +47,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -77,6 +82,10 @@ public final class StreamUtil {
         
         br.close();
         return sb.toString();
+    }
+
+    public static Iterator<String> asLines(InputStream is) {
+        return new LineIterator(is);
     }
     
     public static void copy(InputStream is, OutputStream os) throws IOException {
@@ -118,7 +127,47 @@ public final class StreamUtil {
         }
     }
 
+    private static class LineIterator implements Iterator<String> {
 
+        private String line;
+        private InputStream is;
+        private BufferedReader br;
+
+        public LineIterator(InputStream is) {
+            this.is = is;
+            this.br = new BufferedReader(new InputStreamReader(is));
+        }
+
+        public boolean hasNext() {
+            return line != null;
+        }
+
+        public String next() {
+            if ( line == null ) {
+                throw new NoSuchElementException();
+            }
+            else {
+                String oldLine = line;
+                try {
+                    line = getNextLine();
+                    if (line == null) {
+                        is.close();
+                    }
+                } catch (IOException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                return oldLine;
+            }
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("Unmodifiable");
+        }
+
+        private String getNextLine() throws IOException {
+            return br.readLine();
+        }
+    }
 
 
 }
