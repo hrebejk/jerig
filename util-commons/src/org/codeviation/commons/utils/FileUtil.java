@@ -87,7 +87,7 @@ public final class FileUtil {
         return new String(bbuf, 0, size);
     }
 
-    public static Iterator<String> asLines(File f) throws FileNotFoundException {
+    public static Iterator<String> asLines(File f) throws FileNotFoundException, IOException {
         return StreamUtil.asLines(new FileInputStream(f));
     }
 
