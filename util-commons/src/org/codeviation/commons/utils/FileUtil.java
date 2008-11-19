@@ -51,6 +51,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.patterns.Filter;
 
@@ -85,7 +86,11 @@ public final class FileUtil {
         
         return new String(bbuf, 0, size);
     }
-    
+
+    public static Iterator<String> asLines(File f) throws FileNotFoundException {
+        return StreamUtil.asLines(new FileInputStream(f));
+    }
+
     public static void fromString( File f, String... strings) throws FileNotFoundException, IOException {
         
         OutputStream os = new BufferedOutputStream( new FileOutputStream(f) );
