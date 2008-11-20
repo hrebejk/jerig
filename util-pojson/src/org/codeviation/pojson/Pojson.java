@@ -66,7 +66,20 @@ public class Pojson {
     static final String DEFAULT_EXTENSION = ".json";
     
     private Pojson() {}
-        
+
+    /** General annotation to mark classes as Pojson records. This annotation
+     * may be used for other frameworks to distinguish between serializable and
+     * not serializable objects. The annotation is currently not used in pojson.
+     *
+     * XXX Put a checker for this anotation to PojsonSave.
+     *
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface Record {
+        // Intentionally empty
+    }
+
     /** Tells Pojson that given field should not be stored
      *
      */
