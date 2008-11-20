@@ -109,6 +109,10 @@ public class CollectionsUtil {
         
         return target;
     }
+
+    public static <T, C extends Collection<T>, Q extends T> C add(C target, Iterable<Q> it) {
+        return add(target, it.iterator());
+    }
     
     public static <T, C extends Collection<T>, Q extends Collection<? extends T>> C add(C target, Q source, Filter<? super T> filter) {
         for (T t : source) {
