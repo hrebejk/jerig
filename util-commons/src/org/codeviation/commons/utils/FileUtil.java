@@ -144,7 +144,7 @@ public final class FileUtil {
     }
 
     public static File file(File parent, String... pathElements) {
-        return new File(parent, path(pathElements));
+        return new File(parent, path(File.separatorChar, pathElements));
     }
 
     public static String path(String... pathElements) {

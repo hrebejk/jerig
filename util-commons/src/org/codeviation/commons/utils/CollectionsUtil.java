@@ -46,8 +46,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
 
 /** Convenience methods for working with collections.
  *
@@ -57,7 +55,7 @@ public class CollectionsUtil {
         
     private CollectionsUtil() {}
     
-    public static <T,Q extends T> HashSet<T> hashSet(Q... params) {
+    public static <T> HashSet<T> hashSet(T... params) {
         HashSet<T> s = new HashSet<T>(params.length);
         for (T p : params) {
             s.add(p);
@@ -65,7 +63,7 @@ public class CollectionsUtil {
         return s;
     }
     
-    public static <T,Q extends T> HashSet<T> hashSet(Collection<Q> original,  Filter<T> filter) {
+    public static <T> HashSet<T> hashSet(Collection<? extends T> original,  Filter<T> filter) {
         HashSet<T> s = new HashSet<T>(original.size());
         for (T p : original) {
             if ( filter.accept(p)) {
