@@ -91,6 +91,19 @@ public final class FileUtil {
         return StreamUtil.asLines(new FileInputStream(f));
     }
 
+    public static void copy( File src, File dest ) throws IOException {
+
+        InputStream is = new FileInputStream(src);
+        FileOutputStream os = new FileOutputStream(dest);
+
+        StreamUtil.copy( is, os);
+
+        is.close();
+        os.flush();
+        os.close();
+
+    }
+    
     public static void fromString( File f, String... strings) throws FileNotFoundException, IOException {
         
         OutputStream os = new BufferedOutputStream( new FileOutputStream(f) );

@@ -65,6 +65,12 @@ public class FileFilters {
     public static Filter<File> name(String regexp) {
         return new UniversalFF(regexp);
     }
+
+    public static Filter<File> extension(String extension) {
+        UniversalFF ff =  new UniversalFF(-1);
+        ff.extension = extension;
+        return ff;
+    }
             
     /** Contverts File&lt;Filter&gt; to java.io.FileFilter.
      */
@@ -86,10 +92,12 @@ public class FileFilters {
         public static final int IS_FILE = CAN_EXECUTE + 1;        
         public static final int IS_DIRECTORY = IS_FILE + 1;
         public static final int IS_HIDDEN = IS_DIRECTORY + 1;
+
         
         private int kind = -1;
         private Filter<String> rf;
         private Filter<File> df;
+        private String extension;
         
         public UniversalFF(int kind) {
             this.kind = kind;
@@ -98,7 +106,8 @@ public class FileFilters {
         public UniversalFF(String regexp) {
             this.rf = Filters.Regexp(regexp);
         }
-        
+
+
         public UniversalFF(Filter<File> df) {
             this.df = df;
         }
@@ -111,6 +120,10 @@ public class FileFilters {
             
             if ( rf != null ) {
                 return rf.accept(file.getName());                 
+            }
+
+            if ( extension != null ) {
+                return file.getName().endsWith(extension);
             }
             
             switch(kind) {
