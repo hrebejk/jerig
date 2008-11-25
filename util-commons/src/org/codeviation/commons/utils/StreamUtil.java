@@ -41,6 +41,8 @@
 
 package org.codeviation.commons.utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,28 +91,44 @@ public final class StreamUtil {
     }
     
     public static void copy(InputStream is, OutputStream os) throws IOException {
-        copy( is, new OutputStreamWriter(os) );
-    }
-    
-    public static void copy(InputStream is, Writer w) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(is);
+        BufferedOutputStream bos = new BufferedOutputStream(os);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        
-        char buffer[] = new char[BUFFER_SIZE];
-        
+        byte buffer[] = new byte[BUFFER_SIZE]; // XXX optimize buffer size
+
         int read = -1;
         do {
-            read = br.read(buffer);
+            read = bis.read(buffer);
             if ( read != -1 ) {
-                w.write(buffer, 0, read);
-                w.flush();
+                bos.write(buffer, 0, read);
             }
         }
         while( read != -1 );
-        
-        br.close();        
-        
+
+        bos.flush();
+        bos.close();
+        bis.close();
     }
+    
+//    public static void copy(InputStream is, Writer w) throws IOException {
+//
+//        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//
+//        char buffer[] = new char[BUFFER_SIZE];
+//
+//        int read = -1;
+//        do {
+//            read = br.read(buffer);
+//            if ( read != -1 ) {
+//                w.write(buffer, 0, read);
+//                w.flush();
+//            }
+//        }
+//        while( read != -1 );
+//
+//        br.close();
+//
+//    }
 
     public static OutputStream nullOutputStream() {
         return new NullOutputStream();
