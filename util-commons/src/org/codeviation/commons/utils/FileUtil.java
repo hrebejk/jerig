@@ -142,7 +142,11 @@ public final class FileUtil {
     public static Factory<File,String> fileFactory(File root, Filter<File> filter) {
         return new FileFactory(root, filter);
     }
-        
+
+    public static File file(File parent, String... pathElements) {
+        return new File(parent, path(pathElements));
+    }
+
     public static String path(String... pathElements) {
         return path( File.pathSeparatorChar, pathElements);
     }
