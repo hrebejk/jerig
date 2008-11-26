@@ -23,6 +23,8 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
     private Semaphore s;
     private String name;
     private int permits;
+    private volatile boolean stop;
+    private Thread t;
 
     public QueueProcessor(String name, int permits) {
         this.name = name;
@@ -31,8 +33,14 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
         this.permits = permits;
     }
 
-    public void start() {
-        new Thread(this, name).start();
+    public synchronized void start() {
+        t = new Thread(this, name);
+        t.start();
+    }
+
+    public synchronized void  stop() {
+        stop = true;
+        t.interrupt();
     }
 
     public void add( E e ) {
@@ -66,7 +74,7 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
     protected abstract void processEvent(E e);
 
     public void run() {
-        while( true ) {
+        while( !stop ) {
             try {
                 // Get next available event
                 E e = q.take();
@@ -79,7 +87,7 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
                 Processor p = new Processor(e);
                 new Thread(p).start();
             } catch (InterruptedException ex) {
-                Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
