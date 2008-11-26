@@ -40,7 +40,9 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
 
     public synchronized void  stop() {
         stop = true;
-        t.interrupt();
+        if ( t != null) {
+            t.interrupt();
+        }
     }
 
     public void add( E e ) {
