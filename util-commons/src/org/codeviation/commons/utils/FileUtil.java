@@ -160,6 +160,14 @@ public final class FileUtil {
         return new File(parent, path(File.separatorChar, pathElements));
     }
 
+    public static void assureDirectory( File directory ) throws IOException {
+        if ( !directory.isDirectory() ) {
+            if (!directory.mkdirs() ) {
+                throw new IOException("Can't create directory : " + directory.getAbsolutePath());
+            }
+        }
+    }
+
     public static String path(String... pathElements) {
         return path( File.pathSeparatorChar, pathElements);
     }
