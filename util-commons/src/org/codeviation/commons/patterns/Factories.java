@@ -65,6 +65,10 @@ public class Factories {
     private Factories() {
     }
 
+    public static <T,P extends T> Factory<T,P> defaultValue(T defaultValue) {
+        return new Default<T,P>(defaultValue);
+    }
+
     public static <T, P> Factory<T[], P[]> array(Factory<T, P> elementFactory, Class... productClass) {
         return new ArrayFactory<T, P>(elementFactory, null, ArrayFactory.getProductClass(productClass));
     }
@@ -355,5 +359,19 @@ public class Factories {
             return param.toString();
         }
         
+    }
+
+    private static class Default<T,P extends T> implements Factory<T, P> {
+
+        private T dflt;
+
+        public Default(T dflt) {
+            this.dflt = dflt;
+        }
+
+        public T create(P param) {
+            return param == null ? dflt : param;
+        }
+
     }
 }
