@@ -213,15 +213,42 @@ public class FileUtilTest {
      * Test of extension method, of class FileUtil.
      */
     @Test
+    public void testExtensions() {
+        String name = "a.b.c";
+        assertEquals("b.c", FileUtil.extensions(name));
+
+        name = "a.b";
+        assertEquals("b", FileUtil.extensions(name));
+
+        name = null;
+        assertNull(FileUtil.extensions(name));
+
+        name = "";
+        assertEquals("", FileUtil.extensions(name));
+
+        name = "a.";
+        assertEquals("", FileUtil.extensions(name));
+
+        name = ".x";
+        assertEquals("x", FileUtil.extensions(name));
+    }
+
+    /**
+     * Test of extension method, of class FileUtil.
+     */
+    @Test
     public void testExtension() {
         String name = "a.b.c";
-        assertEquals("b.c", FileUtil.extension(name));
+        assertEquals("c", FileUtil.extension(name));
 
         name = "a.b";
         assertEquals("b", FileUtil.extension(name));
 
         name = null;
         assertNull(FileUtil.extension(name));
+
+        name = "";
+        assertEquals("", FileUtil.extension(name));
 
         name = "a.";
         assertEquals("", FileUtil.extension(name));

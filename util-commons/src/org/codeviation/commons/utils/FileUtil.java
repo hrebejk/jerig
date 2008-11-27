@@ -248,8 +248,28 @@ public final class FileUtil {
         
     }
 
-    /** Returns filenane with absolutely no extension. I.e. all after
-     * first dot will be striped off.
+    /** Returns all extensions of given file name. E.g. all chars after
+     * the first dot.
+     * @param name
+     */
+    public static String extensions(String name) {
+
+        if (name == null) {
+            return null;
+        }
+
+        int ild = name.indexOf('.');
+        if ( ild == -1 ) {
+            return "";
+        }
+
+        return name.substring(ild + 1, name.length());
+
+    }
+
+
+    /** Returns extension of given file name. E.g. all chars after
+     * the last dot.
      * @param name
      */
     public static String extension(String name) {
@@ -258,15 +278,14 @@ public final class FileUtil {
             return null;
         }
 
-        int ild = name.indexOf('.');
+        int ild = name.lastIndexOf('.');
         if ( ild == -1 ) {
-            return null;
+            return "";
         }
 
         return name.substring(ild + 1, name.length());
 
     }
-
     
     public static URL toURL(File file) throws MalformedURLException {
         return file.toURI().toURL();
