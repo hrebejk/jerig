@@ -205,7 +205,23 @@ public class FactoriesTest {
         assertEquals("A" + f.getPath(), factory1.create(f));
         assertEquals("B" + f.getPath(), factory2.create(f));        
     }
-    
+
+
+    @Test
+    public void defaultValue() {
+        System.out.println("default");
+
+        Factory<Integer,Integer> fii = Factories.<Integer,Integer>defaultValue(-1);
+        assertEquals(new Integer(5), fii.create(5));
+        assertEquals(new Integer(-1), fii.create(null));
+
+
+        Factory<Number,Integer> fni = Factories.<Number,Integer>defaultValue(-1);
+        assertEquals(5, fni.create(5));
+        assertEquals(-1, fni.create(null));
+
+
+    }
     
     // Private section ---------------------------------------------------------
     
