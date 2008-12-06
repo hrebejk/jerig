@@ -228,6 +228,7 @@ class Handlers {
     
     static class PojoInfo extends Info {
 
+
         private Field field;
         private Class<?> clazz;
         private Object o;        // The object
@@ -310,9 +311,10 @@ class Handlers {
         public void addValue(Object value, String name) {
             //System.out.println("aval t." + kind + " " + name + " = " + value);
 
-            if ( field == null ) {
-                return; // Class annotated with IgnoreNonExisting and field does not exist
+            if ( IgnoreInfo.IGNORE == value ) {
+                return;
             }
+
 
             switch( kind ) {
                 case Info.OBJECT:
@@ -366,6 +368,7 @@ class Handlers {
 
     static class IgnoreInfo extends Info {
 
+        static final Object IGNORE = new Object();
 
         public IgnoreInfo(int kind, String name) {
             super( kind, name);
@@ -383,7 +386,7 @@ class Handlers {
 
         @Override
         public Object getValue() {
-            return null;
+            return IGNORE;
         }
 
     }
