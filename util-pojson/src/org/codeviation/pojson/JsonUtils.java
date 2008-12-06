@@ -42,6 +42,7 @@
 package org.codeviation.pojson;
 
 import java.lang.reflect.Array;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.codeviation.commons.reflect.ClassUtils;
@@ -292,6 +293,9 @@ class JsonUtils {
             else if ( Float.class.equals(type) ) {
                 return new Float(n.floatValue());                
             }
+            else if ( Date.class.equals(type) || ClassUtils.isSuperclass(type, Date.class) ) {
+                return new Date( n.longValue() );
+            }
             else {
                 return new Double(n.doubleValue());            
             }
@@ -306,12 +310,6 @@ class JsonUtils {
 //            field.set();
 //            result = fillArray(Collection.class.cast(result));
 //        }       
-//        else if ( type == Date.class || ClassUtils.isSuperclass(type, Date.class)) {
-//            return Pojson.DATE_FORMAT.parse((String)object);
-//        }
-//        else {            
-//            return restore(type, (JSONObject)object);
-//        }
         
         throw new ClassCastException( object.getClass() + " into " + type );
     } 
