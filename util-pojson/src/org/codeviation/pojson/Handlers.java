@@ -229,7 +229,7 @@ class Handlers {
     static class PojoInfo extends Info {
 
         private Field field;
-        private Class clazz;
+        private Class<?> clazz;
         private Object o;        // The object
         private List<Object> al; // List for the array
                 
@@ -276,7 +276,12 @@ class Handlers {
                        i.field = clazz.getField(name);
                        i.clazz = i.field.getType();
                     } catch (NoSuchFieldException ex) {
-                        Logger.getLogger(Handlers.class.getName()).log(Level.SEVERE, null, ex);
+                        if (clazz.isAnnotationPresent(Pojson.IgnoreNonExisting.class)) {
+                            return new IgnoreInfo( FIELD, name);
+                        }
+                        else {
+                            Logger.getLogger(Handlers.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } catch (SecurityException ex) {
                         Logger.getLogger(Handlers.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -304,6 +309,11 @@ class Handlers {
         @Override
         public void addValue(Object value, String name) {
             //System.out.println("aval t." + kind + " " + name + " = " + value);
+
+            if ( field == null ) {
+                return; // Class annotated with IgnoreNonExisting and field does not exist
+            }
+
             switch( kind ) {
                 case Info.OBJECT:
                     try {
@@ -352,5 +362,29 @@ class Handlers {
         }
         
     }
-    
+
+
+    static class IgnoreInfo extends Info {
+
+
+        public IgnoreInfo(int kind, String name) {
+            super( kind, name);
+        }
+
+        @Override
+        public Info createInfo(int kind, String name) {
+            return new IgnoreInfo(kind, null);
+        }
+
+        @Override
+        public void addValue(Object value, String name) {
+            // Does nothing
+        }
+
+        @Override
+        public Object getValue() {
+            return null;
+        }
+
+    }
 }
