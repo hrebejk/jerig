@@ -121,9 +121,11 @@ class Handlers {
         
         private void addValue(Object value) {
             Info i = s.peek();
-            if (i.kind == Info.FIELD) {         // We are an object field
-                s.pop();                        // Go back to object
-                s.peek().addValue(value,i.getName());
+            if (i.kind == Info.FIELD) {         // We are an object field                
+                s.pop(); // Go back to object
+                if (!i.isIgnore() ) {
+                    s.peek().addValue(value,i.getName());
+                }
             }
             else if ( i.kind == Info.ARRAY || i.kind == Info.ROOT ) {  // We are in arrey
                 i.addValue(value, null);        // Just store the value
@@ -141,16 +143,22 @@ class Handlers {
         public static final int ARRAY = 0;
         public static final int OBJECT = 1;
         public static final int FIELD = 2;
+
         
         protected int kind;
         private String name;
+        private boolean ignore;
         
         public Info(int kind, String name) {
+            this(kind, name, false);
+        }
+
+        public Info(int kind, String name, boolean ignore) {
             this.kind = kind;
             this.name = name;
-            
+            this.ignore = ignore;
         }
-                
+
         public String getName() {
             return this.name;
         }
@@ -160,7 +168,11 @@ class Handlers {
         public abstract void addValue(Object value, String name);
         
         public abstract Object getValue();
-        
+
+        public boolean isIgnore() {
+            return ignore;
+        }
+
     }
     
     static class CollectionsInfo extends Info {
@@ -311,10 +323,10 @@ class Handlers {
         public void addValue(Object value, String name) {
             //System.out.println("aval t." + kind + " " + name + " = " + value);
 
-            if ( IgnoreInfo.IGNORE == value ) {
-                return;
-            }
-
+//            if ( IgnoreInfo.IGNORE == value ) {
+//                return;
+//            }
+//
 
             switch( kind ) {
                 case Info.OBJECT:
@@ -326,7 +338,7 @@ class Handlers {
                     catch (IllegalAccessException ex ) { 
                         Logger.getLogger(Handlers.class.getName()).log(Level.SEVERE, null, ex);
                     } 
-                    catch (NoSuchFieldException ex) {
+                    catch (NoSuchFieldException ex) {                        
                         Logger.getLogger(Handlers.class.getName()).log(Level.SEVERE, null, ex);
                     } 
                     catch (SecurityException ex) {
@@ -357,7 +369,7 @@ class Handlers {
                 case Info.ARRAY:
                     return this.al;
                 case Info.ROOT:
-                    return this.o;
+                    return this.o;           
                 default:
                     throw new IllegalStateException();
             }
@@ -368,10 +380,8 @@ class Handlers {
 
     static class IgnoreInfo extends Info {
 
-        static final Object IGNORE = new Object();
-
         public IgnoreInfo(int kind, String name) {
-            super( kind, name);
+            super( kind, name, true);
         }
 
         @Override
@@ -386,7 +396,7 @@ class Handlers {
 
         @Override
         public Object getValue() {
-            return IGNORE;
+            return null;
         }
 
     }

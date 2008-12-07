@@ -43,6 +43,7 @@ package org.codeviation.pojson;
 import org.codeviation.pojson.records.RecordComplex;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
+import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -53,34 +54,58 @@ import static org.junit.Assert.*;
  */
 public class IgnoreNonExistingTest {
 
-    private static String GOLDEN;
-    private static String WITH_NON_EXISTING;
+    private static String WITH_NON_EXISTING_COMPLEX;
+    private static String GOLDEN_COMPLEX;
+
+    private static String WITH_NON_EXISTING_JSON;
+    private static String GOLDEN_JSON;
 
     public IgnoreNonExistingTest() {
     }
 
     @BeforeClass
     public static void init() throws IOException {
-        WITH_NON_EXISTING = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/ComplexIgnoreNonExisting.txt");
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Complex.txt");
+        WITH_NON_EXISTING_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/ComplexIgnoreNonExisting.txt");
+        GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Complex.txt");
+
+        WITH_NON_EXISTING_JSON = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypesIgnoreNonExisting.txt");
+        GOLDEN_JSON = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypes.txt");
     }
     
     @Test
-    public void ignoreNonExisting() throws IOException {
-        System.out.println("ignoreNonExisting");
+    public void ignoreNonExistingJson() throws IOException {
+        System.out.println("ignoreNonExistingJson");
 
         PojsonLoad load = PojsonLoad.create();
-        RecordComplex record = load.load(WITH_NON_EXISTING, ComplexINE.class); // This should not throw execprion
+        RecordPrimitiveTypes record = load.load(WITH_NON_EXISTING_JSON, PrimitiveINE.class); // This should not throw execprion
+
+        PojsonSave<RecordPrimitiveTypes> save = PojsonSave.create(RecordPrimitiveTypes.class);
+        assertEquals( GOLDEN_JSON, save.asString(record)); // Save should be like by complex record
+        
+    }
+
+    @Test
+    public void ignoreNonExistingComplex() throws IOException {
+        System.out.println("ignoreNonExistingComplex");
+
+        PojsonLoad load = PojsonLoad.create();
+        RecordComplex record = load.load(WITH_NON_EXISTING_COMPLEX, ComplexINE.class); // This should not throw execprion
 
         PojsonSave<RecordComplex> save = PojsonSave.create(RecordComplex.class);
-        assertEquals( GOLDEN, save.asString(record)); // Save should be like by complex record
-        
-    } 
+        assertEquals( GOLDEN_COMPLEX, save.asString(record)); // Save should be like by complex record
+
+    }
 
         
     @Pojson.IgnoreNonExisting
     @Pojson.StopAt(RecordComplex.class)
     public static class ComplexINE extends RecordComplex {
+
+    }
+
+    @Pojson.IgnoreNonExisting
+    @Pojson.StopAt(RecordPrimitiveTypes.class)
+    public static class PrimitiveINE extends RecordPrimitiveTypes {
 
     }
 
