@@ -73,9 +73,9 @@ class JsonUtils {
         else if ( object instanceof String ) {
             return quote((String)object);
         }
-//        else if ( object instanceof Date ) {
-//            return quote( Pojson.DATE_FORMAT.format((Date)object) );
-//        }
+        else if ( object instanceof Date ) {
+            return numberToString(((Date)object).getTime() );
+        }
         if (object instanceof Byte || 
             object instanceof Short ||
             object instanceof Integer || 

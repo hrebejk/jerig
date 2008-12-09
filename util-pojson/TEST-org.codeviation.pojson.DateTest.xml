@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="phrebejk-nb" name="org.codeviation.pojson.DateTest" tests="3" time="0.146" timestamp="2008-12-09T16:54:27">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="sun.boot.library.path" value="/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/i386" />
+    <property name="java.vm.version" value="11.0-b11" />
+    <property name="java.vm.vendor" value="Sun Microsystems Inc." />
+    <property name="java.vendor.url" value="http://java.sun.com/" />
+    <property name="path.separator" value=":" />
+    <property name="java.vm.name" value="Java HotSpot(TM) Server VM" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="user.country" value="US" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="user.dir" value="/home/phrebejk/space/dc/ncd/util-pojson" />
+    <property name="java.runtime.version" value="1.6.0_10-beta-b23" />
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+    <property name="java.endorsed.dirs" value="/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/endorsed" />
+    <property name="os.arch" value="i386" />
+    <property name="java.io.tmpdir" value="/tmp" />
+    <property name="line.separator" value="
+" />
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="os.name" value="Linux" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="java.library.path" value="/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/i386/server:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/i386:/home/phrebejk/opt/java/jdk1.6.0_10/jre/../lib/i386:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/i386/client:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/i386:/home/phrebejk/opt/java/jdk1.6.0_10/jre/../lib/i386:/usr/java/packages/lib/i386:/lib:/usr/lib" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="java.class.version" value="50.0" />
+    <property name="sun.management.compiler" value="HotSpot Tiered Compilers" />
+    <property name="os.version" value="2.6.24-22-generic" />
+    <property name="user.home" value="/home/phrebejk" />
+    <property name="user.timezone" value="" />
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="java.specification.version" value="1.6" />
+    <property name="user.name" value="phrebejk" />
+    <property name="java.class.path" value="/home/phrebejk/src/netbeans/BUILDS/my/java2/ant/patches/72080.jar:/home/phrebejk/src/netbeans/BUILDS/my/java2/ant/patches/ant-42275.jar:/home/phrebejk/src/netbeans/BUILDS/my/java2/ant/lib/ant.jar:/home/phrebejk/src/netbeans/BUILDS/my/java2/ant/lib/ant-junit.jar:/home/phrebejk/space/dc/ncd/util-commons/build/classes:/home/phrebejk/space/dc/ncd/util-commons/src:/home/phrebejk/space/dc/ncd/util-pojson/build/classes:/home/phrebejk/space/dc/ncd/util-pojson/src:/home/phrebejk/space/dc/ncd/lib/junit/junit-3.8.2.jar:/home/phrebejk/space/dc/ncd/lib/junit_4/junit-4.5.jar:/home/phrebejk/space/dc/ncd/util-pojson/build/test/classes:/home/phrebejk/space/dc/ncd/util-pojson/test" />
+    <property name="java.vm.specification.version" value="1.0" />
+    <property name="sun.arch.data.model" value="32" />
+    <property name="java.home" value="/home/phrebejk/opt/java/jdk1.6.0_10/jre" />
+    <property name="java.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="user.language" value="en" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="java.version" value="1.6.0_10-beta" />
+    <property name="java.ext.dirs" value="/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/ext:/usr/java/packages/lib/ext" />
+    <property name="sun.boot.class.path" value="/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/resources.jar:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/rt.jar:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/sunrsasign.jar:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/jsse.jar:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/jce.jar:/home/phrebejk/opt/java/jdk1.6.0_10/jre/lib/charsets.jar:/home/phrebejk/opt/java/jdk1.6.0_10/jre/classes" />
+    <property name="java.vendor" value="Sun Microsystems Inc." />
+    <property name="file.separator" value="/" />
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="sun.desktop" value="gnome" />
+    <property name="sun.cpu.isalist" value="" />
+  </properties>
+  <testcase classname="org.codeviation.pojson.DateTest" name="dateFromLong" time="0.035" />
+  <testcase classname="org.codeviation.pojson.DateTest" name="dateWrite" time="0.0" />
+  <testcase classname="org.codeviation.pojson.DateTest" name="dateToLong" time="0.0010" />
+  <system-out><![CDATA[dateFromLong
+dateFromDate
+dateFromDate
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
