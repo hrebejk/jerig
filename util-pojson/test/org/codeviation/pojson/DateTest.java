@@ -68,9 +68,9 @@ public class DateTest {
     */
     
     @Test
-    public void date() throws IOException {
+    public void dateFromLong() throws IOException {
 
-        System.out.println("date");
+        System.out.println("dateFromLong");
         
         Date d = new Date(); // Now
         
@@ -85,7 +85,45 @@ public class DateTest {
         assertEquals( d, rdr.timestamp);
         
     }
-    
+
+
+    @Test
+    public void dateWrite() throws IOException {
+
+        System.out.println("dateFromDate");
+
+        Date d = new Date(); // Now
+
+        PojsonSave<RecordDateRead> save = PojsonSave.create(RecordDateRead.class);
+        RecordDateRead rdr = new RecordDateRead();
+        rdr.timestamp = d;
+
+        String s = save.asString(rdr);
+
+        RecordDateRead rdr2 = PojsonLoad.create().load(s, RecordDateRead.class);
+
+        assertEquals( d, rdr2.timestamp);
+
+    }
+
+    @Test
+    public void dateToLong() throws IOException {
+
+        System.out.println("dateToLong");
+
+        Date d = new Date(); // Now
+
+        PojsonSave<RecordDateRead> save = PojsonSave.create(RecordDateRead.class);
+        RecordDateRead rdr = new RecordDateRead();
+        rdr.timestamp = d;
+
+        String s = save.asString(rdr);
+
+        RecordDateWrite rdw = PojsonLoad.create().load(s, RecordDateWrite.class);
+
+        assertEquals( d.getTime(), rdw.timestamp);
+
+    }
     
     public static class RecordDateWrite {
 
