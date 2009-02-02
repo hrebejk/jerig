@@ -160,6 +160,21 @@ public final class FileUtil {
         return new File(parent, path(File.separatorChar, pathElements));
     }
 
+    /** If the file is absolute return the file, if the file is relaative
+     * returns the file under parent.
+     * @param parent
+     * @param file
+     * @return
+     */
+    public static File file(File parent, File file) {
+        if ( parent == null || file == null ) {
+            throw new IllegalArgumentException( "Both parameters must be non null");
+        }
+
+        return file.isAbsolute() ? file : new File(parent, file.getPath());
+                
+    }
+
     public static void assureDirectory( File directory ) throws IOException {
         if ( !directory.isDirectory() ) {
             if (!directory.mkdirs() ) {
