@@ -44,7 +44,6 @@ package org.codeviation.pojson;
 import java.io.IOException;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -54,7 +53,6 @@ import java.util.Set;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.commons.utils.CollectionsUtil;
 import org.codeviation.pojson.records.RecordArrays;
-import org.codeviation.pojson.records.RecordMaps;
 import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -76,7 +74,7 @@ public class IterablesTest {
     @BeforeClass
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Arrays.txt");
-        RA = new RecordArrays();
+        RA = new RecordArrays().init();
     }
     
     @Test
@@ -89,12 +87,8 @@ public class IterablesTest {
         l.add("tri");
         
         
-        PojsonSave save = PojsonSave.create();
-        save.setIndentation(null);
-        save.setIndentLevel(0);
-                
-        assertEquals( "[\"jedna\",\"dve\",\"tri\"]", save.asString(l));
-        
+        Marshaller<List<String>> m = new Marshaller<List<String>>(null, 0);
+        assertEquals( "[\"jedna\",\"dve\",\"tri\"]", m.save(l));        
     }
     
     
@@ -107,11 +101,8 @@ public class IterablesTest {
         s.add("dve");
         s.add("tri");
                 
-        PojsonSave save = PojsonSave.create();
-        save.setIndentation(null);
-        save.setIndentLevel(0);
-                
-        assertEquals( "[\"jedna\",\"dve\",\"tri\"]", save.asString(s));
+        Marshaller<Set<String>> m = new Marshaller<Set<String>>(null, 0);
+        assertEquals( "[\"jedna\",\"dve\",\"tri\"]", m.save(s));
         
     }
             
@@ -126,9 +117,8 @@ public class IterablesTest {
         m.put( "enumArray", CollectionsUtil.add(new ArrayList<RetentionPolicy>(), RA.enumArray) );
         m.put( "objectArray", CollectionsUtil.add(new ArrayList<RecordSmall>(), RA.objectArray) );
         m.put( "empty", new ArrayList<Long>() );
-        
-        PojsonSave save = PojsonSave.create();        
-        assertEquals( GOLDEN, save.asString(m));
+                
+        assertEquals( GOLDEN, Pojson.save(m));
         
         m.clear();
         m.put( "charArray", CollectionsUtil.add(new LinkedHashSet(), 'x', 'y', 'z') );
@@ -138,7 +128,7 @@ public class IterablesTest {
         m.put( "objectArray", CollectionsUtil.add(new LinkedHashSet<RecordSmall>(), RA.objectArray) );
         m.put( "empty", new ArrayList<Long>() );
         
-        assertEquals( GOLDEN, save.asString(m));
+        assertEquals( GOLDEN, Pojson.save(m));
     }
     
     

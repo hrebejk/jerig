@@ -50,9 +50,18 @@ import org.codeviation.pojson.Pojson;
 @Pojson.StopAt(RecordPrimitiveTypes.class)
 public class RecordExtendsPrimitiveTypes extends RecordPrimitiveTypes {
 
-    public boolean fBoolean = false;    
-    public double fDouble = 66.6d;
-    public String fString = "ping";
-    public RetentionPolicy fEnum = RetentionPolicy.CLASS; 
+    public boolean fBoolean;    
+    public double fDouble;
+    public String fString;
+    public RetentionPolicy fEnum;
+
+    public RecordExtendsPrimitiveTypes init() {
+        super.init();
+        fBoolean = false;
+        fDouble = 66.6d;
+        fString = "ping";
+        fEnum = RetentionPolicy.CLASS;
+        return this;
+    }
     
 }

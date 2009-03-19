@@ -42,6 +42,8 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordMaps;
 import org.junit.BeforeClass;
@@ -67,10 +69,31 @@ public class MapsTest {
     @Test @SuppressWarnings("unchecked")
     public void maps() throws IOException {
         System.out.println("maps");
-
-        PojsonSave save = PojsonSave.create();
-        assertEquals( GOLDEN, save.asString(new RecordMaps()));        
+        
+        assertEquals( GOLDEN, Pojson.save(new RecordMaps().init()));
     }
-    
+
+    @Test
+    public void testMapsPure() throws IOException {
+        System.out.println("mapsPure");
+
+        Map<String,Map<String,Integer>> m = new LinkedHashMap<String,Map<String,Integer>>();
+        Map<String,Integer>m1 = new LinkedHashMap<String,Integer>();
+        Map<String,Integer>m2 = new LinkedHashMap<String,Integer>();
+
+        m.put("m1", m1);
+        m.put("m2", m2);
+        m1.put("M1-1", 11);
+        m1.put("M1-2", 12);
+
+        m2.put("M2-1", 13);
+        m2.put("M2-2", 14);
+
+        Marshaller<Map<String,Map<String,Integer>>> ma = new Marshaller<Map<String,Map<String,Integer>>>(null, 0);
+
+        assertEquals( "{\"m1\":{\"M1-1\":11,\"M1-2\":12},\"m2\":{\"M2-1\":13,\"M2-2\":14}}", ma.save(m));
+
+
+    }
     
 }

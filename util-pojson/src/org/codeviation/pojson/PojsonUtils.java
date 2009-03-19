@@ -39,6 +39,11 @@
 
 package org.codeviation.pojson;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
+import org.codeviation.commons.patterns.Filter;
+import org.codeviation.commons.reflect.FieldUtils;
+
 /** Utility methods for endocding/decoding values and other parts of Json format.
  *
  * @author Petr Hrebejk
@@ -92,4 +97,88 @@ public final class PojsonUtils {
         return JsonUtils.toJsonString(value);
     }
     
+    
+    /** Method that creates a Map -> Name to Filed and honors Pojson annotations
+     * 
+     * @param clazz
+     * @return
+     */
+    public static Collection<Field> getFields( Class<?> clazz ) {
+
+        Pojson.StopAt saa = clazz.getAnnotation(Pojson.StopAt.class);
+
+        Class stopClass;
+
+        if ( saa == null ) {
+            stopClass = clazz;
+        }
+        else {
+            stopClass = saa.value();
+            if ( saa.value() == Pojson.StopAtCurrentClass.class ) {
+                stopClass = clazz;
+            }
+        }
+
+        return FieldUtils.getAll(clazz, stopClass, new FieldFilter(clazz)).values();
+
+    }
+
+    private static class FieldFilter implements Filter<Field> {
+
+        private Class<?> clazz;
+        private int[] positive;
+        private int[] negative;
+
+        public FieldFilter(Class<?> clazz) {
+
+            this.clazz = clazz;
+
+            Pojson.ModifierPositive mp = clazz.getAnnotation(Pojson.ModifierPositive.class);
+            if ( mp != null ) {
+                positive = mp.value();
+                if (positive.length == 0) {
+                    positive = null;
+                }
+            }
+
+            Pojson.ModifierNegative mn = clazz.getAnnotation(Pojson.ModifierNegative.class);
+            if ( mn != null ) {
+                negative = mp.value();
+                if (negative.length == 0) {
+                    negative = null;
+                }
+            }
+
+        }
+
+        public boolean accept(Field field) {
+
+            if (field.isAnnotationPresent(Pojson.SuppressStoring.class)) {
+                return false;
+            }
+
+            int m = field.getModifiers();
+
+            if ( positive != null ) {
+                for( int p : positive ) {
+                    if ( (m & p) == 0) {
+                        return false;
+                    }
+                }
+            }
+
+            if ( negative != null ) {
+                for( int p : negative ) {
+                    if ( (m & p) != 0) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+    }
+
+
 }

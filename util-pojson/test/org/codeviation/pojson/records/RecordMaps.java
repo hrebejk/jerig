@@ -49,27 +49,28 @@ import java.util.Map;
  * @author phrebejk
  */
 public class RecordMaps {
-
-    public RecordMaps() {
-        strings = new LinkedHashMap<String, String>();        
-        strings.put("A", "a");
-        strings.put("B", "b");
-        strings.put("C", "c");
-        
-        integers = new LinkedHashMap<Integer, Integer>();        
-        integers.put(1, 11);
-        integers.put(2, 12);
-        integers.put(3, 13);
-        
-        maps = new LinkedHashMap();
-        maps.put("m1", strings);
-        maps.put("m2", integers);        
-        
-    }
     
     public Map<String,String> strings;
     public Map<Integer,Integer> integers;
     public Map maps;
-    
+
+    public RecordMaps init () {
+        strings = new LinkedHashMap<String, String>();
+        strings.put("A", "a");
+        strings.put("B", "b");
+        strings.put("C", "c");
+
+        integers = new LinkedHashMap<Integer, Integer>();
+        integers.put(1, 11);
+        integers.put(2, 12);
+        integers.put(3, 13);
+
+        maps = new LinkedHashMap();
+        maps.put("m1", strings);
+        maps.put("m2", integers);
+
+        return this;
+    }
+
     
 }

@@ -44,6 +44,7 @@ package org.codeviation.pojson;
 import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
+import org.codeviation.pojson.records.RecordObjectTypes;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -55,7 +56,8 @@ import static org.junit.Assert.*;
 public class JsonTypesTest {
     
     private static String GOLDEN = null; 
-    private static RecordPrimitiveTypes RECORD;
+    private static RecordPrimitiveTypes RECORD_PRIMITIVES;
+    private static RecordObjectTypes RECORD_OBJECTS;
     
     public JsonTypesTest() {
         
@@ -64,54 +66,76 @@ public class JsonTypesTest {
     @BeforeClass
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypes.txt");
-        RECORD = new RecordPrimitiveTypes();
+        RECORD_PRIMITIVES = new RecordPrimitiveTypes().init();
+        RECORD_OBJECTS = new RecordObjectTypes().init();
     }
 
     @Test
-    public void primitives() throws IOException {
-        System.out.println("primitives");
-
-        PojsonSave<RecordPrimitiveTypes> save = PojsonSave.create(RecordPrimitiveTypes.class);
-        
-        assertEquals( GOLDEN, save.asString(RECORD));
-        
+    public void primitivesSave() throws IOException {
+        System.out.println("primitivesSave");
+        assertEquals( GOLDEN, Pojson.save(RECORD_PRIMITIVES));
     } 
 
     
     @Test
-    public void primitivesUnindented() throws IOException {
-        System.out.println("primitivesUnindented");
-        
-        PojsonSave<RecordPrimitiveTypes> save = PojsonSave.create(RecordPrimitiveTypes.class);
-        save.setIndentation(null);
-        save.setIndentLevel(0);
-        
-        assertEquals( Util.removeFormating(GOLDEN), save.asString(RECORD));
-        
+    public void primitivesUnindentedSave() throws IOException {
+        System.out.println("primitivesUnindentedSave");
+
+        Marshaller<RecordPrimitiveTypes> m = new Marshaller<RecordPrimitiveTypes>(null, 0);
+        assertEquals( Util.removeFormating(GOLDEN), m.save(RECORD_PRIMITIVES));
     }
     
     @Test
-    public void objects() throws IOException {
-        System.out.println("objects");
+    public void objectsSave() throws IOException {
+        System.out.println("objectsSave");
         
-        PojsonSave<RecordPrimitiveTypes> save = PojsonSave.create(RecordPrimitiveTypes.class);
-        
-        assertEquals( GOLDEN, save.asString(RECORD));
-        
+        assertEquals( GOLDEN, Pojson.save(RECORD_OBJECTS));
     } 
 
     
     @Test
-    public void objectsUnindented() throws IOException {
-        System.out.println("objectsUnindented");
+    public void objectsUnindentedSave() throws IOException {
+        System.out.println("objectsUnindentedSave");
 
-        PojsonSave<RecordPrimitiveTypes> save = PojsonSave.create(RecordPrimitiveTypes.class);
-        save.setIndentation(null);
-        save.setIndentLevel(0);
-        
-        
-        assertEquals( Util.removeFormating(GOLDEN), save.asString(RECORD));
-        
+        Marshaller<RecordObjectTypes> m = new Marshaller<RecordObjectTypes>(null, 0);
+        assertEquals( Util.removeFormating(GOLDEN), m.save(RECORD_OBJECTS));
+    }
+
+
+    @Test
+    public void primitivesLoad() throws IOException {
+        System.out.println("primitivesLoad");
+
+        RecordPrimitiveTypes r1 = new RecordPrimitiveTypes().init();
+        String s1 = Pojson.save(r1);
+
+        RecordPrimitiveTypes r2 = new RecordPrimitiveTypes();
+        Pojson.update(r2, s1);
+        String s2 = Pojson.save(r2);
+        assertEquals(s1, s2);
+
+        RecordPrimitiveTypes r3 = Pojson.load(RecordPrimitiveTypes.class, s1 );
+        s2 = Pojson.save(r3);
+        assertEquals(s1, s2);
+    }
+
+    @Test
+    public void objectsLoad() throws IOException {
+        System.out.println("objectsLoad");
+
+        RecordObjectTypes o1 = new RecordObjectTypes().init();
+        String s1 = Pojson.save(o1);
+
+        RecordObjectTypes o2 = new RecordObjectTypes();
+
+        Pojson.update(o2,s1);
+        String s2 = Pojson.save(o2);
+        assertEquals(s1, s2);
+
+        RecordObjectTypes o3 = Pojson.load(RecordObjectTypes.class, s1);
+        s2 = Pojson.save(o3);
+        assertEquals(s1, s2);
+
     }
 
 }

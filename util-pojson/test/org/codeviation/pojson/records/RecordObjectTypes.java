@@ -49,34 +49,32 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class RecordObjectTypes {
 
-    public Boolean fBoolean = Boolean.TRUE;    
-    public Character fCharacter = new Character('c');
-    public Byte fByte = new Byte((byte)1);
-    public Short fShort = new Short((short)2);
-    public Integer fInteger = new Integer(3);
-    public Long fLong = new Long(4);
-    public Float fFloat = new Float(5.5f);
-    public Double fDouble = new Double(6.6d);
-    public String fString="string";
-    public RetentionPolicy fEnum = RetentionPolicy.SOURCE; 
+    public Boolean fBoolean;
+    public Character fCharacter;
+    public Byte fByte;
+    public Short fShort;
+    public Integer fInteger;
+    public Long fLong;
+    public Float fFloat;
+    public Double fDouble;
+    public String fString;
+    public RetentionPolicy fEnum; 
     
     
-    public static RecordObjectTypes empty() {
+    public RecordObjectTypes init() {
         
-        RecordObjectTypes r = new RecordObjectTypes();
+        fBoolean = Boolean.TRUE;
+        fCharacter = new Character('c');
+        fByte = new Byte((byte)1);
+        fShort = new Short((short)2);
+        fInteger = new Integer(3);
+        fLong = new Long(4);
+        fFloat = new Float(5.5f);
+        fDouble = new Double(6.6d);
+        fString="string";
+        fEnum = RetentionPolicy.SOURCE;
         
-        r.fBoolean = null;
-        r.fCharacter = null;
-        r.fByte = null;
-        r.fShort = null;
-        r.fInteger = null;
-        r.fLong = null;
-        r.fFloat = null;
-        r.fDouble = null;
-        r.fString = null;
-        r.fEnum = null;
-        
-        return r;
+        return this;
     }
     
 }

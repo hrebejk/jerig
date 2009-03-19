@@ -73,24 +73,8 @@ public class NullsTest {
     @Test
     public void nullObjectTypes() throws IOException {
         System.out.println("nullObjectTypes");
-        
-        PojsonSave save = PojsonSave.create();
-        
-        RecordObjectTypes record = new RecordObjectTypes();
-        
-        record.fBoolean = null;
-        record.fByte = null;
-        record.fCharacter = null;
-        record.fDouble = null;
-        record.fEnum = null;
-        record.fFloat = null;
-        record.fInteger = null;
-        record.fLong = null;
-        record.fShort = null;
-        record.fString = null;
-                
-        assertEquals( GOLDEN_OBJECT_TYPES, save.asString(record));
-        
+
+        assertEquals( GOLDEN_OBJECT_TYPES, Pojson.save(new RecordObjectTypes()));
     } 
     
     @Test
@@ -98,34 +82,14 @@ public class NullsTest {
         System.out.println("nullArrays");
 
         PojsonSave save = PojsonSave.create();
-
-        RecordArrays record = new RecordArrays();
-        
-        record.charArray = null;
-        record.empty = null;
-        record.enumArray = null;
-        record.intArray = null;
-        record.stringArray = null;
-        record.objectArray = null;
-                
-        assertEquals( GOLDEN_ARRAYS, save.asString(record));
-        
+        assertEquals( GOLDEN_ARRAYS, Pojson.save(new RecordArrays()));        
     }
     
     @Test
     public void nullComplex() throws IOException {
         System.out.println("nullComplex");
         
-        PojsonSave save = PojsonSave.create();
-
-        RecordComplex record = new RecordComplex();
-        
-        record.arrays = null;
-        record.objects = null;
-        record.primitives = null;
-        
-        assertEquals( GOLDEN_COMPLEX, save.asString(record));
-        
+        assertEquals( GOLDEN_COMPLEX, Pojson.save(new RecordComplex()));        
     } 
 
     

@@ -47,14 +47,17 @@ package org.codeviation.pojson.records;
  */
 public class RecordGeneric<T1,T2> {
 
+    public int integer;
+    public T1 t1;
+    public T2 t2;
+
+    public RecordGeneric() {
+        
+    }
+
     public RecordGeneric(int integer, T1 t1, T2 t2) {
         this.integer = integer;
         this.t1 = t1;
         this.t2 = t2;
     }
-    
-    public int integer;
-    public T1 t1;
-    public T2 t2;
-    
 }

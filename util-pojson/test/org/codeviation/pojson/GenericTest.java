@@ -65,16 +65,21 @@ public class GenericTest {
     }
     
     @Test
-    public void generic() throws IOException {
+    public void genericSave() throws IOException {
         System.out.println("generic");
         
-        RecordGeneric<Double,String> r1 = new RecordGeneric<Double,String>(100,0.1,"FFFF");
-        
-        PojsonSave save = PojsonSave.create();
-        RecordGeneric<Double,String> record = new RecordGeneric<Double,String>(100,0.1,"FFFF");
-        
-        assertEquals( GOLDEN, save.asString(record));
-        
+        assertEquals( GOLDEN, Pojson.save(new RecordGeneric<Double,String>(100,0.1,"FFFF")));
+    }
+
+    @Test
+    public void genericLoad() throws IOException {
+        System.out.println("generic");
+
+        RecordGeneric<Double,String> r = Pojson.update(new RecordGeneric<Double,String>(), GOLDEN);
+
+        assertEquals(100,  r.integer);
+        assertEquals(0.1d,  r.t1, 0.00001);
+        assertEquals("FFFF",  r.t2);
     }
     
     

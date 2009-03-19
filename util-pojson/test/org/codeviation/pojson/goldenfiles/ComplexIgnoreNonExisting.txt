@@ -78,5 +78,44 @@
         "empty": []
     },
 
-    "arrays2": [ "ya", "da", "ya", "da" ]
+    "arrays2": {
+        "charArray": [
+            "x",
+            "y",
+            "z"
+        ],
+        "intArray": [
+            1,
+            2,
+            3
+        ],
+        "stringArray": [
+            "A",
+            "B",
+            "C"
+        ],
+        "enumArray": [
+            "CLASS",
+            "RUNTIME"
+        ],
+        "objectArray": [
+            {
+                "i": 1,
+                "s": "A",
+                "rs": null
+            },
+            {
+                "i": 2,
+                "s": "B",
+                "rs": null
+            },
+            {
+                "i": 3,
+                "s": "C",
+                "rs": null
+            }
+        ],
+        "empty": []
+    }
+
 }

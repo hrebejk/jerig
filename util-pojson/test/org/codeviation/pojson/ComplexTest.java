@@ -42,8 +42,8 @@ package org.codeviation.pojson;
 
 import org.codeviation.pojson.records.RecordComplex;
 import java.io.IOException;
-import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.reflect.ClassUtils;
+import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -65,28 +65,62 @@ public class ComplexTest {
     }
     
     @Test
-    public void complex() throws IOException {
-        System.out.println("complex");
+    public void complexSave() throws IOException {
+        System.out.println("complexSave");
         
-        PojsonSave save = PojsonSave.create();        
-        RecordComplex record = new RecordComplex();
-        
-        assertEquals( GOLDEN, save.asString(record));
-        
+        assertEquals( GOLDEN, Pojson.save(new RecordComplex().init()));
     } 
 
     
     @Test
-    public void complexUnindented() throws IOException {
-        System.out.println("complexUnindented");
+    public void complexUnindentedSave() throws IOException {
+        System.out.println("complexUnindentedSave");
         
-        PojsonSave save = PojsonSave.create();
-        save.setIndentation(null);
-        save.setIndentLevel(0);
-        RecordComplex record = new RecordComplex();
-                
-        assertEquals( Util.removeFormating(GOLDEN), save.asString(record));
+        Marshaller<RecordComplex> m = new Marshaller<RecordComplex>(null, 0);
+        assertEquals( Util.removeFormating(GOLDEN), m.save(new RecordComplex().init()));
         
     }
+
+    @Test
+    public void complexLoad() throws IOException {
+        System.out.println("complexLoad");
+
+        RecordComplex c1 = new RecordComplex().init();
+        String s1 = Pojson.save(c1);
+
+        RecordComplex c2 = Pojson.load(RecordComplex.class, s1);
+
+        assertEquals(s1, Pojson.save(c2));
+        assertEquals(c1.primitives.fCharacter, c2.primitives.fCharacter );
+
+        c2 = new RecordComplex();
+        Pojson.update(c2,s1);
+        assertEquals(s1, Pojson.save(c2));
+
+
+    }
+
+
+     @Test
+     public void deepLoad() throws IOException {
+        System.out.println("deepLoad");
+
+        RecordSmall c1 = new RecordSmall( 1, "A",
+                new RecordSmall( 2 , "B",
+                    new RecordSmall(3, "C",
+                        new RecordSmall( 4, "D",
+                            new RecordSmall( 5, "E",
+                                new RecordSmall(6, "F"))))));
+        String s1 = Pojson.save(c1);
+
+        RecordSmall c2 = Pojson.load(RecordSmall.class, s1);
+        
+        assertEquals(s1, Pojson.save(c2));
+
+        c2 = new RecordSmall();
+        Pojson.update(c2, s1);
+        assertEquals(s1, Pojson.save(c2));
+    }
+
     
 }

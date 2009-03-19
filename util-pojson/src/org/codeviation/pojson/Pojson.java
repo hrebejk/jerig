@@ -41,14 +41,26 @@
 
 package org.codeviation.pojson;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Modifier;
-import java.text.SimpleDateFormat;
 
-/** Contains annotations for driving the save and load process of objects
+/** Contains annotations for driving the save and load process of objects and
+ * convenience utility methods for saving/loading Java objects to/from JSON
+ * format. In case the of storing or loading larger number of objects (which
+ * may profit from caching) or if you need modify proprties of the
+ * marhalling/unmarshalling process and/or stricter type checking please use
+ * the marshaller UnMarshaller classes.
+ *
  *
  *  XXX Remove PojsonLoad and Pojson Save
  *  XXX Make the Load methods honor Pojson annotations
@@ -62,10 +74,58 @@ import java.text.SimpleDateFormat;
  */
 public class Pojson {
 
-    static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS ZZZZ");
     static final String DEFAULT_EXTENSION = ".json";
     
     private Pojson() {}
+
+    /** Saves an object to string */
+    public static String save( Object object ) {
+        return new Marshaller<Object>().save(object);
+    }
+
+    public static void save( Object object, Writer writer ) throws IOException {
+        new Marshaller<Object>().save(object, writer);
+    }
+
+    public static void save( Object object, OutputStream outputStream ) throws IOException {
+        new Marshaller<Object>().save(object, outputStream);
+    }
+
+    public static void save( Object object, File file ) throws IOException {
+        new Marshaller<Object>().save(object, file);
+    }
+
+    public static <T> T load( Class<T> clazz, String string ) {
+        return new UnMarshaller().load(clazz, string);
+    }
+
+    public static <T> T load( Class<T> clazz, Reader reader ) throws IOException {
+        return new UnMarshaller().load(clazz, reader);
+    }
+
+    public static <T> T load( Class<T> clazz, InputStream inputStream ) throws IOException {
+        return new UnMarshaller().load(clazz, inputStream);
+    }
+
+    public static <T> T load( Class<T> clazz, File file ) throws FileNotFoundException, IOException {
+        return new UnMarshaller().load(clazz, file);
+    }
+
+    public static <T> T update( T object, String string ) {
+        return new UnMarshaller().update(object, string);
+    }
+
+    public static <T> T update( T object, Reader reader ) throws IOException {
+        return new UnMarshaller().update(object, reader);
+    }
+
+    public static <T> T update( T object, InputStream inputStream ) throws IOException {
+        return new UnMarshaller().update(object, inputStream);
+    }
+
+    public static <T> T update( T object, File file ) throws FileNotFoundException, IOException {
+        return new UnMarshaller().update(object, file);
+    }
 
     /** General annotation to mark classes as Pojson records. This annotation
      * may be used for other frameworks to distinguish between serializable and
@@ -201,7 +261,13 @@ public class Pojson {
     public @interface NamePrefix {
         String value();
     }
-        
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface InstanceClass {
+        Class<?> value();
+    }
+    
     interface StopAtCurrentClass {
         // Marker interface for stopping at current class
     }

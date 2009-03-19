@@ -43,9 +43,6 @@ package org.codeviation.pojson;
 
 import java.io.IOException;
 import java.util.Date;
-import org.codeviation.commons.reflect.ClassUtils;
-import org.codeviation.pojson.records.RecordGeneric;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -55,71 +52,54 @@ import static org.junit.Assert.*;
  */
 public class DateTest {
     
-    private static String GOLDEN;
-    
     public DateTest() {
     }
-
-    /*
-    @BeforeClass
-    public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Generic.txt");
-    }
-    */
     
     @Test
     public void dateFromLong() throws IOException {
-
         System.out.println("dateFromLong");
         
         Date d = new Date(); // Now
         
-        PojsonSave<RecordDateWrite> save = PojsonSave.create(RecordDateWrite.class);
         RecordDateWrite rdw = new RecordDateWrite();
         rdw.timestamp = d.getTime();
 
-        String s = save.asString(rdw);
+        String s = Pojson.save(rdw);
 
-        RecordDateRead rdr = PojsonLoad.create().load(s, RecordDateRead.class);
+        RecordDateRead rdr = Pojson.load(RecordDateRead.class, s);
 
         assertEquals( d, rdr.timestamp);
-        
     }
 
 
     @Test
     public void dateWrite() throws IOException {
-
-        System.out.println("dateFromDate");
+        System.out.println("dateWrite");
 
         Date d = new Date(); // Now
 
-        PojsonSave<RecordDateRead> save = PojsonSave.create(RecordDateRead.class);
         RecordDateRead rdr = new RecordDateRead();
         rdr.timestamp = d;
 
-        String s = save.asString(rdr);
+        String s = Pojson.save(rdr);
 
-        RecordDateRead rdr2 = PojsonLoad.create().load(s, RecordDateRead.class);
+        RecordDateRead rdr2 = Pojson.load(RecordDateRead.class, s);
 
         assertEquals( d, rdr2.timestamp);
-
     }
 
     @Test
     public void dateToLong() throws IOException {
-
         System.out.println("dateToLong");
 
         Date d = new Date(); // Now
 
-        PojsonSave<RecordDateRead> save = PojsonSave.create(RecordDateRead.class);
         RecordDateRead rdr = new RecordDateRead();
         rdr.timestamp = d;
 
-        String s = save.asString(rdr);
+        String s = Pojson.save(rdr);
 
-        RecordDateWrite rdw = PojsonLoad.create().load(s, RecordDateWrite.class);
+        RecordDateWrite rdw = Pojson.load(RecordDateWrite.class, s);
 
         assertEquals( d.getTime(), rdw.timestamp);
 
