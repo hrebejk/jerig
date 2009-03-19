@@ -218,74 +218,85 @@ public class JsonParserTest {
         
         TestHandler h = new TestHandler(w);
         Reader r = new CharArrayReader(json.toCharArray());        
-        Parser.parse(r, h);
+        Parser2.parse(r, h);
         
         return w.toString();
     }
     
-    private class TestHandler implements Parser.Handler {
+    private class TestHandler extends  Parser2.Handler<RuntimeException> {
 
         PrintWriter pw;
         
         private TestHandler( Writer w ) {
+            super(null);
             this.pw = new PrintWriter(w);
         }
         
+        @Override
         public void objectStart() {            
             pw.print("(O");
         }
 
+        @Override
         public void objectEnd() {
             pw.print("O)");
         }
 
+        @Override
         public void arrayStart() {
             pw.print("(A");
         }
 
+        @Override
         public void arrayEnd() {
             pw.print("A)");
         }
 
+        @Override
         public void field(String value) {
             pw.print("(F" + value + "F)");
         }
 
+        @Override
         public void bool(boolean value) {                       
             pw.print("(B" + value + "B)");
         }
         
+        @Override
         public void nul() {                       
             pw.print("(NULL)");
         }
 
+        @Override
         public void string(String value) {
             pw.print("(S" + value + "S)");
         }
 
+        @Override
         public void number(long value) {
             pw.print("(L" + value + "L)");
         }
         
+        @Override
         public void number(double value) {
             pw.print("(D" + value + "D)");
         }
 
-        public void error(Error error) {
+        @Override
+        public void error(Parser2.Error error)  {
             pw.print("(!" + error + "!)");
         }
-        
+
+        @Override
         public void comment(String comment) {
             pw.print("(C" + comment + "C)");
         }
         
+        @Override
         public void lineComment(String comment) {
             pw.print("(c" + comment + "c)");
         }
         
     }
-    
-    
-    
-    
+
 }

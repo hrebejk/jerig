@@ -43,7 +43,6 @@ package org.codeviation.pojson;
 
 import org.codeviation.pojson.records.RecordsChangeFieldName;
 import java.io.IOException;
-import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -58,15 +57,27 @@ public class ChangeFieldNameTest {
     }
 
     @Test
-    public void changeFieldName() throws IOException {
-        System.out.println("changeFieldName");
+    public void changeFieldNameSave() throws IOException {
+        System.out.println("changeFieldNameSave");
+
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/ChangeFieldName.txt"),
+                      Pojson.save(new RecordsChangeFieldName().init()));
         
-        PojsonSave save = PojsonSave.create();
-        
-        RecordsChangeFieldName record = new RecordsChangeFieldName();
-        
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/ChangeFieldName.txt"), save.asString(record));
-        
+    }
+
+    @Test
+    public void changeFieldNameLoad() throws IOException {
+        System.out.println("changeFieldNameLoad");
+
+        String t = ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/ChangeFieldName.txt");
+
+        RecordsChangeFieldName r = Pojson.load(RecordsChangeFieldName.class, t);
+
+        assertEquals(1, r.getJedna());
+        assertEquals(2, r.getDve());
+        assertEquals(3, r.getTri());
+        assertEquals(4, r.getCtyri());
+
     }
      
 }

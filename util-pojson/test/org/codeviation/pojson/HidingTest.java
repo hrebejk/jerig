@@ -42,7 +42,6 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
-import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordExtendsPrimitiveTypes;
 import org.junit.BeforeClass;
@@ -70,11 +69,7 @@ public class HidingTest {
     public void hiding() throws IOException {
         System.out.println("hiding");
         
-        PojsonSave<RecordExtendsPrimitiveTypes> save = PojsonSave.create(RecordExtendsPrimitiveTypes.class);
-        RecordExtendsPrimitiveTypes record = new RecordExtendsPrimitiveTypes();
-        
-        assertEquals( GOLDEN, save.asString(record));
-        
+        assertEquals( GOLDEN, Pojson.save(new RecordExtendsPrimitiveTypes().init()));
     } 
 
 }

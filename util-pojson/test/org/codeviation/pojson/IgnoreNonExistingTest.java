@@ -76,23 +76,19 @@ public class IgnoreNonExistingTest {
     public void ignoreNonExistingJson() throws IOException {
         System.out.println("ignoreNonExistingJson");
 
-        PojsonLoad load = PojsonLoad.create();
-        RecordPrimitiveTypes record = load.load(WITH_NON_EXISTING_JSON, PrimitiveINE.class); // This should not throw execprion
-
-        PojsonSave<RecordPrimitiveTypes> save = PojsonSave.create(RecordPrimitiveTypes.class);
-        assertEquals( GOLDEN_JSON, save.asString(record)); // Save should be like by complex record
-        
+        RecordPrimitiveTypes record = Pojson.load(PrimitiveINE.class,WITH_NON_EXISTING_JSON); // This should not throw execprion
+        assertEquals( GOLDEN_JSON, Pojson.save(record)); // Save should be like by complex record
     }
 
     @Test
     public void ignoreNonExistingComplex() throws IOException {
         System.out.println("ignoreNonExistingComplex");
 
-        PojsonLoad load = PojsonLoad.create();
-        RecordComplex record = load.load(WITH_NON_EXISTING_COMPLEX, ComplexINE.class); // This should not throw execprion
+        RecordComplex record = Pojson.load(ComplexINE.class, WITH_NON_EXISTING_COMPLEX); // This should not throw execprion
 
-        PojsonSave<RecordComplex> save = PojsonSave.create(RecordComplex.class);
-        assertEquals( GOLDEN_COMPLEX, save.asString(record)); // Save should be like by complex record
+        System.out.println(Pojson.save(record));
+
+        assertEquals( GOLDEN_COMPLEX, Pojson.save(record)); // Save should be like by complex record
 
     }
 

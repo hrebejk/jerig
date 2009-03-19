@@ -1,0 +1,65 @@
+{
+    "COMPLEX_primitives": {
+        "PRIMITIVES_fBoolean": true,
+        "PRIMITIVES_fCharacter": "c",
+        "PRIMITIVES_fByte": 1,
+        "PRIMITIVES_fShort": 2,
+        "PRIMITIVES_fInteger": 3,
+        "PRIMITIVES_fLong": 4,
+        "PRIMITIVES_fFloat": 5.5,
+        "PRIMITIVES_fDouble": 6.6,
+        "PRIMITIVES_fString": "string",
+        "PRIMITIVES_fEnum": "SOURCE"
+    },
+    "COMPLEX_objects": {
+        "OBJECTS_fBoolean": true,
+        "OBJECTS_fCharacter": "c",
+        "OBJECTS_fByte": 1,
+        "OBJECTS_fShort": 2,
+        "OBJECTS_fInteger": 3,
+        "OBJECTS_fLong": 4,
+        "OBJECTS_fFloat": 5.5,
+        "OBJECTS_fDouble": 6.6,
+        "OBJECTS_fString": "string",
+        "OBJECTS_fEnum": "SOURCE"
+    },
+    "COMPLEX_arrays": {
+        "ARRAYS_charArray": [
+            "x",
+            "y",
+            "z"
+        ],
+        "ARRAYS_intArray": [
+            1,
+            2,
+            3
+        ],
+        "ARRAYS_stringArray": [
+            "A",
+            "B",
+            "C"
+        ],
+        "ARRAYS_enumArray": [
+            "CLASS",
+            "RUNTIME"
+        ],
+        "ARRAYS_objectArray": [
+            {
+                "i": 1,
+                "s": "A",
+                "rs": null
+            },
+            {
+                "i": 2,
+                "s": "B",
+                "rs": null
+            },
+            {
+                "i": 3,
+                "s": "C",
+                "rs": null
+            }
+        ],
+        "ARRAYS_empty": []
+    }
+}

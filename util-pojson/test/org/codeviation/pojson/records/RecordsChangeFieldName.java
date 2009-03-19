@@ -50,12 +50,38 @@ import org.codeviation.pojson.*;
 public class RecordsChangeFieldName {
 
     @Pojson.Name("ein")
-    int jedna = 1;
+    int jedna = -1;
     @Pojson.Name("zwei")
-    int dve = 2;
+    int dve = -1;
     @Pojson.Name("drei")
-    int tri = 3;
+    int tri = -1;
     @Pojson.Name("vier")
-    int ctyri = 4;        
-            
+    int ctyri = -1;
+
+    public RecordsChangeFieldName init() {
+        jedna = 1;
+        dve = 2;
+        tri = 3;
+        ctyri = 4;
+        return this;
+    }
+
+    public int getCtyri() {
+        return ctyri;
+    }
+
+    public int getDve() {
+        return dve;
+    }
+
+    public int getJedna() {
+        return jedna;
+    }
+
+    public int getTri() {
+        return tri;
+    }
+
+
+
 }

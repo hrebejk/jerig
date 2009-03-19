@@ -43,7 +43,6 @@ package org.codeviation.pojson;
 
 import org.codeviation.pojson.records.RecordsSkipFields;
 import java.io.IOException;
-import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -61,55 +60,45 @@ public class SkipFieldsTest {
     public void skipFieldsFirst() throws IOException {
         System.out.println("skipFieldsFirst");
         
-        PojsonSave save = PojsonSave.create();
         RecordsSkipFields.First record = new RecordsSkipFields.First();
-        
         assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsFirst.txt"), 
-                      save.asString(record));        
+                      Pojson.save(record));
     }
     
     @Test
     public void skipFieldsLast() throws IOException {
         System.out.println("skipFieldsLast");
         
-        PojsonSave save = PojsonSave.create();
         RecordsSkipFields.Last record = new RecordsSkipFields.Last();
-        
         assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsLast.txt"), 
-                      save.asString(record));        
+                      Pojson.save(record));
     }
     
     @Test
     public void skipFieldsMid() throws IOException {
         System.out.println("skipFieldsMid");
         
-        PojsonSave save = PojsonSave.create();
         RecordsSkipFields.Mid record = new RecordsSkipFields.Mid();
-        
         assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsMid.txt"), 
-                      save.asString(record));        
+                      Pojson.save(record));
     }
     
     @Test
     public void skipFieldsMore() throws IOException {
         System.out.println("skipFieldsMore");
         
-        PojsonSave save = PojsonSave.create();
         RecordsSkipFields.More record = new RecordsSkipFields.More();
-        
         assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsMore.txt"), 
-                      save.asString(record));        
+                      Pojson.save(record));
     } 
     
     @Test
     public void skipFieldsAll() throws IOException {
         System.out.println("skipFieldsAll");
         
-        PojsonSave save = PojsonSave.create();
         RecordsSkipFields.All record = new RecordsSkipFields.All();
-        
         assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsAll.txt"), 
-                      save.asString(record));        
+                      Pojson.save(record));
     } 
     
 }

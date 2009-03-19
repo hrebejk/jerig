@@ -48,16 +48,28 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class RecordArrays {
 
-    public char charArray[] = new char[] {'x','y','z'};
-    public int intArray[] = new int[] {1,2,3};
-    public String stringArray[] = new String[] {"A","B","C"};
-    public RetentionPolicy enumArray[] = new RetentionPolicy[]{
-        RetentionPolicy.CLASS, RetentionPolicy.RUNTIME                
-    };
-    public RecordSmall[] objectArray = new RecordSmall[] {
-           new RecordSmall(1, "A"),
-           new RecordSmall(2, "B"),
-           new RecordSmall(3, "C")
-    };
-    public long empty[] = new long[]{};
+    public char charArray[];
+    public int intArray[];
+    public String stringArray[];
+    public RetentionPolicy enumArray[];
+    public RecordSmall[] objectArray;
+    public long empty[];
+
+    public RecordArrays init() {
+        charArray = new char[] {'x','y','z'};
+        intArray = new int[] {1,2,3};
+        stringArray = new String[] {"A","B","C"};
+        enumArray = new RetentionPolicy[]{
+            RetentionPolicy.CLASS, RetentionPolicy.RUNTIME
+        };
+        objectArray = new RecordSmall[] {
+               new RecordSmall(1, "A"),
+               new RecordSmall(2, "B"),
+               new RecordSmall(3, "C")
+        };
+        empty = new long[]{};
+        
+        return this;
+    }
+
 }

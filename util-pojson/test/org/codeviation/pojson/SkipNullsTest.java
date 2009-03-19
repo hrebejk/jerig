@@ -69,11 +69,8 @@ public class SkipNullsTest {
     public void skipNulls() throws IOException {
         System.out.println("nullObjectTypes");
         
-        PojsonSave<RecordSkipNulls> save = PojsonSave.create(RecordSkipNulls.class);
-        
         RecordSkipNulls record = new RecordSkipNulls();
-                
-        assertEquals( GOLDEN, save.asString(record));
+        assertEquals( GOLDEN, Pojson.save(record));
         
     } 
 }

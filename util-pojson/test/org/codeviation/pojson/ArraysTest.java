@@ -44,6 +44,7 @@ import org.codeviation.pojson.records.RecordArrays;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.commons.utils.CollectionsUtil;
+import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -64,37 +65,160 @@ public class ArraysTest {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Arrays.txt");
     }
     
-    @Test @SuppressWarnings("unchecked")
-    public void arrays() throws IOException {
-        System.out.println("arrays");
+    @Test
+    public void arraysSave() throws IOException {
+        System.out.println("arraysSave");
+        assertEquals( GOLDEN, Pojson.save(new RecordArrays().init()));
+    }
+    
+    @Test
+    public void arraysUnindentedSave() throws IOException {
+        System.out.println("arraysUnindentedSave");
+        
+        Marshaller<RecordArrays> m = new Marshaller<RecordArrays>(null, 0);
+        assertEquals( Util.removeFormating(GOLDEN), m.save(new RecordArrays().init()));
+    }
+    
+    @Test
+    public void arraysPureUnindentedSave() throws IOException {
+        System.out.println("arraysPureUnindentedSave");
+        
+        Marshaller<Object> m = new Marshaller<Object>(null, 0);
+        assertEquals( "[1,2,3]", m.save(new int[]{1,2,3}));
+        assertEquals( "[1,2,3]", m.save(CollectionsUtil.arrayList(1,2,3)));
+                
+    }
+
+    @Test
+    public void arraysMultidimensionalSave() throws IOException {
+        System.out.println("arraysSaveMultiDimensional");
+
+        Marshaller<Object> m = new Marshaller<Object>(null, 0);
+        assertEquals( "[[1,2,3],[1,2,3]]", m.save(new int[][]{ { 1,2,3 }, { 1, 2, 3} }));
+        assertEquals( "[[1,2,3],[1,2,3]]", m.save( CollectionsUtil.arrayList(
+                                                       CollectionsUtil.arrayList(1,2,3),
+                                                       CollectionsUtil.arrayList(1,2,3))));
+    }
+
+
+     @Test
+    public void arraysLoad() throws IOException {
+        System.out.println("arraysLoad");
+
+
+        RecordArrays a1 = new RecordArrays().init();
+        String s1 = Pojson.save(a1);
+
+        RecordArrays a2 = Pojson.load( RecordArrays.class, s1);
+        assertEquals(s1, Pojson.save(a2));
+
+        a2 = new RecordArrays();
+        Pojson.update(a2,s1);
+        assertEquals(s1, Pojson.save(a2));
+
+    }
+    
+
+    @Test
+    public void arraysIntegerLoad() throws IOException {
+        System.out.println("arraysIntegerLoad");
+                
+        Integer[] i1 = new Integer[] {1,2,3,900000};
+        String s1 = Pojson.save(i1);
+
+        Integer[] i2 = Pojson.load(Integer[].class, s1);
+        String s2 = Pojson.save(i2);
+
+        assertEquals( s1, s2 );
+
+        // XXX update
+
+    }
+
+    @Test
+    public void arraysLong() throws IOException {
+        System.out.println("arraysLong");
+
+        
+        Long[] l1 = new Long[] {1l,2l,3l,900000l};
+        String s1 = Pojson.save(l1);
+
+        Long[] l2 = Pojson.load(Long[].class, s1);
+        assertEquals( s1, Pojson.save(l2) );
+        
+        Long[] l3 = Pojson.update(new Long[0], s1);
+
+        assertEquals( s1, Pojson.save(l3) );
+
+    }
+
+    @Test
+    public void arraysFloatLoad() throws IOException {
+        System.out.println("arraysFloat");
 
         PojsonSave save = PojsonSave.create();
-        assertEquals( GOLDEN, save.asString(new RecordArrays()));        
+        PojsonLoad load = PojsonLoad.create();
+
+        Float[] f1 = new Float[] {1.0f,2.0f,3.0f,900000.783293289f};
+        String s1 = save.asString(f1);
+
+        Float[] f2 = load.load(s1, Float[].class);
+        String s2 = save.asString(f2);
+
+        assertEquals( s1, s2 );
+
     }
-    
-    @Test @SuppressWarnings("unchecked")
-    public void arraysUnindented() throws IOException {
-        System.out.println("arraysUnindented");
-        
+
+    @Test
+    public void arraysDoubleLoad() throws IOException {
+        System.out.println("arraysDoubleLoad");
+
         PojsonSave save = PojsonSave.create();
-        save.setIndentLevel(0);
-        save.setIndentation(null);
-                        
-        assertEquals( Util.removeFormating(GOLDEN), save.asString(new RecordArrays()));
-        
+        PojsonLoad load = PojsonLoad.create();
+
+        Double[] d1 = new Double[] {1.0,2.0,3.0,900000.783293289};
+        String s1 = save.asString(d1);
+
+        Double[] d2 = load.load(s1, Double[].class);
+        String s2 = save.asString(d2);
+
+        assertEquals( s1, s2 );
+
     }
-    
-    @Test @SuppressWarnings("unchecked")
-    public void arraysPureUnindented() throws IOException {
-        System.out.println("arraysPureUnindented");
-        
+
+    @Test
+    public void arraysObjectLoad() throws IOException {
+        System.out.println("arraysObjectLoad");
+
         PojsonSave save = PojsonSave.create();
-        save.setIndentLevel(0);
-        save.setIndentation(null);
-        assertEquals( "[1,2,3]", save.asString(1,2,3));
-        assertEquals( "[1,2,3]", save.asString(new int[]{1,2,3}));
-        assertEquals( "[1,2,3]", save.asString(CollectionsUtil.arrayList(1,2,3)));
-                
+        PojsonLoad load = PojsonLoad.create();
+
+        RecordSmall[] d1 = new RecordSmall[] {
+            new RecordSmall(1, "A"),
+            new RecordSmall(2, "B"),
+            new RecordSmall(3, "C")
+        };
+        String s1 = save.asString(d1);
+
+        System.out.println(s1);
+
+        RecordSmall[] d2 = load.load(s1, RecordSmall[].class);
+        String s2 = save.asString(d2);
+
+        assertEquals( s1, s2 );
+
+    }
+
+    @Test
+    public void arraysMultidimensionalLoad() throws IOException {
+        System.out.println("arraysMultiDimensionalLoad");
+
+
+        String s = Pojson.save(new int[][]{ { 1,2,3 }, { 1, 2, 3} });
+
+        Integer[][] i1 = Pojson.load(Integer[][].class, s);
+
+        assertEquals(s, Pojson.save(i1));
     }
 
 }

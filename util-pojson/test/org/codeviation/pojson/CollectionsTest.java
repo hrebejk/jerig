@@ -42,12 +42,13 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordComplex;
-import org.codeviation.pojson.records.RecordSmall;
+import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -56,12 +57,12 @@ import static org.junit.Assert.*;
  *
  * @author Petr Hrebejk
  */
-public class ToCollectionsTest {
+public class CollectionsTest {
     
     private static Map<String,Object> GOLDEN_TYPES;
     private static Map<String,Object> GOLDEN_ARRAYS;
     
-    public ToCollectionsTest() {
+    public CollectionsTest() {
     }
     
     
@@ -104,18 +105,27 @@ public class ToCollectionsTest {
         GOLDEN_TYPES.put("fEnum", "SOURCE"); 
         
     }
-    
+
+    @Test
+    public void primitive() throws IOException {
+        System.out.println("primitive");
+
+        RecordPrimitiveTypes p1 = new RecordPrimitiveTypes().init();
+        String s1 = Pojson.save(p1);
+
+        Map o = Pojson.load( HashMap.class, s1);
+        assertEquals(GOLDEN_TYPES, o);
+    }
+
     @Test
     public void complex() throws IOException {
         System.out.println("complex");
         
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
         
-        RecordComplex c1 = new RecordComplex();
-        String s1 = save.asString(c1);
-        Object o = load.toCollections(s1);
-        
+        RecordComplex c1 = new RecordComplex().init();
+        String s1 = Pojson.save(c1);
+        Map o = Pojson.load( HashMap.class, s1);
+
         Map<String,Object> golden = new HashMap<String,Object>();
         golden.put("primitives", GOLDEN_TYPES);
         golden.put("objects", GOLDEN_TYPES);
@@ -128,9 +138,8 @@ public class ToCollectionsTest {
     public void arrays() throws IOException {
         System.out.println("arrays");
                 
-        String text = ClassUtils.getResourceAsString(ToCollectionsTest.class, "goldenfiles/Arrays.txt");        
-        PojsonLoad load = PojsonLoad.create();
-        Object o = load.toCollections(text);
+        String text = ClassUtils.getResourceAsString(CollectionsTest.class, "goldenfiles/Arrays.txt");
+        Object o = Pojson.load(HashMap.class, text);
    
         assertEquals(GOLDEN_ARRAYS, o);                
     }  
@@ -141,14 +150,10 @@ public class ToCollectionsTest {
     public void arraysInteger() throws IOException {
         System.out.println("arraysInteger");
         
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();        
-        
         Integer[] i1 = new Integer[] {1,2,3,900000};
-        String s1 = save.asString(i1);        
-        Object o = load.toCollections(s1);
-                
-        
+        String s1 = Pojson.save(i1);
+        Object o = Pojson.load(ArrayList.class, s1);
+
         assertEquals( Arrays.asList(1l,2l,3l,900000l), o );
         
     }
@@ -158,12 +163,10 @@ public class ToCollectionsTest {
     public void arraysLong() throws IOException {
         System.out.println("arraysLong");
         
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
-        
+   
         Long[] l1 = new Long[] {1l,2l,3l,900000l};
-        String s1 = save.asString(l1);
-        Object o = load.toCollections(s1);
+        String s1 = Pojson.save(l1);
+        Object o = Pojson.load(ArrayList.class, s1);
         
         assertEquals( Arrays.asList(l1), o );
         
@@ -173,12 +176,12 @@ public class ToCollectionsTest {
     public void arraysFloat() throws IOException {
         System.out.println("arraysFloat");
         
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
-        
         Float[] f1 = new Float[] {1.0f,2.0f,3.0f,9000.78f};
-        String s1 = save.asString(f1);
-        Object o = load.toCollections(s1);
+        String s1 = Pojson.save(f1);
+//        System.out.println(s1);
+//        float d = f1[3].floatValue();
+//        System.out.println(d);
+        Object o = Pojson.load(ArrayList.class, s1);
                 
         assertEquals( Arrays.asList(1l,2l,3l,9000.78), o );
         
@@ -188,12 +191,9 @@ public class ToCollectionsTest {
     public void arraysDouble() throws IOException {
         System.out.println("arraysDouble");
         
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
-        
         Double[] d1 = new Double[] {1.0,2.0,3.0,900000.783293289};
-        String s1 = save.asString(d1);
-        Object o = load.toCollections(s1);
+        String s1 = Pojson.save(d1);
+        Object o = Pojson.load(ArrayList.class, s1);
         
         assertEquals( Arrays.asList(1l,2l,3l,900000.783293289), o );
         

@@ -47,8 +47,15 @@ package org.codeviation.pojson.records;
  */
 public class RecordComplex {
 
-    public RecordPrimitiveTypes primitives = new RecordPrimitiveTypes();
-    public RecordObjectTypes objects = new RecordObjectTypes();
-    public RecordArrays arrays = new RecordArrays();
+    public RecordPrimitiveTypes primitives;
+    public RecordObjectTypes objects;
+    public RecordArrays arrays;
+
+    public RecordComplex init() {
+        primitives = new RecordPrimitiveTypes().init();
+        objects = new RecordObjectTypes().init();
+        arrays = new RecordArrays().init();
+        return this;
+    }
     
 }

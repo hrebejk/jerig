@@ -39,39 +39,83 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.codeviation.pojson.records;
+package org.codeviation.pojson;
 
-import java.lang.annotation.RetentionPolicy;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import org.codeviation.commons.patterns.Filter;
 
-/**
+/** Good for saving objects in Json format.
+ *
+ * XXX Hold the builders to make caching working
  *
  * @author Petr Hrebejk
  */
-public class RecordPrimitiveTypes {
-
-    public boolean fBoolean = false;
-    public char fCharacter = ' ';
-    public byte fByte = -1;
-    public short fShort = -1;
-    public int fInteger = -1;
-    public long fLong = -1;
-    public float fFloat = -1f;
-    public double fDouble = -1d;
-    public String fString = null;
-    public RetentionPolicy fEnum = null;
+public final class Marshaller<T> {
     
-    public RecordPrimitiveTypes init() {
-        fBoolean = true;
-        fCharacter = 'c';
-        fByte = 1;
-        fShort = 2;
-        fInteger = 3;
-        fLong = 4;
-        fFloat = 5.5f;
-        fDouble = 6.6d;
-        fString = "string";
-        fEnum = RetentionPolicy.SOURCE;
-        return this;
+    private Filter<String> fieldFilter;
+    private String indentation = "    ";
+    private int indentLevel = 0;
+
+    public Marshaller() {
+    }
+
+    public Marshaller(String indentation, int indentLevel) {
+        this.indentation = indentation;
+        this.indentLevel = indentLevel;
+    }
+
+    /** Saves an object to string */
+    public String save( T object ) {
+
+        StringWriter sw = new StringWriter(2048);
+        try {
+            save(object, sw);
+            return sw.toString();
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+
+    }
+
+    public void save( T object, Writer writer ) throws IOException {
+        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(writer, indentation, indentLevel);
+        PojoWriter pw = new PojoWriter();
+        pw.<Object,Void,IOException>writeTo(object, pb);
+    }
+
+    public void save( T object, OutputStream outputStream ) throws IOException {
+        save( object, new OutputStreamWriter(outputStream));
+    }
+
+    public void save( T object, File file ) throws IOException {
+        save( object, new FileWriter(file));
+    }
+
+             
+    public void setFieldFilter(Filter<String> fieldFilter) {
+        this.fieldFilter = fieldFilter;
     }
     
+    /** Sets the string which will be used as indetation
+     * 
+     * @param indentation The indentation string.
+     */
+    public void setIndentation(String indentation) {
+        this.indentation = indentation;
+    }
+    
+    /** Sets the initial level of indentation.
+     * 
+     * @param startIndentLevel Number of indentation string repeats
+     */
+    public void setIndentLevel(int startIndentLevel) {
+        this.indentLevel = startIndentLevel;
+    }
+        
 }
