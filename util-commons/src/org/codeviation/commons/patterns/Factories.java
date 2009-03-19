@@ -41,6 +41,7 @@
 
 package org.codeviation.commons.patterns;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
@@ -59,6 +60,11 @@ import java.util.Map;
  */
 public class Factories {
 
+    /** Creates new instance of given class by calling <CODE>clazz.newInstance()</CODE>.
+     * If the class can not be instantiated the <CODE>create</CODE> method will
+     * throw IllegallArgumentException with the original exception set as cause.
+     */
+    public static final InstanceFactory NEW_INSTANCE = new NewInstanceFactory();
     public static final Factory<String,Object> TO_STRING = new ToString();
     public static final Factory<String[],Object[]> TO_STRING_ARRAY = array( TO_STRING );
         
@@ -359,6 +365,24 @@ public class Factories {
             return param.toString();
         }
         
+    }
+
+    private static class NewInstanceFactory implements InstanceFactory {
+
+        @SuppressWarnings("unchecked")
+        public <T> T create(Class<T> clazz) {
+            try {
+                return  clazz.isArray() ? (T)Array.newInstance(clazz.getComponentType(), 0) : clazz.newInstance();
+            }
+            catch (InstantiationException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+            catch (IllegalAccessException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+        }
+
+
     }
 
     private static class Default<T,P extends T> implements Factory<T, P> {
