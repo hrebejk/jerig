@@ -81,7 +81,6 @@ public class NullsTest {
     public void nullArrays() throws IOException {
         System.out.println("nullArrays");
 
-        PojsonSave save = PojsonSave.create();
         assertEquals( GOLDEN_ARRAYS, Pojson.save(new RecordArrays()));        
     }
     

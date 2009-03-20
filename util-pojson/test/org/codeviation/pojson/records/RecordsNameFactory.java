@@ -48,67 +48,67 @@ import org.codeviation.pojson.*;
  */
 public class RecordsNameFactory {
 
-    
-    public static class Default {
-        int id = 1;
-        String s = "nazdar";
-    }
-    
-    public static class DifferentId {
-        int id = 1;
-        @Pojson.IdPart
-        String s = "nazdar";
-    }
-    
-    public static class MultiId {
-        @Pojson.IdPart
-        int id = 1;
-        @Pojson.IdPart
-        String s = "nazdar";
-    }
-    
-    @Pojson.FileNameFormat("file.extension")
-    public static class Extension {
-        int id = 1;
-        String s = "nazdar";
-    }
-    
-    @Pojson.FileNameFormat("myfoder/myfoder/file.extension")
-    public static class Folder {
-        int id = 1;
-        String s = "nazdar";
-    }
-     
-    @Pojson.FileNameFormat("%s.%s")
-    public static class Parametrized {
-        @Pojson.IdPart
-        int id = 1;
-        @Pojson.IdPart
-        String s = "nazdar";
-    }
-    
-    @Pojson.FileNameFormat("%s-%s.ext")
-    public static class ParametrizedOrdered {
-        @Pojson.IdPart(4)
-        int id = 1;
-        @Pojson.IdPart(2)
-        String s = "nazdar";
-    }
-    
-    
-    public static class NullId {
-        @Pojson.IdPart
-        int id = 1;
-        @Pojson.IdPart
-        String s = null;
-    }
-    
-    @Pojson.FileNameFormat("%s-%s.ext")
-    public static class NullIdFormated {
-        @Pojson.IdPart
-        int id = 1;
-        @Pojson.IdPart
-        String s = null;
-    }
+//
+//    public static class Default {
+//        int id = 1;
+//        String s = "nazdar";
+//    }
+//
+//    public static class DifferentId {
+//        int id = 1;
+//        @Pojson.IdPart
+//        String s = "nazdar";
+//    }
+//
+//    public static class MultiId {
+//        @Pojson.IdPart
+//        int id = 1;
+//        @Pojson.IdPart
+//        String s = "nazdar";
+//    }
+//
+//    @Pojson.FileNameFormat("file.extension")
+//    public static class Extension {
+//        int id = 1;
+//        String s = "nazdar";
+//    }
+//
+//    @Pojson.FileNameFormat("myfoder/myfoder/file.extension")
+//    public static class Folder {
+//        int id = 1;
+//        String s = "nazdar";
+//    }
+//
+//    @Pojson.FileNameFormat("%s.%s")
+//    public static class Parametrized {
+//        @Pojson.IdPart
+//        int id = 1;
+//        @Pojson.IdPart
+//        String s = "nazdar";
+//    }
+//
+//    @Pojson.FileNameFormat("%s-%s.ext")
+//    public static class ParametrizedOrdered {
+//        @Pojson.IdPart(4)
+//        int id = 1;
+//        @Pojson.IdPart(2)
+//        String s = "nazdar";
+//    }
+//
+//
+//    public static class NullId {
+//        @Pojson.IdPart
+//        int id = 1;
+//        @Pojson.IdPart
+//        String s = null;
+//    }
+//
+//    @Pojson.FileNameFormat("%s-%s.ext")
+//    public static class NullIdFormated {
+//        @Pojson.IdPart
+//        int id = 1;
+//        @Pojson.IdPart
+//        String s = null;
+//    }
             
 }
