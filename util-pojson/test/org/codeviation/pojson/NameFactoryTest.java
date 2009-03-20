@@ -51,89 +51,89 @@ import static org.junit.Assert.*;
  */
 public class NameFactoryTest {
             
-    @Test
-    public void def()  {
-        System.out.println("default");
-
-        PojsonSave save = PojsonSave.create();
-        Default record = new Default();
-        
-        assertEquals( "1.json", save.getFileName(record) );
-    }
-    
-    @Test
-    public void differentId()  {
-        System.out.println("differentId");
-
-        PojsonSave save = PojsonSave.create();
-        DifferentId record = new DifferentId();
-        
-        assertEquals( "nazdar.json", save.getFileName(record) );
-    }
-    
-    @Test
-    public void multiId()  {
-        System.out.println("multiId");
-
-        PojsonSave save = PojsonSave.create();
-        MultiId record = new MultiId();
-        
-        assertEquals( "1nazdar.json", save.getFileName(record) );
-    }
-     
-    
-    @Test
-    public void extension()  {
-        System.out.println("extension");
-
-        PojsonSave save = PojsonSave.create();
-        Extension record = new Extension();
-        
-        assertEquals( "file.extension", save.getFileName(record) );
-    }
-    
-    @Test
-    public void parmetrized()  {
-        System.out.println("parmetrized");
-
-        PojsonSave save = PojsonSave.create();
-        Parametrized record = new Parametrized();
-        
-        assertEquals( "1.nazdar", save.getFileName(record) );
-    }
-    
-    @Test
-    public void parmetrizedOrdered()  {
-        System.out.println("parmetrizedOrdered");
-
-        PojsonSave save = PojsonSave.create();
-        ParametrizedOrdered record = new ParametrizedOrdered();
-        
-        assertEquals( "nazdar-1.ext", save.getFileName(record) );
-        
-    }
-    
-    @Test
-    public void nullId()  {
-        System.out.println("nullId");
-
-        PojsonSave save = PojsonSave.create();
-        NullId record = new NullId();
-        
-        assertEquals( "1null.json", save.getFileName(record) );    
-        
-    }
-    
-    @Test
-    public void nullIdFormated()  {
-        System.out.println("nullIdFormated");
-
-        PojsonSave save = PojsonSave.create();
-        NullIdFormated record = new NullIdFormated();
-        
-        assertEquals( "1-null.ext", save.getFileName(record) );    
-        
-    }
-    
-    
+//    @Test
+//    public void def()  {
+//        System.out.println("default");
+//
+//        PojsonSave save = PojsonSave.create();
+//        Default record = new Default();
+//
+//        assertEquals( "1.json", save.getFileName(record) );
+//    }
+//
+//    @Test
+//    public void differentId()  {
+//        System.out.println("differentId");
+//
+//        PojsonSave save = PojsonSave.create();
+//        DifferentId record = new DifferentId();
+//
+//        assertEquals( "nazdar.json", save.getFileName(record) );
+//    }
+//
+//    @Test
+//    public void multiId()  {
+//        System.out.println("multiId");
+//
+//        PojsonSave save = PojsonSave.create();
+//        MultiId record = new MultiId();
+//
+//        assertEquals( "1nazdar.json", save.getFileName(record) );
+//    }
+//
+//
+//    @Test
+//    public void extension()  {
+//        System.out.println("extension");
+//
+//        PojsonSave save = PojsonSave.create();
+//        Extension record = new Extension();
+//
+//        assertEquals( "file.extension", save.getFileName(record) );
+//    }
+//
+//    @Test
+//    public void parmetrized()  {
+//        System.out.println("parmetrized");
+//
+//        PojsonSave save = PojsonSave.create();
+//        Parametrized record = new Parametrized();
+//
+//        assertEquals( "1.nazdar", save.getFileName(record) );
+//    }
+//
+//    @Test
+//    public void parmetrizedOrdered()  {
+//        System.out.println("parmetrizedOrdered");
+//
+//        PojsonSave save = PojsonSave.create();
+//        ParametrizedOrdered record = new ParametrizedOrdered();
+//
+//        assertEquals( "nazdar-1.ext", save.getFileName(record) );
+//
+//    }
+//
+//    @Test
+//    public void nullId()  {
+//        System.out.println("nullId");
+//
+//        PojsonSave save = PojsonSave.create();
+//        NullId record = new NullId();
+//
+//        assertEquals( "1null.json", save.getFileName(record) );
+//
+//    }
+//
+//    @Test
+//    public void nullIdFormated()  {
+//        System.out.println("nullIdFormated");
+//
+//        PojsonSave save = PojsonSave.create();
+//        NullIdFormated record = new NullIdFormated();
+//
+//        assertEquals( "1-null.ext", save.getFileName(record) );
+//
+//    }
+//
+//    
 }

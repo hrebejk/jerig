@@ -156,16 +156,18 @@ public class ArraysTest {
     public void arraysFloatLoad() throws IOException {
         System.out.println("arraysFloat");
 
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
+        
 
         Float[] f1 = new Float[] {1.0f,2.0f,3.0f,900000.783293289f};
-        String s1 = save.asString(f1);
+        String s1 = Pojson.save(f1);
 
-        Float[] f2 = load.load(s1, Float[].class);
-        String s2 = save.asString(f2);
+        Float[] f2 = Pojson.load(Float[].class, s1);
+        assertEquals( s1, Pojson.save(f2) );
 
-        assertEquals( s1, s2 );
+        Float[] f3 = Pojson.update(new Float[0], s1);
+
+        assertEquals( s1, Pojson.save(f3) );
+
 
     }
 
@@ -173,16 +175,14 @@ public class ArraysTest {
     public void arraysDoubleLoad() throws IOException {
         System.out.println("arraysDoubleLoad");
 
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
-
         Double[] d1 = new Double[] {1.0,2.0,3.0,900000.783293289};
-        String s1 = save.asString(d1);
+        String s1 = Pojson.save(d1);
 
-        Double[] d2 = load.load(s1, Double[].class);
-        String s2 = save.asString(d2);
+        Double[] d2 = Pojson.load(Double[].class, s1);
+        assertEquals( s1, Pojson.save(d2) );
 
-        assertEquals( s1, s2 );
+        Double[] d3 = Pojson.update(new Double[0], s1);
+        assertEquals( s1, Pojson.save(d3) );
 
     }
 
@@ -190,20 +190,22 @@ public class ArraysTest {
     public void arraysObjectLoad() throws IOException {
         System.out.println("arraysObjectLoad");
 
-        PojsonSave save = PojsonSave.create();
-        PojsonLoad load = PojsonLoad.create();
-
         RecordSmall[] d1 = new RecordSmall[] {
             new RecordSmall(1, "A"),
             new RecordSmall(2, "B"),
             new RecordSmall(3, "C")
         };
-        String s1 = save.asString(d1);
+        String s1 = Pojson.save(d1);
 
         System.out.println(s1);
 
-        RecordSmall[] d2 = load.load(s1, RecordSmall[].class);
-        String s2 = save.asString(d2);
+
+
+        RecordSmall[] d2 = Pojson.load(RecordSmall[].class, s1);
+        String s2 = Pojson.save(d2);
+
+        RecordSmall[] d3 = Pojson.update(new RecordSmall[0], s1);
+        assertEquals( s1, Pojson.save(d3) );
 
         assertEquals( s1, s2 );
 

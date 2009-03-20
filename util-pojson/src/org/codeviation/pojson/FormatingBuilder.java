@@ -58,8 +58,9 @@ class FormatingBuilder implements PojsonBuilder<Void,IOException> {
         comma();
         if ( !isField && parent != null ) {
             nl();
-            indent();
+            //indent();
         }
+        indent();
         w.write("{" );
         return new FormatingBuilder(w, this, '}', indent, level + 1);
     }

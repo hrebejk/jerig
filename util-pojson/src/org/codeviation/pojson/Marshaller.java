@@ -98,7 +98,7 @@ public final class Marshaller<T> {
     }
 
              
-    public void setFieldFilter(Filter<String> fieldFilter) {
+    void setFieldFilter(Filter<String> fieldFilter) {
         this.fieldFilter = fieldFilter;
     }
     

@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
-import org.codeviation.pojson.Parser.Error;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
