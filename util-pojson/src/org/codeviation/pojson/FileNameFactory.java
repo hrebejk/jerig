@@ -72,9 +72,9 @@ class FileNameFactory<T> implements Factory<String, T> {
                 field.setAccessible(true);
                 ids[i] = field.get(object);
             } catch (IllegalArgumentException ex) {
-                Logger.getLogger(StoreInfo.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FileNameFactory.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
-                Logger.getLogger(StoreInfo.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FileNameFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

@@ -53,6 +53,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URL;
 
 /** Contains annotations for driving the save and load process of objects and
  * convenience utility methods for saving/loading Java objects to/from JSON
@@ -111,6 +113,14 @@ public class Pojson {
         return new UnMarshaller().load(clazz, file);
     }
 
+    public static <T> T load(Class<T> clazz, URI uri ) throws IOException{
+        return new UnMarshaller().load(clazz, uri);
+    }
+
+    public static <T> T load(Class<T> clazz, URL url ) throws IOException{
+        return new UnMarshaller().load(clazz, url);
+    }
+
     public static <T> T update( T object, String string ) {
         return new UnMarshaller().update(object, string);
     }
@@ -126,6 +136,16 @@ public class Pojson {
     public static <T> T update( T object, File file ) throws FileNotFoundException, IOException {
         return new UnMarshaller().update(object, file);
     }
+
+    public static <T> T update(T object, URI uri ) throws IOException{
+        return new UnMarshaller().update(object, uri);
+    }
+
+    public static <T> T update(T object, URL url ) throws IOException{
+        return new UnMarshaller().update(object, url);
+    }
+
+
 
     /** General annotation to mark classes as Pojson records. This annotation
      * may be used for other frameworks to distinguish between serializable and
@@ -148,7 +168,16 @@ public class Pojson {
     public @interface SuppressStoring {
         // Intentionally empty
     }
-    
+
+    /** Tells Pojson where to stop inspecting the class hierarchy.
+     * By default only inspects current class.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ ElementType.TYPE, ElementType.FIELD} )
+    public @interface StopAt {
+        Class value() default StopAtCurrentClass.class;
+    }
+
     /** Tells Pojson that given should be stored under diferent name than the
      * name of given field.
      *
@@ -188,7 +217,7 @@ public class Pojson {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE, ElementType.FIELD })
-    public @interface FileNameFormat {
+    @interface FileNameFormat {
         String value() default "";
     }
         
@@ -199,26 +228,18 @@ public class Pojson {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD )
-    public @interface IdPart {
+    @interface IdPart {
         int value() default -1;        
     }
     
     
-    /** Tells Pojson where to stop inspecting the class hierarchy.
-     * By default only inspects current class.
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.TYPE, ElementType.FIELD} )
-    public @interface StopAt {
-        Class value() default StopAtCurrentClass.class;
-    }
     
     /** Tells Pojson that given field should be stored by calling to String
      *
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    public @interface ToString {
+    @interface ToString {
         // XXX Add factory for from string back to object
         //Class<Factory<Object,String>> value();
     }
@@ -228,7 +249,7 @@ public class Pojson {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface ModifierPositive {
+    @interface ModifierPositive {
         int[] value() default {Modifier.PUBLIC};
     }
     
@@ -237,7 +258,7 @@ public class Pojson {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface ModifierNegative {
+    @interface ModifierNegative {
         int[] value() default {Modifier.TRANSIENT, Modifier.STATIC};
     }
     
@@ -247,7 +268,7 @@ public class Pojson {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
-    public @interface PostLoad {
+    @interface PostLoad {
     }
     
     /** Tells Poson that all fields in the class should have its name prefixed
@@ -258,13 +279,13 @@ public class Pojson {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface NamePrefix {
+    @interface NamePrefix {
         String value();
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    public @interface InstanceClass {
+    @interface InstanceClass {
         Class<?> value();
     }
     

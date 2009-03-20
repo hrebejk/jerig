@@ -9,7 +9,7 @@ package org.codeviation.pojson;
  *
  * @author phrebejk
  */
-public class IgnoringBuilder<T,E extends Exception> implements PojsonBuilder<T,E> {
+class IgnoringBuilder<T,E extends Exception> implements PojsonBuilder<T,E> {
 
     private PojsonBuilder<T,E> parent;
     private int depth = 0;
