@@ -48,7 +48,7 @@ import org.codeviation.commons.reflect.FieldUtils;
  *
  * @author Petr Hrebejk
  */
-public final class PojsonUtils {
+final class PojsonUtils {
 
     // Static class
     private PojsonUtils() {}

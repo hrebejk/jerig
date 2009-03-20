@@ -52,21 +52,21 @@ import java.util.zip.ZipOutputStream;
  *
  * @author phrebejk
  */
-public class ZipSaver {
+class ZipSaver {
 
-    private PojsonSave save;
+    private Marshaller save;
     private ZipOutputStream zos;
     private Writer writer;
         
     public ZipSaver(ZipOutputStream zos) {
-        this(PojsonSave.create(), zos);
+        this(new Marshaller(), zos);
     }
     
     /** Creates and zip saver around a saver
      * 
      * @param save The Saver to delegate to.
      */
-    public ZipSaver(PojsonSave save, ZipOutputStream zos) {
+    public ZipSaver(Marshaller save, ZipOutputStream zos) {
         this.save = save;
         this.zos = zos;
         this.writer = new BufferedWriter( new OutputStreamWriter(zos) );
@@ -79,7 +79,7 @@ public class ZipSaver {
      */
     public void save(String entryName, Object object) throws IOException {
         zos.putNextEntry(new ZipEntry(entryName));
-        save.save(writer, object);        
+        save.save(object, writer);
         writer.flush();
     }
     
@@ -90,7 +90,7 @@ public class ZipSaver {
      */
     public void save(String entryName, Object[] array) throws IOException {
         zos.putNextEntry(new ZipEntry(entryName));
-        save.save(writer, array);        
+        save.save(array, writer);
         writer.flush();
     }
     
@@ -98,21 +98,21 @@ public class ZipSaver {
      * Saves the object(s) as JSON Array.
      * @param array
      */
-    public void save(String entryName, Object firstObject, Object... array) throws IOException {
-        zos.putNextEntry(new ZipEntry(entryName));
-        save.save(writer, firstObject, array);        
-        writer.flush();
-    }
+//    public void save(String entryName, Object firstObject, Object... array) throws IOException {
+//        zos.putNextEntry(new ZipEntry(entryName));
+//        save.save(writer, firstObject, array);
+//        writer.flush();
+//    }
     
     /**
      * Saves the object(s) in iterable as JSON Array.
      * 
      * @param array
      */
-    public void save(String entryName, Iterable iterable) throws IOException {
-        zos.putNextEntry(new ZipEntry(entryName));
-        save.save(writer, iterable);        
-        writer.flush();
-    }
+//    public void save(String entryName, Iterable iterable) throws IOException {
+//        zos.putNextEntry(new ZipEntry(entryName));
+//        save.save(writer, iterable);
+//        writer.flush();
+//    }
     
 }

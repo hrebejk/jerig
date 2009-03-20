@@ -9,7 +9,7 @@ package org.codeviation.pojson;
  *
  * @author Petr Hrebejk
  */
-public interface PojsonBuilder<T,E extends Exception> {
+interface PojsonBuilder<T,E extends Exception> {
 
     T build() throws E;
 
