@@ -43,7 +43,6 @@ package org.codeviation.pojson;
 
 import java.io.IOException;
 import org.codeviation.pojson.records.RecordFinalFields;
-import org.codeviation.pojson.records.RecordPrivateConstructor;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
