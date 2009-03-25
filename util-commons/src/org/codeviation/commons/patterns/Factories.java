@@ -42,6 +42,7 @@
 package org.codeviation.commons.patterns;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
@@ -372,7 +373,20 @@ public class Factories {
         @SuppressWarnings("unchecked")
         public <T> T create(Class<T> clazz) {
             try {
-                return  clazz.isArray() ? (T)Array.newInstance(clazz.getComponentType(), 0) : clazz.newInstance();
+                if (clazz.isArray() ) {
+                    return (T)Array.newInstance(clazz.getComponentType(), 0);
+                }
+                else {
+                    Constructor<T> c = clazz.getDeclaredConstructor();
+                    c.setAccessible(true);
+                    return c.newInstance();
+                }
+            }
+            catch (InvocationTargetException ex ) {
+                throw new IllegalArgumentException(ex);
+            }
+            catch (NoSuchMethodException ex ) {
+                throw new IllegalArgumentException(ex);
             }
             catch (InstantiationException ex) {
                 throw new IllegalArgumentException(ex);
