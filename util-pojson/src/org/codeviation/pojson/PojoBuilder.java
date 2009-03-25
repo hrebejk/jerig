@@ -248,6 +248,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
                 else {
                     Field field = getField(object, fieldName);
                     if ( field != null ) {
+                        field.setAccessible(true);
                         field.set(object, JsonUtils.fromJSON(field.getType(), value));
                     }
                 }
