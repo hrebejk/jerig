@@ -9,9 +9,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
-import org.codeviation.commons.patterns.Filter;
-import org.codeviation.commons.reflect.FieldUtils;
 
 /** Default pojson object scanner.
  *
@@ -23,7 +22,7 @@ import org.codeviation.commons.reflect.FieldUtils;
  */
 class PojoWriter {
 
-    // private PojsonBuilder<T,E> builder;
+    private Map<Class<?>,Collection<Field>> fieldCache = new HashMap<Class<?>, Collection<Field>>();
 
     public <T,X,E extends Exception> T writeTo(T object, PojsonBuilder<X,E> builder) throws E {
         writeAny(object, builder);
@@ -103,15 +102,15 @@ class PojoWriter {
 
         else {
             // Object
-
-            // XXX add AsBean annotation
+            
             builder = builder.hash();
-            for( Field field : PojsonUtils.getFields( object.getClass()) ) { // XXX add caching
+
+            for( Field field : getFields( object.getClass()) ) {
                 try {
                     field.setAccessible(true);
                     Object o = field.get(object);
                     if ( !( o == null && field.isAnnotationPresent(Pojson.SkipNullValues.class))) {
-                        builder = builder.field(getPojsonFieldName(field));
+                        builder = builder.field(PojsonUtils.getPojsonFieldName(field));
                         writeAny(o, builder);
                     }
                 }
@@ -124,31 +123,13 @@ class PojoWriter {
 
     }
 
-    
-    // XXX move me to PojsonUtils
-    public static String getPojsonFieldName(Field f) {
-
-        String name;
-
-        Pojson.Name na = f.getAnnotation(Pojson.Name.class);
-
-        if (na == null) {
-            name = f.getName();
+    private synchronized Collection<Field> getFields(Class<?> clazz) {
+        Collection<Field> fields = fieldCache.get(clazz);
+        if ( fields == null ) {
+            fields = PojsonUtils.getFields( clazz ).values();
+            fieldCache.put(clazz, fields);
         }
-        else {
-           name = na.value();
-           name = name == null ? f.getName() : name;
-        }
-
-        Pojson.NamePrefix np = f.getDeclaringClass().getAnnotation(Pojson.NamePrefix.class);
-        if ( np != null ) {
-            name = np.value() + name;
-        }
-
-        return name;
-
+        return fields;
     }
-
-    
-
+ 
 }
