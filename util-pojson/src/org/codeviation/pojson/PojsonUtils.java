@@ -41,6 +41,7 @@ package org.codeviation.pojson;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Map;
 import org.codeviation.commons.patterns.Filter;
 import org.codeviation.commons.reflect.FieldUtils;
 
@@ -103,7 +104,7 @@ final class PojsonUtils {
      * @param clazz
      * @return
      */
-    public static Collection<Field> getFields( Class<?> clazz ) {
+    public static Map<String,Field> getFields( Class<?> clazz ) {
 
         Pojson.StopAt saa = clazz.getAnnotation(Pojson.StopAt.class);
 
@@ -119,10 +120,35 @@ final class PojsonUtils {
             }
         }
 
-        return FieldUtils.getAll(clazz, stopClass, new FieldFilter(clazz)).values();
+        return FieldUtils.getAll(clazz, stopClass, new FieldFilter(clazz));
 
     }
 
+
+    public static String getPojsonFieldName(Field f) {
+
+        String name;
+
+        Pojson.Name na = f.getAnnotation(Pojson.Name.class);
+
+        if (na == null) {
+            name = f.getName();
+        }
+        else {
+           name = na.value();
+           name = name == null ? f.getName() : name;
+        }
+
+        Pojson.NamePrefix np = f.getDeclaringClass().getAnnotation(Pojson.NamePrefix.class);
+        if ( np != null ) {
+            name = np.value() + name;
+        }
+
+        return name;
+
+    }
+
+    /** Gets name of a field honoring the Pojson Annotations */
     private static class FieldFilter implements Filter<Field> {
 
         private Class<?> clazz;

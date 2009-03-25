@@ -5,12 +5,12 @@
 
 package org.codeviation.pojson;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +22,8 @@ import org.codeviation.commons.reflect.ClassUtils;
  * @author Petr Hrebejk
  */
 class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
+
+    private Map<Class<?>,Map<String,Field>> fieldsCache = new HashMap<Class<?>, Map<String,Field>>();
 
     private String fieldName;
     
@@ -267,18 +269,21 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
         }
     }
 
-    // XXX move me to JSON utils
-    // XXX stnchronize with the writer e.g. prefix, stopAt, field filter etc.
-    private static Field getField(Object object, String name) {
-        try {
-            return object.getClass().getField(name); // XXX rewrite to reflection utils
-        }
-        catch (NoSuchFieldException ex) {
+    
+    private Field getField(Object object, String name) {
+        Map<String,Field> fields = getFields(object.getClass());
+        Field f = fields.get(name);
+        if ( f == null ) {
             if ( object.getClass().isAnnotationPresent(Pojson.IgnoreNonExisting.class ) ) {
                 return null;
             }
-            throw new IllegalArgumentException(ex);
+            else {
+                throw new IllegalArgumentException( new NoSuchFieldException("Field " + name + " not found in class " + object.getClass().getName() + "."));
+            }
         }
+
+        return f;
+
     }
 
     private static <T> T createInstance(Class<T> clazz) {
@@ -353,15 +358,23 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     }
 
     private boolean isArrayType(Class type) {
-
         return type.isArray() || ClassUtils.isSuperinterface(type, Iterable.class);
-
     }
 
     private boolean isMapType(Class type) {
-
         return ClassUtils.isSuperinterface(type, Map.class);
+    }
 
+    private synchronized Map<String,Field> getFields(Class<?> clazz) {
+
+        Map<String,Field> fields = fieldsCache.get(clazz);
+        if ( fields == null ) {
+            fields = new HashMap<String, Field>();
+            for (Field f : PojsonUtils.getFields(clazz).values()) {
+                fields.put(PojsonUtils.getPojsonFieldName(f), f);
+            }
+        }
+        return fields;
     }
 
 }

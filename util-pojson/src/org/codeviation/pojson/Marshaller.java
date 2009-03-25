@@ -62,12 +62,16 @@ public final class Marshaller<T> {
     private String indentation = "    ";
     private int indentLevel = 0;
 
+    private PojoWriter pw;
+
     public Marshaller() {
+        this.pw = new PojoWriter();
     }
 
     public Marshaller(String indentation, int indentLevel) {
+        this();
         this.indentation = indentation;
-        this.indentLevel = indentLevel;
+        this.indentLevel = indentLevel;        
     }
 
     /** Saves an object to string */
@@ -84,8 +88,7 @@ public final class Marshaller<T> {
     }
 
     public void save( T object, Writer writer ) throws IOException {
-        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(writer, indentation, indentLevel);
-        PojoWriter pw = new PojoWriter();
+        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(writer, indentation, indentLevel);        
         pw.<Object,Void,IOException>writeTo(object, pb);
     }
 
