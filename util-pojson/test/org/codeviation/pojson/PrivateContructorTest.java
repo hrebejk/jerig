@@ -41,10 +41,7 @@
 
 package org.codeviation.pojson;
 
-import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import java.io.IOException;
-import org.codeviation.commons.reflect.ClassUtils;
-import org.codeviation.pojson.records.RecordObjectTypes;
 import org.codeviation.pojson.records.RecordPrivateConstructor;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,9 +53,6 @@ import static org.junit.Assert.*;
  */
 public class PrivateContructorTest {
     
-    private static String GOLDEN = null; 
-    private static RecordPrimitiveTypes RECORD_PRIMITIVES;
-    private static RecordObjectTypes RECORD_OBJECTS;
     
     public PrivateContructorTest() {
         
