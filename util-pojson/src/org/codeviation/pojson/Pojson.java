@@ -61,17 +61,8 @@ import java.net.URL;
  * format. In case the of storing or loading larger number of objects (which
  * may profit from caching) or if you need modify proprties of the
  * marhalling/unmarshalling process and/or stricter type checking please use
- * the marshaller UnMarshaller classes.
- *
- *
- *  XXX Remove PojsonLoad and Pojson Save
- *  XXX Make the Load methods honor Pojson annotations
- *  XXX Make the Load methods work with StoreInfo
- *  XXX (Optionaly) clean up the handlers stuff
- *  XXX Add caches for StoreInfos where apporpriate
- *  XXX Add methods and functionality for saving to/loading from collections
- *      using an annotation
- * 
+ * the {@link Marshaller}, {@link UnMarshaller} classes.
+
  * @author Petr Hrebejk
  */
 public class Pojson {
@@ -80,19 +71,61 @@ public class Pojson {
     
     private Pojson() {}
 
-    /** Saves an object to string */
+    
+    /** Writes JSON representation of the object into a String. This is a
+     * convenience method, which uses standard formating and does not cache
+     * information about serialized classes. If you need more control of the
+     * formating the marshalling process or if you want to achieve slightly better 
+     * better performance please use the {@link Marshaller} class.
+     *
+     * @param object Object to be marshaled to JSON format.
+     * @return String containing JSON representation of the object.
+     */
     public static String save( Object object ) {
         return new Marshaller<Object>().save(object);
     }
 
+    /** Writes JSON representation of the object into a Writer. This is a
+     * convenience method, which uses standard formating and does not cache
+     * information about serialized classes. If you need more control of the
+     * formating the marshalling process or if you want to achieve slightly better
+     * better performance please use the {@link Marshaller} class.<BR/>
+     * This method does NOT close the Writer after it writes to it.
+     *
+     * @param object Object to be marshaled to JSON format.
+     * @param writer The Writer to marshall the object into.
+     * @throws IOException when it can't write the object for some reason.
+     */
     public static void save( Object object, Writer writer ) throws IOException {
         new Marshaller<Object>().save(object, writer);
     }
 
+    /** Writes JSON representation of the object into a Stream. This is a
+     * convenience method, which uses standard formating and does not cache
+     * information about serialized classes. If you need more control of the
+     * formating the marshalling process or if you want to achieve slightly better
+     * better performance please use the {@link Marshaller} class.<BR/>
+     * This method does NOT close the Stream after it writes to it.
+     *
+     * @param object Object to be marshaled to JSON format.
+     * @param outputStream The Stream to marshall the object into.
+     * @throws IOException when it can't write the object for some reason.
+     */
     public static void save( Object object, OutputStream outputStream ) throws IOException {
         new Marshaller<Object>().save(object, outputStream);
     }
 
+    /** Writes JSON representation of the object into a File. This is a
+     * convenience method, which uses standard formating and does not cache
+     * information about serialized classes. If you need more control of the
+     * formating the marshalling process or if you want to achieve slightly better
+     * better performance please use the {@link Marshaller} class.<BR/>
+     * This method does NOT close the Stream after it writes to it.
+     *
+     * @param object Object to be marshaled to JSON format.
+     * @param file The File to marshall the object into.
+     * @throws IOException when it can't write the object for some reason.
+     */
     public static void save( Object object, File file ) throws IOException {
         new Marshaller<Object>().save(object, file);
     }
@@ -149,10 +182,8 @@ public class Pojson {
 
     /** General annotation to mark classes as Pojson records. This annotation
      * may be used for other frameworks to distinguish between serializable and
-     * not serializable objects. The annotation is currently not used in pojson.
-     *
-     * XXX Put a checker for this anotation to PojsonSave.
-     *
+     * not serializable objects. The annotation is currently not used by the
+     * Pojson library itself.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
@@ -160,7 +191,9 @@ public class Pojson {
         // Intentionally empty
     }
 
-    /** Tells Pojson that given field should not be stored
+    /** Tells Pojson that given field should not be stored. Fields marked with
+     * this annotation will be excluded from the marshalling process even if
+     * they would be serialezed normally.
      *
      */
     @Retention(RetentionPolicy.RUNTIME)
@@ -169,8 +202,12 @@ public class Pojson {
         // Intentionally empty
     }
 
-    /** Tells Pojson where to stop inspecting the class hierarchy.
-     * By default only inspects current class.
+    /** Tells Pojson where to stop inspecting the class hierarchy. By default
+     * Pojson only stores/loads the fields in the last class in the hierarchy.
+     * E.g. it does not serialize values of any parent classes. With this annotation
+     * you may ordr pojson to go deeper in the hirarachy. If used then all classes
+     * from the last to the class passed as parameter into the annotation will
+     * (inclusive) will be taken into account when marshalling/unmarshlling objects.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ ElementType.TYPE, ElementType.FIELD} )
@@ -178,8 +215,16 @@ public class Pojson {
         Class value() default StopAtCurrentClass.class;
     }
 
+    interface StopAtCurrentClass {
+        // Marker interface for stopping at current class
+    }
+
     /** Tells Pojson that given should be stored under diferent name than the
-     * name of given field.
+     * name of given field. This annotation is good for renamining fields in
+     * the resulting JSON representation. You may need to use this annotation for
+     * example in cases where you need to a field to by named by a Java keyword
+     * (such as package) or by some identifier which is not alowed in Java. (such
+     * as identifier containig spaces or other disallowed charaters).
      *
      * @author Petr Hrebejk
      */
@@ -189,8 +234,9 @@ public class Pojson {
         String value();
     }
     
-    /** Tells Pojson not to store fields whose value is null. If used on class
-     * it is valid for all fields in the class.
+    /** Tells Pojson not to store fields whose value is null. I.e. fields
+     * containig null will not appear in the resulting JSON representation.
+     * If used on class it is valid for all fields in the class.
      *
      */
     @Retention(RetentionPolicy.RUNTIME)
@@ -200,15 +246,48 @@ public class Pojson {
 
 
     /** Tells Pojson not to complain about nonexisting fields in the class
-     * when loading the data from the stream. I.e. having more fields in the
-     * stream than in the class is fine.
+     * when unmarshalling the data from the JSON representation. I.e. loading
+     * a JSON text which contains field which do not exist in the Java class
+     * will not result into a exception.
      *
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE })
     public @interface IgnoreNonExisting {
     }
-    
+
+    /** Tells Pojson which fields should be used based on theirs modifiers. Works
+     * toghether with the {@link ModifierNegative} annotation. To get to the final
+     * set of fields all fields which match the {@link ModifierPositive} filter
+     * are taken into account and then thos fields which match the
+     * {@link ModifierNegative} filter are subtracted from the set.
+     * <br/></br>
+     * Default value of this annotation is {@link Modifier.PUBLIC}
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface ModifierPositive {
+        int[] value() default {java.lang.reflect.Modifier.PUBLIC};
+    }
+
+    /** Tells Pojson which fields should NOT be used based on theirs modifiers.
+     * Works toghether with the {@link ModifierPositive} annotation. To get to the final
+     * set of fields all fields which match the {@link ModifierPositive} filter
+     * are taken into account and then thos fields which match the
+     * {@link ModifierNegative} filter are subtracted from the set.
+     * <br/></br>
+     * Default value of this annotation is { {@link java.lang.reflect.Modifier.TRANSIENT},
+     * {@link java.lang.reflect.Modifier.STATIC} }
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface ModifierNegative {
+        int[] value() default {Modifier.TRANSIENT, Modifier.STATIC};
+    }
+
+
+    // The other annotations are currently not used. -------------------------------
+
     /** Tells Pojson how the filename of the record should be formated
      * the format string is the same as the one of printf method. If used on
      * field it means that the field will be stored in different file. See also 
@@ -244,23 +323,7 @@ public class Pojson {
         //Class<Factory<Object,String>> value();
     }
     
-    /** What fields should be included
-     *
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    @interface ModifierPositive {
-        int[] value() default {Modifier.PUBLIC};
-    }
     
-    /** What fields should not be included
-     * 
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    @interface ModifierNegative {
-        int[] value() default {Modifier.TRANSIENT, Modifier.STATIC};
-    }
     
     /** This method should be called after the object has been loaded from
      * the JSON format.
@@ -289,8 +352,6 @@ public class Pojson {
         Class<?> value();
     }
     
-    interface StopAtCurrentClass {
-        // Marker interface for stopping at current class
-    }
+    
         
 }
