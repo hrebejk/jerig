@@ -10,19 +10,20 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /** Default pojson object scanner.
  *
- * XXX Add cycle detection
  * XXX Add field filter
- * XXX Make it honor all annotations
  *
  * @author Petr Hrebejk
  */
 class PojoWriter {
 
     private Map<Class<?>,Collection<Field>> fieldCache = new HashMap<Class<?>, Collection<Field>>();
+
+    private Map<Object,Object> cycleDetector = new IdentityHashMap<Object, Object>();
 
     public <T,X,E extends Exception> T writeTo(T object, PojsonBuilder<X,E> builder) throws E {
         writeAny(object, builder);
@@ -39,28 +40,34 @@ class PojoWriter {
         // Maps, Collections and Arrays
 
         else if ( object instanceof Map ) {
+            checkCyclic(object);
             builder = builder.hash();
             for( Object entry : ((Map)object).entrySet() ) {
                 builder = builder.field( ((Map.Entry)entry).getKey().toString() );
                 writeAny( ((Map.Entry)entry).getValue(), builder );
             }
             builder = builder.up();
+            cycleDetector.remove(object);
         }
 
         else if ( object instanceof Iterable ) {
+            checkCyclic(object);
             builder = builder.array();
             for( Object o : (Iterable)object ) {
                 writeAny( o, builder );
             }
             builder = builder.up();
+            cycleDetector.remove(object);
         }
 
         else if ( object.getClass().isArray() ) {
+            checkCyclic(object);
             builder = builder.array();
             for ( int i = 0; i < Array.getLength(object); i++) {
                 writeAny( Array.get(object, i), builder );
             }
             builder = builder.up();
+            cycleDetector.remove(object);
         }
 
         // Date
@@ -102,7 +109,9 @@ class PojoWriter {
 
         else {
             // Object
-            
+
+            checkCyclic(object);
+
             builder = builder.hash();
 
             for( Field field : getFields( object.getClass()) ) {
@@ -119,6 +128,7 @@ class PojoWriter {
                 }
             }
             builder = builder.up();
+            cycleDetector.remove(object);
         }
 
     }
@@ -131,5 +141,19 @@ class PojoWriter {
         }
         return fields;
     }
+
+    private boolean checkCyclic(Object object) {
+
+        if ( cycleDetector.get(object) != null ) {
+            throw new IllegalArgumentException("Object cycle detected.");
+        }
+        else {
+            cycleDetector.put(object, object);
+            return false;
+        }
+
+    }
+
+
  
 }
