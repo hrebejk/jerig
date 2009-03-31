@@ -82,11 +82,11 @@ public class ArraysTest {
     @Test
     public void arraysPureUnindentedSave() throws IOException {
         System.out.println("arraysPureUnindentedSave");
-        
+
         Marshaller<Object> m = new Marshaller<Object>(null, 0);
         assertEquals( "[1,2,3]", m.save(new int[]{1,2,3}));
         assertEquals( "[1,2,3]", m.save(CollectionsUtil.arrayList(1,2,3)));
-                
+
     }
 
     @Test
@@ -117,12 +117,12 @@ public class ArraysTest {
         assertEquals(s1, Pojson.save(a2));
 
     }
-    
+
 
     @Test
     public void arraysIntegerLoad() throws IOException {
         System.out.println("arraysIntegerLoad");
-                
+
         Integer[] i1 = new Integer[] {1,2,3,900000};
         String s1 = Pojson.save(i1);
 
@@ -139,13 +139,13 @@ public class ArraysTest {
     public void arraysLong() throws IOException {
         System.out.println("arraysLong");
 
-        
+
         Long[] l1 = new Long[] {1l,2l,3l,900000l};
         String s1 = Pojson.save(l1);
 
         Long[] l2 = Pojson.load(Long[].class, s1);
         assertEquals( s1, Pojson.save(l2) );
-        
+
         Long[] l3 = Pojson.update(new Long[0], s1);
 
         assertEquals( s1, Pojson.save(l3) );
@@ -156,7 +156,7 @@ public class ArraysTest {
     public void arraysFloatLoad() throws IOException {
         System.out.println("arraysFloat");
 
-        
+
 
         Float[] f1 = new Float[] {1.0f,2.0f,3.0f,900000.783293289f};
         String s1 = Pojson.save(f1);
@@ -198,8 +198,6 @@ public class ArraysTest {
         String s1 = Pojson.save(d1);
 
         System.out.println(s1);
-
-
 
         RecordSmall[] d2 = Pojson.load(RecordSmall[].class, s1);
         String s2 = Pojson.save(d2);
