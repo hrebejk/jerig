@@ -76,6 +76,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     public PojsonBuilder<T, RuntimeException> hash() throws RuntimeException {
 
         if ( parent == null && fieldName == null ) {
+            parent = this;
             return this;    // call to hash on root
         }
         else if ( fieldName != null ) { // call to hash in an object field
@@ -141,6 +142,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     public PojsonBuilder<T, RuntimeException> array() throws RuntimeException {
 
         if ( parent == null && fieldName == null ) {  // call to array on root
+            parent = this;
             return this;
         }
         else if ( fieldName != null ) { // call to array in an object field
@@ -228,8 +230,12 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     }
 
     public PojsonBuilder<T, RuntimeException> up() throws RuntimeException {
+
         if ( parent != null ) {
             parent.resolveTemporaryArray();
+        }
+        if ( parent == this) {
+            parent = null;
         }
         return parent == null ? this : parent;
     }

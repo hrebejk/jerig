@@ -45,10 +45,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordComplex;
 import org.codeviation.pojson.records.RecordPrimitiveTypes;
+import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -197,5 +199,31 @@ public class CollectionsTest {
         
         assertEquals( Arrays.asList(1l,2l,3l,900000.783293289), o );
         
+    }
+
+    @Test
+    public void loadList() throws IOException {
+
+        System.out.println("loadList");
+
+        List<RecordSmall> d1 = new ArrayList<RecordSmall>();
+        d1.add( new RecordSmall(1, "A"));
+        d1.add(new RecordSmall(2, "B"));
+        d1.add(new RecordSmall(3, "C"));
+
+        String s1 = Pojson.save(d1);
+
+        System.out.println(s1);
+
+        @SuppressWarnings("unchecked")
+        List<RecordSmall> d2 = Pojson.load(ArrayList.class, s1);
+        String s2 = Pojson.save(d2);
+
+        List<RecordSmall> d3 = new ArrayList<RecordSmall>();
+        d3 = Pojson.update(d3, s1);
+        assertEquals( s1, Pojson.save(d3) );
+
+        assertEquals( s1, s2 );
+
     }
 }
