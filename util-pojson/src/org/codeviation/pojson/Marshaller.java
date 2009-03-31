@@ -48,6 +48,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.codeviation.commons.patterns.Filter;
 
 /** Good for saving objects in Json format.
@@ -96,8 +98,19 @@ public final class Marshaller<T> {
         save( object, new OutputStreamWriter(outputStream));
     }
 
-    public void save( T object, File file ) throws IOException {
-        save( object, new FileWriter(file));
+    public void save( T object, File file ) throws IOException  {
+
+        FileWriter fw = null;
+
+        try {
+            fw = new FileWriter(file);
+            save( object, fw);
+        }
+        finally {
+            if ( fw != null) {
+                fw.close();
+            }
+        }
     }
 
              
