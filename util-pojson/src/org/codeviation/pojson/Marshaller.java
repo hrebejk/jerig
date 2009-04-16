@@ -41,6 +41,7 @@
 
 package org.codeviation.pojson;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -90,12 +91,21 @@ public final class Marshaller<T> {
     }
 
     public void save( T object, Writer writer ) throws IOException {
-        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(writer, indentation, indentLevel);        
+        BufferedWriter bw = new BufferedWriter( writer );
+        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(bw, indentation, indentLevel);
         pw.<Object,Void,IOException>writeTo(object, pb);
+        bw.flush();
+        bw.close();
     }
 
     public void save( T object, OutputStream outputStream ) throws IOException {
-        save( object, new OutputStreamWriter(outputStream));
+        OutputStreamWriter osw = new OutputStreamWriter(outputStream);
+        try {
+            save( object, osw);
+        }
+        finally {
+            osw.close();
+        }
     }
 
     public void save( T object, File file ) throws IOException  {

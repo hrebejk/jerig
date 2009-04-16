@@ -249,8 +249,11 @@ class JsonUtils {
         if ( object == null) {
             return null;
         }
-        
-        if ( ClassUtils.isSuperclass(object.getClass(), type) ) {
+
+
+
+        if ( (type.isInterface() && ClassUtils.isSuperinterface(object.getClass(), type) ) ||
+              ClassUtils.isSuperclass(object.getClass(), type) ) {
             return object;
         } 
 
