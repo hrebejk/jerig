@@ -68,7 +68,7 @@ public final class FileUtil {
     public static Factory<String,File> TO_STRING = new StringFactory();
     public static Factory<InputStream,File> TO_INPUT_STREAM = new InputStreamFactory();
     public static Factory<OutputStream,File> TO_OUTPUT_STREAM = new OutputStreamFactory();
-        
+
     public static String asString( File f ) throws IOException {
         
         int size = (int)f.length(); // XXX too long files
