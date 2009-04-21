@@ -9,9 +9,7 @@
 
 package org.codeviation.lutz;
 
-import java.util.Collection;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 import org.codeviation.commons.patterns.Factory;
 
 /**
@@ -30,44 +28,46 @@ class DocumentFactory<T> implements Factory<Document,T> {
         Document doc = new Document();
 
         for (FieldRecord fr : indexInfo.getFields()) {
-            Collection<Object> objects = fr.get(object);
-            if( objects == null ) {
-                index(doc, fr, null);
-            }
-            else {
-                for( Object o : objects ) {
-                    index(doc, fr, o );
-                }
-            }
+            fr.index( doc, object );
         }
+//            Collection<Object> objects = fr.get(object);
+//            if( objects == null ) {
+//                index(doc, fr, null);
+//            }
+//            else {
+//                for( Object o : objects ) {
+//                    index(doc, fr, o );
+//                }
+//            }
+//        }
         return doc;                
     }
             
     // Private section ---------------------------------------------------------
     
-    private void index(Document doc, FieldRecord fr, Object object) {
-                        
-        if ( object == null ) {
-            return;
-        }
-        
-        // Has subs
-        if ( object != null && fr.hasSubs() ) {
-            for (FieldRecord sub : fr.getSubs()) {
-                for( Object o : sub.get(object) ) {
-                    index(doc, sub, o);
-                }
-            }
-        }
-        else {
-            // System.out.println("FR " + fr.getName() + " : " + fr.asText(object));
-            if (  fr.getStore() == null ) {
-                System.out.println( "NULL STORE" + fr.getName() );
-            }
-            Field field = new Field(fr.getName(), fr.asText(object), fr.getStore(), fr.getIndex());
-            doc.add(field);
-        }
-    }
+//    private void index(Document doc, FieldRecord fr, Object object) {
+//
+//        if ( object == null ) {
+//            return;
+//        }
+//
+//        // Has subs
+//        if ( object != null && fr.hasSubs() ) {
+//            for (FieldRecord sub : fr.getSubs()) {
+//                for( Object o : sub.get(object) ) {
+//                    index(doc, sub, o);
+//                }
+//            }
+//        }
+//        else {
+//            // System.out.println("FR " + fr.getName() + " : " + fr.asText(object));
+//            if (  fr.getStore() == null ) {
+//                System.out.println( "NULL STORE" + fr.getName() );
+//            }
+//            Field field = new Field(fr.getName(), fr.asText(object), fr.getStore(), fr.getIndex());
+//            doc.add(field);
+//        }
+//    }
     
 }
 

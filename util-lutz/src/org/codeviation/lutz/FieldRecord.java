@@ -9,25 +9,24 @@
 
 package org.codeviation.lutz;
 
-import java.lang.annotation.Annotation;
+import com.sun.org.apache.bcel.internal.generic.ASTORE;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Iterator;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
-import static org.apache.lucene.document.Field.Store;
-import static org.apache.lucene.document.Field.Index;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.document.NumberTools;
+import org.codeviation.commons.patterns.Factories;
+import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.commons.reflect.FieldUtils;
-import org.codeviation.lutz.Lutz.NamePrefix;
+import org.codeviation.lutz.Lutz.FieldIndex;
 
 
 /** Indexes plain objects in lucene using reflection. Default (if not changed
@@ -45,19 +44,12 @@ import org.codeviation.lutz.Lutz.NamePrefix;
  */
 class FieldRecord  {
     
-    private Analyzer analyzer;
     private Field field;
     private Collection<FieldRecord> subs;
     private String name;
-    private Store store;
-    private Index index;
     
     public String getName() {
         return name;
-    }
-    
-    public Class getType() {
-        return field.getType();
     }
     
     public boolean hasSubs() {
@@ -69,45 +61,75 @@ class FieldRecord  {
     }
     
     public Analyzer getAnalyzer() {
-        return analyzer;
-    }
-    
-    public Store getStore() {
-        return store;
-    }
-    
-    public Index getIndex() {
-        return index;
+        return getFieldAnalyzer(field);
     }
         
-    public Collection<Object> get(Object o) {
-        try {
-            if ( field.getType().isArray() ) {
-                Object array = field.get(o);
-                if ( array == null ) {
-                    return null;
-                }
-                int len = Array.getLength(array);
-                List<Object> result = new ArrayList<Object>(len);
+    /** Adds given field to a document */
+    public void index( Document doc, Object object ) {
+                
+        if ( object == null ) {
+            return;
+        }
 
-                for( int i = 0; i <len; i++) {
-                    result.add(Array.get(array, i) );
+        if ( LutzUtils.isArrayType(field.getType()) ) {
+            if ( isAsTokens(field) ) { // Convert array to text
+                char separator = field.getAnnotation(Lutz.AsTokens.class).value();
+                StringBuilder sb = new StringBuilder();
+                for( Iterator it = LutzUtils.getIterator(getFieldValue( object )); it.hasNext(); ) {
+                    if ( sb.length() != 0) {
+                        sb.append(separator);
+                    }
+                    sb.append( LutzUtils.valueAsText( it.next() ) );                    
+                    
                 }
-                return result;
+                org.apache.lucene.document.Field f = new org.apache.lucene.document.Field (
+                        getName(),
+                        LutzUtils.valueAsText( sb.toString() ),
+                        getFieldStore(field).toLucene(),
+                        getFieldIndex(field).toLucene());                
+                doc.add(f);
             }
-            else {            
-                return Collections.singletonList(field.get(o));
+            else { // Add several fields for every element;
+                for( Iterator it = LutzUtils.getIterator(getFieldValue( object )); it.hasNext(); ) {
+                    org.apache.lucene.document.Field f = new org.apache.lucene.document.Field (
+                        getName(),
+                        LutzUtils.valueAsText( it.next() ),
+                        getFieldStore(field).toLucene(),
+                        getFieldIndex(field).toLucene());
+
+                    doc.add(f);
+                }
             }
         }
-        catch (IllegalArgumentException ex) {
-            Logger.getLogger(FieldRecord.class.getName()).log(Level.SEVERE, null, ex);
+        else {
+            org.apache.lucene.document.Field f = new org.apache.lucene.document.Field (
+                    getName(),
+                    LutzUtils.valueAsText( getFieldValue(object) ),
+                    getFieldStore(field).toLucene(),
+                    getFieldIndex(field).toLucene());
+            doc.add(f);
         }
-        catch (IllegalAccessException ex) {
-            Logger.getLogger(FieldRecord.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;        
+        
+        
+        // Has subs
+//        if ( fr.hasSubs() ) {
+//            for (FieldRecord sub : fr.getSubs()) {
+//                for( Object o : sub.get(object) ) {
+//                    index(doc, sub, o);
+//                }
+//            }
+//        }
+//        else {
+//            // System.out.println("FR " + fr.getName() + " : " + fr.asText(object));
+//            if (  fr.getStore() == null ) {
+//                System.out.println( "NULL STORE" + fr.getName() );
+//            }
+//            Field field = new Field(fr.getName(), fr.asText(object), fr.getStore(), fr.getIndex());
+//            doc.add(field);
+//        }
+        
+               
     }
-
    
     static Collection<FieldRecord> forClass(Class clazz, String parentName ) {
         
@@ -123,7 +145,7 @@ class FieldRecord  {
         // System.out.println( clazz.getName() + " " + namePrefix + ";");
         
         for (Field f : fields) {
-            if ( f.isSynthetic() ) {
+            if ( f.isSynthetic() || f.isAnnotationPresent(Lutz.SuppressIndexing.class) ) {
                 continue; // Rewrite to filter
             }
             f.setAccessible(true);
@@ -135,133 +157,104 @@ class FieldRecord  {
             FieldRecord fr = new FieldRecord();
             fr.field = f;
             fr.name = parentName == null ? namePrefix + f.getName() : parentName + "." + namePrefix + f.getName();
-                        
-            if (isDirectlyIndexed(type) ){
-                fr.store = getFieldStore(fr.field);
-                fr.analyzer = getFieldAnalyzer(fr.field);
-                fr.index = getFieldIndex(fr.field);
-                //System.out.println("Creating FR " + fr.name + " : " + fr.getType() + " " + fr.store + " " + fr.index + " " + fr.analyzer  );
-            }    
-            else {
-                // System.out.println("NOT DIRECTLY INDEXED " + fr.name );
-                fr.subs = forClass( type, fr.name );
-            }
+                                    
+//            if ( !primitive || String) {
+//
+//                // System.out.println("NOT DIRECTLY INDEXED " + fr.name );
+//                fr.subs = forClass( type, fr.name );
+//            }
             result.add(fr);
         }
 
         return result;
     }
     
-    private static Store getFieldStore( Field field ) {
-        return field.isAnnotationPresent(Lutz.Store.class) ? Store.YES: Store.NO;
+    private static Lutz.FieldStore getFieldStore( Field field ) {
+        Lutz.Store s = field.getAnnotation(Lutz.Store.class);
+        return s == null ? Lutz.FieldStore.NO : s.value();
     }
     
     private static String getNamePrefix(Class<?> clazz) {
-        Annotation np = clazz.getAnnotation(Lutz.NamePrefix.class);
-        if ( np != null ) {
-            return ((NamePrefix)np).value();
-        }
-        else {
-            return null;
-        }
+        // XXX Add prefix into Lutz and Pojson
+//        Annotation np = clazz.getAnnotation(Lutz.NamePrefix.class);
+//        if ( np != null ) {
+//            return ((Lutz.NamePrefix)np).value();
+//        }
+//        else {
+//            return null;
+//        }
+
+       return null;
     }
-    
-    private static boolean isUntokenized(Field field) {
-        return field.isAnnotationPresent(Lutz.Untokenized.class);
-    }
-    
-    private static Index getFieldIndex( Field field ) {
-        Class type = field.getType();
         
+    private static Lutz.FieldIndex getFieldIndex( Field field ) {
+
+        if ( LutzUtils.isLutzPrimitive(field.getType())) {  // Primitive types
+            return Lutz.FieldIndex.NOT_ANALYZED;
+        }
         
-        if ( isUntokenized( field ) ||
-             type.isEnum() ||
-             type == Integer.TYPE || type == Integer.class ||
-             type == Long.TYPE || type == Long.class ||
-             type == Short.TYPE || type == Short.class || 
-             type == Byte.TYPE || type == Byte.class ||
-             type == Boolean.TYPE || type == Boolean.class || 
-             type == Character.TYPE || type == Character.class || 
-             type == Date.class ) {
-             return Index.UN_TOKENIZED;
-        }
-        else {
-            return Index.TOKENIZED;
-        }
+        Lutz.Index i = field.getAnnotation(Lutz.Index.class);
+        return i == null ? Lutz.FieldIndex.ANALYZED : i.value();
     }
     
     private static Analyzer getFieldAnalyzer(Field field) {
-        
-        Class type = field.getType();
-        
-        if ( isUntokenized(field) ||
-             type.isEnum() ||
-             type == Integer.TYPE || type == Integer.class ||
-             type == Long.TYPE || type == Long.class ||
-             type == Short.TYPE || type == Short.class || 
-             type == Byte.TYPE || type == Byte.class ||
-             type == Boolean.TYPE || type == Boolean.class || 
-             type == Character.TYPE || type == Character.class || 
-             type == Date.class ) {
-             return new KeywordAnalyzer();
+                
+        FieldIndex fieldIndex = getFieldIndex(field);
+
+        Lutz.Index i = field.getAnnotation(Lutz.Index.class);
+
+        switch( fieldIndex ) {
+            case NO:
+            case NOT_ANALYZED:
+            case NOT_ANALYZED_NO_NORMS:
+                return null;
+            default: // ANALYZED, ANALYZED_NO_NORMS
+
+                Class<?> type = getFieldTypeForIndexing(field);
+
+                if ( LutzUtils.isLutzPrimitive(type) ) { // Primitive types
+                    return new KeywordAnalyzer();
+                }
+                else if ( i != null ) {
+                    return Factories.NEW_INSTANCE.create( i.analyzer() );
+                }
+                else {
+                    return new StandardAnalyzer();
+                }
         }
-        else {
-            return null;
+
+    }
+
+    private Object getFieldValue(Object o) {
+        field.setAccessible(true);
+        try {
+            return field.get(o);
         }
+        catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        catch (IllegalAccessException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
+    private static Class<?> getFieldTypeForIndexing(Field field ) {
+
+        Class<?> type = field.getType();
+
+        if ( LutzUtils.isArrayType(type)) {
+            type = LutzUtils.resolveComponentType(field);
+            if ( type == null ) {
+                throw new IllegalArgumentException("Don't know how to index " + field );
+            }
+        }
+
+        return type;
+    }
+
+    
+    private boolean isAsTokens( Field f ) {
+        return f.isAnnotationPresent(Lutz.AsTokens.class);
     }
     
-    // XXX ugly this method has to be in sync with asText()   
-    private static boolean isDirectlyIndexed(Class type) {
-        
-        if ( type == Integer.TYPE || type == Integer.class ||
-             type == Long.TYPE || type == Long.class ||
-             type == Short.TYPE || type == Short.class || 
-             type == Byte.TYPE || type == Byte.class ||
-             type == Boolean.TYPE || type == Boolean.class || 
-             type == Character.TYPE || type == Character.class || 
-             type == Date.class ||
-             type == String.class ||
-             type.isEnum() ) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
-    // XXX ugly this method has to be in sync with isDirectlyIndexed()
-    String asText(Object o) {
-        
-        if ( o == null ) {
-            return "null";
-        }
-        
-        Class type = getType(); 
-        if ( type.isArray() ) {
-            type = type.getComponentType();
-        }
-        
-        if ( type == Integer.TYPE || type == Integer.class ||
-             type == Long.TYPE || type == Long.class ||
-             type == Short.TYPE || type == Short.class || 
-             type == Byte.TYPE || type == Byte.class ) {
-            return NumberTools.longToString(Long.valueOf(((Number)o).longValue())); 
-        } 
-        else if ( type == Boolean.TYPE || type == Boolean.class ) {
-            return ((Boolean)o).booleanValue() ? "true" : "false";
-        }
-        else if ( type == Boolean.TYPE || type == Boolean.class ) {
-            return ((Character)o).toString() ;
-        }
-        else if ( type == Date.class ) {
-            return DateTools.dateToString((Date)o, DateTools.Resolution.MILLISECOND); //XXX
-        }
-        else if ( type.isEnum() || type == String.class ) {
-            return o.toString();
-        }
-        else {
-            throw new IllegalStateException( "Can't index " + type + "  " + o + "!");
-        }
-    }
-        
 }
