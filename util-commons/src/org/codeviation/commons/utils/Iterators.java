@@ -41,6 +41,7 @@
 
 package org.codeviation.commons.utils;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import org.codeviation.commons.patterns.Factory;
 
@@ -59,8 +60,12 @@ public class Iterators {
     public static <T,P> Iterator<T> translating(Iterable<P> iterable, Factory<T,P> factory) {
         return new TranslatingIterator<T, P>(iterable.iterator(), factory);
     }
+
+    public static <P> Iterator<P> enumeration(Enumeration<P> enumeration ) {
+        return new EnumerationIterator<P>(enumeration);
+    }
     
-    public static class TranslatingIterator<T,P> implements Iterator<T> {
+    private static class TranslatingIterator<T,P> implements Iterator<T> {
 
         private Iterator<P> iterator;
         private Factory <T,P> factory;
@@ -82,6 +87,29 @@ public class Iterators {
             iterator.remove();
         }
         
+    }
+
+    private static class EnumerationIterator<P> implements Iterator<P> {
+
+        private Enumeration<P> enumeration;
+
+
+        public EnumerationIterator(Enumeration<P> enumeration ) {
+            this.enumeration = enumeration;
+        }
+
+        public boolean hasNext() {
+            return enumeration.hasMoreElements();
+        }
+
+        public P next() {
+            return enumeration.nextElement();
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("Enumeration iterator does not support removals.");
+        }
+
     }
     
 }
