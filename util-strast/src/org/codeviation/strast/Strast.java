@@ -20,19 +20,16 @@ import org.codeviation.commons.utils.ArrayUtil;
  */
 public class Strast {
 
-    static final String DATA_FOLDER  = "data"; // XXX Make configurable with storage buidler
-    static final String INDEX_FOLDER  = "indexes"; // XXX Make configurable with storage buidler
-
     public static Store createStore(File root) throws IOException {
         return new FileStore( root );
     }
 
     public static Storage createObjectStorage(File storageRoot) throws IOException {
-        return new ObjectStorage( createStore( new File(storageRoot, DATA_FOLDER) ) );
+        return new ObjectStorage( createStore( storageRoot ) );
     }
 
-    public static IndexingStorage createIndexingStorage(File storageRoot) throws IOException {
-        return new IndexingStorage( createObjectStorage(storageRoot), new File( storageRoot, INDEX_FOLDER));
+    public static IndexingStorage createIndexingStorage(File objectStorageRoot, File indexRoot) throws IOException {
+        return new IndexingStorage( createObjectStorage( objectStorageRoot ), indexRoot);
     }
 
     public static Factory<String, Object> createObjectNameFactory() {

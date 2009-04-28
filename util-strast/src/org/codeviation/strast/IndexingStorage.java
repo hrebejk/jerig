@@ -37,9 +37,7 @@ public class IndexingStorage implements Storage {
 
     public IndexingStorage(Storage dataStorage, File indexesRoot) throws IOException  {
         this.dataStorage = dataStorage == null ? new NullStorage() : dataStorage;
-        this.root = indexesRoot;
-
-        FileUtil.assureDirectory(indexesRoot);
+        this.root = indexesRoot;        
     }
 
     public <T> T get(Class<T> clazz, String... path) {
@@ -130,6 +128,7 @@ public class IndexingStorage implements Storage {
 
     private IndexWriter createIndexWriter(String indexName, Analyzer analyzer) {
         try {
+            FileUtil.assureDirectory(root);
             File f = FileUtil.file(root, indexName);
             IndexWriter iw = new IndexWriter(f, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
             return iw;
