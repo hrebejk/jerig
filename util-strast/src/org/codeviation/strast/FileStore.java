@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import org.codeviation.commons.utils.FileUtil;
+import org.codeviation.strast.model.FileDescription;
 
 /**
  *
@@ -72,5 +73,15 @@ class FileStore implements Store {
 
         return null;
     }
+
+//    private FileDescription createFileDescription(File f) {
+//
+//        f.isDirectory();
+//        f.isFile();
+//        f.isHidden();
+//        f.length();
+//        f.lastModified();
+//        f.list();
+//    }
 
 }
