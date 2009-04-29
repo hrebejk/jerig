@@ -222,6 +222,7 @@ public class CollectionsTest {
         List<RecordSmall> d3 = new ArrayList<RecordSmall>();
         d3 = Pojson.update(d3, s1);
         assertEquals( s1, Pojson.save(d3) );
+//      assertEquals(RecordSmall.class, d3.get(0).getClass());
 
         assertEquals( s1, s2 );
 
