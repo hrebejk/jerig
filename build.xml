@@ -1,0 +1,12 @@
+<project name="jerig-utils" default="jar">
+    <property name="subprojects" value="util-commons:util-lutz:util-pojson:util-strast:util-strast-ws" />
+    <target name="jar">
+        <subant target="jar" buildpath="${subprojects}" />
+    </target>
+    <target name="test">
+        <subant target="test" buildpath="${subprojects}" failonerror="false" />
+    </target>
+    <target name="clean">
+        <subant target="clean" buildpath="${subprojects}"/>
+    </target>
+</project>
