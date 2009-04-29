@@ -55,6 +55,15 @@ public class Strast {
         String value();
     }
 
+    /** If this annotation is present the strast will not try to store the
+     *  JSON representation of the object.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface SuppressStoring {
+        // Intentionally empty
+    }
+
     /** Tells Strast what objects to create and put into indexes, when storing
      *  given object. Classes put as parameters into the annotation will be
      *  scanned for contructor taking annotated class as parameter. If such

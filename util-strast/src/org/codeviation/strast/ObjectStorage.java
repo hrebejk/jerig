@@ -5,16 +5,11 @@
 
 package org.codeviation.strast;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.codeviation.commons.patterns.Factory;
 import org.codeviation.pojson.Marshaller;
-import org.codeviation.pojson.Pojson;
 import org.codeviation.pojson.UnMarshaller;
 
 /**
@@ -48,7 +43,7 @@ class ObjectStorage implements Storage {
 
     public boolean put(Object o, String... path) {
         
-        if ( path == null || !o.getClass().isAnnotationPresent(Pojson.Record.class)) { // Not a Record do not store
+        if ( path == null || o.getClass().isAnnotationPresent(Strast.SuppressStoring.class)) { // Not a Record do not store
             return false;
         }
 
