@@ -1,9 +1,12 @@
 <project name="jerig-utils" default="jar">
     <property name="subprojects" value="util-commons:util-lutz:util-pojson:util-strast:util-strast-ws" />
-    <target name="jar">
+    <target name="-make-lib">
+        <ant antfile="download.xml"/>
+    </target>
+    <target name="jar" depends="-make-lib">
         <subant target="jar" buildpath="${subprojects}" />
     </target>
-    <target name="test">
+    <target name="test" depends="-make-lib">
         <subant target="test" buildpath="${subprojects}" failonerror="false" />
     </target>
     <target name="clean">
