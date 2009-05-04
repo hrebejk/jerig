@@ -9,6 +9,7 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="util-pojson" default="default" basedir=".">
     <description>Builds, tests, and runs the project util-pojson.</description>
+    <import file="../download.xml"/>
     <import file="nbproject/build-impl.xml"/>
     <!--
 

@@ -9,6 +9,7 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="util-commons" default="default" basedir=".">
     <description>Builds, tests, and runs the project util-commons.</description>
+    <import file="../download.xml"/>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
