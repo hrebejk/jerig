@@ -1,5 +1,9 @@
 syntax: glob
+lib/
 */build/
 */dist/
-*/nbproject/private/
-lib/
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$
