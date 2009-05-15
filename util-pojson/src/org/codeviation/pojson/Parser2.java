@@ -336,13 +336,18 @@ class Parser2<E extends Exception> {
     private String handleStringValue() throws IOException {
         int cc = -1;
         StringBuilder sb = new StringBuilder();
-        while( ( cc = reader.read() ) != -1 ) {            
+//        System.out.println("");
+        while( ( cc = reader.read() ) != -1 ) {
+//            System.out.print((char)cc);
             switch (cc) {
             case DOUBLE_QUOTE:
                 return sb.toString();
             case '\\':
                 cc = reader.read();
                 switch (cc) {
+                case '\\':
+                    sb.append('\\');
+                    break;
                 case '"':
                     sb.append('"');
                     break;
@@ -541,7 +546,7 @@ class Parser2<E extends Exception> {
         }
 
         public void error(Error error) throws E {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalArgumentException("JSON Format error " + error);
         }
 
     }
