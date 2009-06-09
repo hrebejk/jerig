@@ -50,14 +50,16 @@ is divided into following sections:
         </pathconvert>
         <basename file="${libraries.1.path}" property="libraries.1.basename" suffix=".properties"/>
         <touch file="${libraries.1.dir}/${libraries.1.basename}-private.properties"/>
-        <loadproperties srcfile="${libraries.1.dir}/${libraries.1.basename}-private.properties">
+        <loadproperties encoding="ISO-8859-1" srcfile="${libraries.1.dir}/${libraries.1.basename}-private.properties">
             <filterchain>
                 <replacestring from="$${base}" to="${libraries.1.dir}"/>
+                <escapeunicode/>
             </filterchain>
         </loadproperties>
-        <loadproperties srcfile="${libraries.1.path}">
+        <loadproperties encoding="ISO-8859-1" srcfile="${libraries.1.path}">
             <filterchain>
                 <replacestring from="$${base}" to="${libraries.1.dir}"/>
+                <escapeunicode/>
             </filterchain>
         </loadproperties>
     </target>
