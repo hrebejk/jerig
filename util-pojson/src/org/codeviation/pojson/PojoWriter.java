@@ -7,6 +7,8 @@ package org.codeviation.pojson;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -105,6 +107,10 @@ class PojoWriter {
         else if (object instanceof Long || object instanceof Integer ||
                  object instanceof Byte || object instanceof Short )  {
             builder = builder.value(((Number)object).longValue());
+        }
+
+        else if ( object instanceof URI || object instanceof URL ) {
+            builder = builder.value(object.toString());
         }
 
         else {

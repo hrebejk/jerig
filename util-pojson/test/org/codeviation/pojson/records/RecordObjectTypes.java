@@ -42,6 +42,12 @@
 package org.codeviation.pojson.records;
 
 import java.lang.annotation.RetentionPolicy;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,21 +65,30 @@ public class RecordObjectTypes {
     public Double fDouble;
     public String fString;
     public RetentionPolicy fEnum; 
-    
+    public URL fUrl;
+    public URI fUri;
     
     public RecordObjectTypes init() {
-        
         fBoolean = Boolean.TRUE;
         fCharacter = new Character('c');
-        fByte = new Byte((byte)1);
-        fShort = new Short((short)2);
+        fByte = new Byte((byte) 1);
+        fShort = new Short((short) 2);
         fInteger = new Integer(3);
         fLong = new Long(4);
         fFloat = new Float(5.5f);
         fDouble = new Double(6.6d);
-        fString="string";
+        fString = "string";
         fEnum = RetentionPolicy.SOURCE;
-        
+        try {
+            fUrl = new URL("http://www.codeviation.org");
+            fUri = new URI("http://www.codeviation.org");
+        }
+        catch (MalformedURLException ex) {
+            throw new IllegalStateException(ex);
+        }
+        catch (URISyntaxException ex) {
+            throw new IllegalStateException(ex);
+        }
         return this;
     }
     

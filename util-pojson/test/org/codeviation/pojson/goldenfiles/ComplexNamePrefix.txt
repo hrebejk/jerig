@@ -21,7 +21,9 @@
         "OBJECTS_fFloat": 5.5,
         "OBJECTS_fDouble": 6.6,
         "OBJECTS_fString": "string",
-        "OBJECTS_fEnum": "SOURCE"
+        "OBJECTS_fEnum": "SOURCE",
+        "OBJECTS_fUrl": "http://www.codeviation.org",
+        "OBJECTS_fUri": "http://www.codeviation.org"
     },
     "COMPLEX_arrays": {
         "ARRAYS_charArray": [

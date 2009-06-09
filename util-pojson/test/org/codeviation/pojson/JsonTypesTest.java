@@ -56,6 +56,7 @@ import static org.junit.Assert.*;
 public class JsonTypesTest {
     
     private static String GOLDEN = null; 
+    private static String GOLDEN_OBJECTS = null;
     private static RecordPrimitiveTypes RECORD_PRIMITIVES;
     private static RecordObjectTypes RECORD_OBJECTS;
     
@@ -66,6 +67,7 @@ public class JsonTypesTest {
     @BeforeClass
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypes.txt");
+        GOLDEN_OBJECTS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonObjectTypes.txt");
         RECORD_PRIMITIVES = new RecordPrimitiveTypes().init();
         RECORD_OBJECTS = new RecordObjectTypes().init();
     }
@@ -89,7 +91,7 @@ public class JsonTypesTest {
     public void objectsSave() throws IOException {
         System.out.println("objectsSave");
         
-        assertEquals( GOLDEN, Pojson.save(RECORD_OBJECTS));
+        assertEquals( GOLDEN_OBJECTS, Pojson.save(RECORD_OBJECTS));
     } 
 
     
@@ -98,7 +100,7 @@ public class JsonTypesTest {
         System.out.println("objectsUnindentedSave");
 
         Marshaller<RecordObjectTypes> m = new Marshaller<RecordObjectTypes>(null, 0);
-        assertEquals( Util.removeFormating(GOLDEN), m.save(RECORD_OBJECTS));
+        assertEquals( Util.removeFormating(GOLDEN_OBJECTS), m.save(RECORD_OBJECTS));
     }
 
 

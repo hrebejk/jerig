@@ -8,6 +8,8 @@ package org.codeviation.pojson;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -352,7 +354,9 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
              Float.class.equals(type) ||
              Double.class.equals(type) ||
              Void.class.equals(type) ||
-             String.class.equals(type) ) {
+             String.class.equals(type) ||
+             URL.class.equals(type) ||
+             URI.class.equals(type) ) {
             return true;
         }
 

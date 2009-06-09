@@ -42,13 +42,22 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordComplex;
+import org.codeviation.pojson.records.RecordObjectTypes;
 import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
@@ -61,7 +70,8 @@ import static org.junit.Assert.*;
  */
 public class CollectionsTest {
     
-    private static Map<String,Object> GOLDEN_TYPES;
+    private static Map<String,Object> GOLDEN_PRIMITIVES;
+    private static Map<String,Object> GOLDEN_OBJECTS;
     private static Map<String,Object> GOLDEN_ARRAYS;
     
     public CollectionsTest() {
@@ -94,17 +104,22 @@ public class CollectionsTest {
         GOLDEN_ARRAYS.put("objectArray", Arrays.asList( GOLDEN_SR1, GOLDEN_SR2, GOLDEN_SR3 ));
         GOLDEN_ARRAYS.put("empty", Arrays.asList());
         
-        GOLDEN_TYPES = new HashMap<String,Object>();
-        GOLDEN_TYPES.put("fBoolean" ,true);    
-        GOLDEN_TYPES.put("fCharacter",  "c");
-        GOLDEN_TYPES.put("fByte", 1l);
-        GOLDEN_TYPES.put("fShort", 2l);
-        GOLDEN_TYPES.put("fInteger", 3l);
-        GOLDEN_TYPES.put("fLong", 4l);
-        GOLDEN_TYPES.put("fFloat", 5.5d);
-        GOLDEN_TYPES.put("fDouble", 6.6d);
-        GOLDEN_TYPES.put("fString", "string");
-        GOLDEN_TYPES.put("fEnum", "SOURCE"); 
+        GOLDEN_PRIMITIVES = new HashMap<String,Object>();
+        GOLDEN_PRIMITIVES.put("fBoolean" ,true);
+        GOLDEN_PRIMITIVES.put("fCharacter",  "c");
+        GOLDEN_PRIMITIVES.put("fByte", 1l);
+        GOLDEN_PRIMITIVES.put("fShort", 2l);
+        GOLDEN_PRIMITIVES.put("fInteger", 3l);
+        GOLDEN_PRIMITIVES.put("fLong", 4l);
+        GOLDEN_PRIMITIVES.put("fFloat", 5.5d);
+        GOLDEN_PRIMITIVES.put("fDouble", 6.6d);
+        GOLDEN_PRIMITIVES.put("fString", "string");
+        GOLDEN_PRIMITIVES.put("fEnum", "SOURCE");
+
+        GOLDEN_OBJECTS = new HashMap<String,Object>();
+        GOLDEN_OBJECTS.putAll(GOLDEN_PRIMITIVES);
+        GOLDEN_OBJECTS.put("fUrl" , "http://www.codeviation.org");
+        GOLDEN_OBJECTS.put("fUri", "http://www.codeviation.org");
         
     }
 
@@ -116,7 +131,19 @@ public class CollectionsTest {
         String s1 = Pojson.save(p1);
 
         Map o = Pojson.load( HashMap.class, s1);
-        assertEquals(GOLDEN_TYPES, o);
+        assertEquals(GOLDEN_PRIMITIVES, o);
+    }
+
+    @Test
+    public void object() throws IOException {
+        System.out.println("object");
+
+        RecordObjectTypes p1 = new RecordObjectTypes().init();
+        String s1 = Pojson.save(p1);
+
+        Map o = Pojson.load( HashMap.class, s1);
+        
+        assertEquals(GOLDEN_OBJECTS, o);
     }
 
     @Test
@@ -129,8 +156,8 @@ public class CollectionsTest {
         Map o = Pojson.load( HashMap.class, s1);
 
         Map<String,Object> golden = new HashMap<String,Object>();
-        golden.put("primitives", GOLDEN_TYPES);
-        golden.put("objects", GOLDEN_TYPES);
+        golden.put("primitives", GOLDEN_PRIMITIVES);
+        golden.put("objects", GOLDEN_OBJECTS);
         golden.put("arrays", GOLDEN_ARRAYS);
                 
         assertEquals(golden, o);

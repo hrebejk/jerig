@@ -21,7 +21,9 @@
         "fFloat": 5.5,
         "fDouble": 6.6,
         "fString": "string",
-        "fEnum": "SOURCE"
+        "fEnum": "SOURCE",
+        "fUrl": "http://www.codeviation.org",
+        "fUri": "http://www.codeviation.org"
     },
     "arrays": {
         "charArray": [

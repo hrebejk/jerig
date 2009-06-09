@@ -42,6 +42,10 @@
 package org.codeviation.pojson;
 
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -306,6 +310,22 @@ class JsonUtils {
         }
         else if (Character.class.equals(type)) {
             return Character.valueOf(((String)object).charAt(0));
+        }
+        else if ( URL.class.equals(type)) {
+            try {
+                return new URL((String)object);
+            }
+            catch (MalformedURLException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+        }
+        else if ( URI.class.equals(type)) {
+            try {
+                return new URI((String)object);
+            }
+            catch (URISyntaxException ex) {
+                throw new IllegalArgumentException(ex);
+            }
         }
 //        else if ( ClassUtils.isSuperinterface(type, Collection.class) ) {            
             // XXX

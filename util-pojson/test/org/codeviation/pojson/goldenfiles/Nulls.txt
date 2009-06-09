@@ -8,5 +8,7 @@
     "fFloat": null,
     "fDouble": null,
     "fString": null,
-    "fEnum": null
+    "fEnum": null,
+    "fUrl": null,
+    "fUri": null
 }
