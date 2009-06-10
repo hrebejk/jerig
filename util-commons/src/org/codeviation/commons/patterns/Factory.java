@@ -41,12 +41,17 @@
 
 package org.codeviation.commons.patterns;
 
-/** General factory
+/** General factory. Factory given a parameter P produces an object of type T.
  *
  * @author Petr Hrebejk
  */
 public interface Factory<T,P> {
 
+    /** Creates an object based on given parameter.
+     *
+     * @param param Parameter for the object cretion
+     * @return an object created based on the parameter.
+     */
     public T create(P param);
 
 }

@@ -47,6 +47,7 @@ package org.codeviation.commons.patterns;
  */
 public interface InstanceFactory {
 
+    
     public <T> T create(Class<T> clazz);
 
 }

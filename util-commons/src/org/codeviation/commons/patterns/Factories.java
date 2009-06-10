@@ -72,6 +72,15 @@ public class Factories {
     private Factories() {
     }
 
+    /** Creates a factory with default value. Resulting factory will either
+     * return the parmeter put into it or the default value if null is passed
+     * as parameter.
+     *
+     * <T> Type of the product.
+     * <P> Type of the parameter.
+     * @param defaultValue value to be returned if null is passed as argument.
+     * @return new factory with default value.
+     */
     public static <T,P extends T> Factory<T,P> defaultValue(T defaultValue) {
         return new Default<T,P>(defaultValue);
     }
@@ -84,6 +93,11 @@ public class Factories {
         return new ArrayFactory<T, P>(elementFactory, filter, ArrayFactory.getProductClass(productClass));
     }
 
+    /** Creates factory backed by a Map.
+     *
+     * @param map A map to get the objects from.
+     * @return Factory backed by a map.
+     */
     public static <T, P> Factory<T, P> fromMap(Map<P, T> map) {
         return new MapFactory<T, P>(map);
     }
