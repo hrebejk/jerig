@@ -76,5 +76,22 @@ public class FieldFilterTest {
 
         assertEquals( GOLDEN_DEFAULT, Pojson.save(rf));
     }
+
+    @Test
+    public void nonStaticInnerclass() {
+        System.out.println("nonStaticInnerclass");
+
+        NonStaticInnerclass nsi = new NonStaticInnerclass();
+
+        String s = Util.removeFormating(Pojson.save(nsi));
+
+        assertEquals("{\"text\":\"nazdar\"}", s);
+    }
+
+    private class NonStaticInnerclass {
         
+        public String text = "nazdar";
+
+    }
+
 }

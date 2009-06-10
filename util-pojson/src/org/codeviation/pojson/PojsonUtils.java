@@ -182,7 +182,8 @@ final class PojsonUtils {
 
         public boolean accept(Field field) {
 
-            if (field.isAnnotationPresent(Pojson.SuppressStoring.class)) {
+            if (field.isSynthetic() ||
+                field.isAnnotationPresent(Pojson.SuppressStoring.class) ) {
                 return false;
             }
 
