@@ -240,7 +240,7 @@ public class CollectionsTest {
 
         String s1 = Pojson.save(d1);
 
-        System.out.println(s1);
+        // System.out.println(s1);
 
         @SuppressWarnings("unchecked")
         List<RecordSmall> d2 = Pojson.load(ArrayList.class, s1);

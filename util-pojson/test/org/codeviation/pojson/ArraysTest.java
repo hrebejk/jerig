@@ -197,7 +197,7 @@ public class ArraysTest {
         };
         String s1 = Pojson.save(d1);
 
-        System.out.println(s1);
+        // System.out.println(s1);
 
         RecordSmall[] d2 = Pojson.load(RecordSmall[].class, s1);
         String s2 = Pojson.save(d2);

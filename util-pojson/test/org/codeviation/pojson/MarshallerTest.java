@@ -147,7 +147,7 @@ public class MarshallerTest {
         assertEquals(GOLDEN, m.save( new RecordSmall(10, "ahoj")));
 
         m.setIndentLevel(1);
-        System.out.println(m.save( new RecordSmall(10, "ahoj")));
+        // System.out.println(m.save( new RecordSmall(10, "ahoj")));
 
         assertEquals(GOLDEN_L1, m.save( new RecordSmall(10, "ahoj")));
     }

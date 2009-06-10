@@ -86,7 +86,7 @@ public class IgnoreNonExistingTest {
 
         RecordComplex record = Pojson.load(ComplexINE.class, WITH_NON_EXISTING_COMPLEX); // This should not throw execprion
 
-        System.out.println(Pojson.save(record));
+        // System.out.println(Pojson.save(record));
 
         assertEquals( GOLDEN_COMPLEX, Pojson.save(record)); // Save should be like by complex record
 
