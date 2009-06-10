@@ -262,12 +262,12 @@ public class Pojson {
      * are taken into account and then thos fields which match the
      * {@link ModifierNegative} filter are subtracted from the set.
      * <br/></br>
-     * Default value of this annotation is {@link Modifier.PUBLIC}
+     * If the annotation is not used then all fields are taken into account.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface ModifierPositive {
-        int[] value() default {java.lang.reflect.Modifier.PUBLIC};
+        int[] value();
     }
 
     /** Tells Pojson which fields should NOT be used based on theirs modifiers.
@@ -276,13 +276,13 @@ public class Pojson {
      * are taken into account and then thos fields which match the
      * {@link ModifierNegative} filter are subtracted from the set.
      * <br/></br>
-     * Default value of this annotation is { {@link java.lang.reflect.Modifier.TRANSIENT},
-     * {@link java.lang.reflect.Modifier.STATIC} }
+     * If the annotation is not used then fields { {@link java.lang.reflect.Modifier.TRANSIENT},
+     * and {@link java.lang.reflect.Modifier.STATIC} } are ignored by default.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface ModifierNegative {
-        int[] value() default {Modifier.TRANSIENT, Modifier.STATIC};
+        int[] value();
     }
 
 

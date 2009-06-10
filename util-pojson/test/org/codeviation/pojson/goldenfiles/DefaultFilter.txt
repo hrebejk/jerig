@@ -1,0 +1,6 @@
+{
+    "pu": "public",
+    "pr": "private",
+    "pt": "protected",
+    "pa": "package"
+}

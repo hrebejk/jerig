@@ -40,6 +40,7 @@
 package org.codeviation.pojson;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
 import org.codeviation.commons.patterns.Filter;
@@ -151,14 +152,13 @@ final class PojsonUtils {
     /** Gets name of a field honoring the Pojson Annotations */
     private static class FieldFilter implements Filter<Field> {
 
-        private Class<?> clazz;
+        private static final int[] DEFAULT_NEGATIVE = new int[] { Modifier.TRANSIENT, Modifier.STATIC };
+
         private int[] positive;
         private int[] negative;
 
         public FieldFilter(Class<?> clazz) {
-
-            this.clazz = clazz;
-
+            
             Pojson.ModifierPositive mp = clazz.getAnnotation(Pojson.ModifierPositive.class);
             if ( mp != null ) {
                 positive = mp.value();
@@ -173,6 +173,9 @@ final class PojsonUtils {
                 if (negative.length == 0) {
                     negative = null;
                 }
+            }
+            else {
+                negative = DEFAULT_NEGATIVE;
             }
 
         }
