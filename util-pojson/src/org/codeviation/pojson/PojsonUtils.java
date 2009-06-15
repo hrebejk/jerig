@@ -191,7 +191,7 @@ final class PojsonUtils {
 
             if ( positive != null ) {
                 for( int p : positive ) {
-                    if ( (m & p) == 0) {
+                    if ( (m & p) != p) {
                         return false;
                     }
                 }
