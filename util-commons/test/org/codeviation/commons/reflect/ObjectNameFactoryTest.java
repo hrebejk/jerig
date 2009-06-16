@@ -58,14 +58,14 @@ public class ObjectNameFactoryTest {
         ObjectNameFactory onf = new ObjectNameFactory();
         Default record = new Default();
 
-        assertEquals( "Default.json", onf.create(record) );
+        assertEquals( "Default", onf.create(record) );
     }
 
     @Test
     public void differentId()  {
         System.out.println("differentId");
 
-        ObjectNameFactory onf = new ObjectNameFactory();
+        ObjectNameFactory onf = new ObjectNameFactory(".json");
         DifferentId record = new DifferentId();
 
         assertEquals( "nazdar.json", onf.create(record) );
@@ -75,10 +75,10 @@ public class ObjectNameFactoryTest {
     public void multiId()  {
         System.out.println("multiId");
 
-        ObjectNameFactory onf = new ObjectNameFactory();
+        ObjectNameFactory onf = new ObjectNameFactory(".ext");
         MultiId record = new MultiId();
 
-        assertEquals( "1nazdar.json", onf.create(record) );
+        assertEquals( "1nazdar.ext", onf.create(record) );
     }
 
 
@@ -117,7 +117,7 @@ public class ObjectNameFactoryTest {
     public void nullId()  {
         System.out.println("nullId");
 
-        ObjectNameFactory onf = new ObjectNameFactory();
+        ObjectNameFactory onf = new ObjectNameFactory(".json");
         NullId record = new NullId();
 
         assertEquals( "1null.json", onf.create(record) );

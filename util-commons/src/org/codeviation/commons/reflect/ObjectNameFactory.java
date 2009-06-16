@@ -63,9 +63,17 @@ import org.codeviation.commons.patterns.Pairs;
 
 public class ObjectNameFactory<T> implements Factory<String, T> {
 
-    private String DEFAULT_EXTENSION = ".json";
+    private String defaultExtension;
 
     private Map<Class<?>, Pair<String,List<Field>>> classInfos = new HashMap<Class<?>, Pair<String, List<Field>>>();
+
+    public ObjectNameFactory() {
+    }
+
+    public ObjectNameFactory(String defaultExtension) {
+        this.defaultExtension = defaultExtension;
+    }
+
 
     public String create(T object) {
 
@@ -93,7 +101,9 @@ public class ObjectNameFactory<T> implements Factory<String, T> {
             for (Object id : ids) {
                 sb.append(id == null ?  "null" : id.toString());
             }
-            sb.append(DEFAULT_EXTENSION);
+            if ( defaultExtension != null ) {
+                sb.append(defaultExtension);
+            }
         }
         else {
             Formatter f = new Formatter();
@@ -141,7 +151,7 @@ public class ObjectNameFactory<T> implements Factory<String, T> {
 
             if ( fields == null ) { // No Id(s) specified
                 if ( nameFormat == null ) {
-                    nameFormat = clazz.getSimpleName() + DEFAULT_EXTENSION;
+                    nameFormat = clazz.getSimpleName() + ( defaultExtension == null ? "" : defaultExtension );
                 }
                 fields = Collections.<Field>emptyList();
             }
