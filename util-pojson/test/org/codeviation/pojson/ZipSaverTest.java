@@ -92,12 +92,13 @@ public class ZipSaverTest {
         RecordPrimitiveTypes rpt = new RecordPrimitiveTypes().init();
         RecordArrays ra = new RecordArrays().init();
         RecordComplex rc = new RecordComplex().init();
+
+        Marshaller m = new Marshaller();
+        //ZipSaver zs = new ZipSaver(zos);
         
-        ZipSaver zs = new ZipSaver(zos);
-        
-        zs.save("primitive/r.json", rpt);
-        zs.save("arrays/r.json", ra);
-        zs.save("complex/r.json", rc);
+        m.save(rpt, zos, "primitive/r.json");
+        m.save(ra, zos, "arrays/r.json");
+        m.save(rc, zos, "complex/r.json");
         
         zos.close();
         

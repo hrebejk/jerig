@@ -51,6 +51,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.codeviation.commons.patterns.Filter;
 
 /** Good for saving objects in Json format.
@@ -92,8 +94,7 @@ public final class Marshaller<T> {
 
     public void save( T object, Writer writer ) throws IOException {
         BufferedWriter bw = new BufferedWriter( writer );
-        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(bw, indentation, indentLevel);
-        pw.<Object,Void,IOException>writeTo(object, pb);
+        doWrite(object, writer);
         bw.flush();
         bw.close();
     }
@@ -123,7 +124,13 @@ public final class Marshaller<T> {
         }
     }
 
-             
+    void save( T object, ZipOutputStream zipOutputStream, String entryName) throws IOException {
+        Writer w = new BufferedWriter( new OutputStreamWriter(zipOutputStream));
+        zipOutputStream.putNextEntry(new ZipEntry(entryName));
+        doWrite(object, w);
+        w.flush();
+    }
+
     void setFieldFilter(Filter<String> fieldFilter) {
         this.fieldFilter = fieldFilter;
     }
@@ -143,5 +150,10 @@ public final class Marshaller<T> {
     public void setIndentLevel(int startIndentLevel) {
         this.indentLevel = startIndentLevel;
     }
-        
+
+    private void doWrite(T object, Writer w) throws IOException {
+        PojsonBuilder<Void,IOException> pb = FormatingBuilder.create(w, indentation, indentLevel);
+        pw.<Object,Void,IOException>writeTo(object, pb);
+    }
+
 }
