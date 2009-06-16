@@ -84,7 +84,7 @@ import java.util.zip.ZipEntry;
  *
  * @author  Petr Nejedly
  */
-public class JarClassLoader extends ProxyClassLoader {
+class JarClassLoader extends ProxyClassLoader {
     
     //private static Stamps cache;
     //static Archive archive = new Archive(); 

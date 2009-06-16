@@ -68,7 +68,7 @@ import java.util.logging.Logger;
  * 
  * @author  Petr Nejedly, Jesse Glick
  */
-public class ProxyClassLoader extends ClassLoader  {
+class ProxyClassLoader extends ClassLoader  {
 
     private static final Logger LOGGER = Logger.getLogger(ProxyClassLoader.class.getName());
     private static final boolean LOG_LOADING;

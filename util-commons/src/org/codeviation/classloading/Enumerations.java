@@ -60,7 +60,7 @@ import java.util.Set;
  * @see NbCollections#checkedEnumerationByFilter
  * @see NbCollections#iterable(Enumeration)
  */
-public final class Enumerations extends Object {
+final class Enumerations extends Object {
     /** No instances */
     private Enumerations() {
     }
