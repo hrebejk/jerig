@@ -38,9 +38,7 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  */
-package org.codeviation.pojson.records;
-
-import org.codeviation.pojson.*;
+package org.codeviation.commons.reflect;
 
 /**
  *
@@ -48,67 +46,67 @@ import org.codeviation.pojson.*;
  */
 public class RecordsNameFactory {
 
-//
-//    public static class Default {
-//        int id = 1;
-//        String s = "nazdar";
-//    }
-//
-//    public static class DifferentId {
-//        int id = 1;
-//        @Pojson.IdPart
-//        String s = "nazdar";
-//    }
-//
-//    public static class MultiId {
-//        @Pojson.IdPart
-//        int id = 1;
-//        @Pojson.IdPart
-//        String s = "nazdar";
-//    }
-//
-//    @Pojson.FileNameFormat("file.extension")
-//    public static class Extension {
-//        int id = 1;
-//        String s = "nazdar";
-//    }
-//
-//    @Pojson.FileNameFormat("myfoder/myfoder/file.extension")
-//    public static class Folder {
-//        int id = 1;
-//        String s = "nazdar";
-//    }
-//
-//    @Pojson.FileNameFormat("%s.%s")
-//    public static class Parametrized {
-//        @Pojson.IdPart
-//        int id = 1;
-//        @Pojson.IdPart
-//        String s = "nazdar";
-//    }
-//
-//    @Pojson.FileNameFormat("%s-%s.ext")
-//    public static class ParametrizedOrdered {
-//        @Pojson.IdPart(4)
-//        int id = 1;
-//        @Pojson.IdPart(2)
-//        String s = "nazdar";
-//    }
-//
-//
-//    public static class NullId {
-//        @Pojson.IdPart
-//        int id = 1;
-//        @Pojson.IdPart
-//        String s = null;
-//    }
-//
-//    @Pojson.FileNameFormat("%s-%s.ext")
-//    public static class NullIdFormated {
-//        @Pojson.IdPart
-//        int id = 1;
-//        @Pojson.IdPart
-//        String s = null;
-//    }
+
+    public static class Default {
+        int id = 1;
+        String s = "nazdar";
+    }
+
+    public static class DifferentId {
+        int id = 1;
+        @ObjectNameFactory.IdPart
+        String s = "nazdar";
+    }
+
+    public static class MultiId {
+        @ObjectNameFactory.IdPart
+        int id = 1;
+        @ObjectNameFactory.IdPart
+        String s = "nazdar";
+    }
+
+    @ObjectNameFactory.NameFormat("file.extension")
+    public static class Extension {
+        int id = 1;
+        String s = "nazdar";
+    }
+
+    @ObjectNameFactory.NameFormat("myfoder/myfoder/file.extension")
+    public static class Folder {
+        int id = 1;
+        String s = "nazdar";
+    }
+
+    @ObjectNameFactory.NameFormat("%s.%s")
+    public static class Parametrized {
+        @ObjectNameFactory.IdPart
+        int id = 1;
+        @ObjectNameFactory.IdPart
+        String s = "nazdar";
+    }
+
+    @ObjectNameFactory.NameFormat("%s-%s.ext")
+    public static class ParametrizedOrdered {
+        @ObjectNameFactory.IdPart(4)
+        int id = 1;
+        @ObjectNameFactory.IdPart(2)
+        String s = "nazdar";
+    }
+
+
+    public static class NullId {
+        @ObjectNameFactory.IdPart
+        int id = 1;
+        @ObjectNameFactory.IdPart
+        String s = null;
+    }
+
+    @ObjectNameFactory.NameFormat("%s-%s.ext")
+    public static class NullIdFormated {
+        @ObjectNameFactory.IdPart
+        int id = 1;
+        @ObjectNameFactory.IdPart
+        String s = null;
+    }
             
 }

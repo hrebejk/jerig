@@ -287,32 +287,7 @@ public class Pojson {
 
 
     // The other annotations are currently not used. -------------------------------
-
-    /** Tells Pojson how the filename of the record should be formated
-     * the format string is the same as the one of printf method. If used on
-     * field it means that the field will be stored in different file. See also 
-     * IdPart annotation. If the Id part not used the first field is taken.
-     * 
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE, ElementType.FIELD })
-    @interface FileNameFormat {
-        String value() default "";
-    }
-        
-    
-    /** Tells Pojson that given field is part of the ID.
-     * 
-     * @author Petr Hrebejk
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.FIELD )
-    @interface IdPart {
-        int value() default -1;        
-    }
-    
-    
-    
+   
     /** Tells Pojson that given field should be stored by calling to String
      *
      */

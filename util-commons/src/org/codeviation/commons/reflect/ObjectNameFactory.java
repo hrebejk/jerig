@@ -39,32 +39,41 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.codeviation.pojson;
+package org.codeviation.commons.reflect;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.codeviation.commons.patterns.Factory;
+import org.codeviation.commons.patterns.Pair;
+import org.codeviation.commons.patterns.Pairs;
 
-class FileNameFactory<T> implements Factory<String, T> {
-        
-    private String fileNameFormat;
-    private List<Field> idParts;
-    
-    public FileNameFactory(Class<T> clazz, Collection<Field> fields) {
-        this.idParts = getIdParts(fields); 
-        Pojson.FileNameFormat fnfA = clazz.getAnnotation(Pojson.FileNameFormat.class);
-        this.fileNameFormat = fnfA == null ? null : fnfA.value();
-    }
-    
+public class ObjectNameFactory<T> implements Factory<String, T> {
+
+    private String DEFAULT_EXTENSION = ".json";
+
+    private Map<Class<?>, Pair<String,List<Field>>> classInfos = new HashMap<Class<?>, Pair<String, List<Field>>>();
+
     public String create(T object) {
-        
+
+        Pair<String,List<Field>> ci = getClassInfo(object.getClass());
+
+        String nameFormat = ci.getFirst();
+        List<Field> idParts = ci.getSecond();
+
         Object[] ids = new Object[idParts.size()];
         for (int i = 0; i < idParts.size(); i++) {
             try {
@@ -72,42 +81,93 @@ class FileNameFactory<T> implements Factory<String, T> {
                 field.setAccessible(true);
                 ids[i] = field.get(object);
             } catch (IllegalArgumentException ex) {
-                Logger.getLogger(FileNameFactory.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ObjectNameFactory.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
-                Logger.getLogger(FileNameFactory.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ObjectNameFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
         StringBuilder sb = new StringBuilder();
         
-        if ( fileNameFormat == null ) {
+        if ( nameFormat == null ) {
             for (Object id : ids) {
                 sb.append(id == null ?  "null" : id.toString());
             }
-            sb.append(Pojson.DEFAULT_EXTENSION);
+            sb.append(DEFAULT_EXTENSION);
         }
         else {
             Formatter f = new Formatter();
-            f.format(fileNameFormat, ids);
+            f.format(nameFormat, ids);
             sb.append(f.toString());    
         }
         return sb.toString();
     }
-    
-    public List<Field> getIdParts(Collection<Field> fields) {
+
+    // Annotations -------------------------------------------------------------
+
+    /** Tells the NameFactory how the filename of the record should be formated
+     * the format string is the same as the one of printf method. If used on
+     * field it means that the field will be stored in different file. See also
+     * IdPart annotation. If the Id part not used the first field is taken.
+     *
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.TYPE, ElementType.FIELD })
+    public @interface NameFormat {
+        String value() default "";
+    }
+
+    /** Tells the NameFactory that given field is part of the ID.
+     *
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD )
+    public @interface IdPart {
+        int value() default -1;
+    }
+
+
+    // Private methods ---------------------------------------------------------
+
+    private synchronized Pair<String,List<Field>> getClassInfo(Class<?> clazz) {
+
+        Pair<String,List<Field>> ci = classInfos.get(clazz);
+
+        if ( ci == null ) {
+
+            NameFormat fnfA = clazz.getAnnotation(NameFormat.class);
+            String nameFormat = fnfA == null ? null : fnfA.value();
+            List<Field> fields = getIdParts(FieldUtils.getAll(clazz, null, null).values());
+
+            if ( fields == null ) { // No Id(s) specified
+                if ( nameFormat == null ) {
+                    nameFormat = clazz.getSimpleName() + DEFAULT_EXTENSION;
+                }
+                fields = Collections.<Field>emptyList();
+            }
+
+            ci = Pairs.pair(nameFormat, fields);
+            classInfos.put(clazz, ci);
+        }
+
+        return ci;
+    }
+
+
+    private static List<Field> getIdParts(Collection<Field> fields) {
         
         SortedMap<Integer,Field> numberedIds= new TreeMap<Integer, Field>();
         List<Field> anonIds = new ArrayList<Field>();
 
-        Field first = null;
+//        Field first = null;
 
         for (Field f : fields) {
 
-            if (first == null) {
-                first = f;
-            }
+//            if (first == null) {
+//                first = f;
+//            }
 
-            Pojson.IdPart idAn = f.getAnnotation(Pojson.IdPart.class);
+            IdPart idAn = f.getAnnotation(IdPart.class);
             if (idAn != null ) {
                 int value = idAn.value();
                 if ( value == -1 ) {
@@ -121,19 +181,17 @@ class FileNameFactory<T> implements Factory<String, T> {
         }
 
         int idsSize = numberedIds.size() + anonIds.size();
-        List<Field> idFields = new ArrayList(idsSize == 0 ? 1 : idsSize);
 
         if ( idsSize == 0 ) {
-            if ( first != null ) {                    
-                idFields.add(first);
-            }
+            return null;
         }
         else {
+            List<Field> idFields = new ArrayList<Field>(idsSize);
             idFields.addAll(numberedIds.values());
             idFields.addAll(anonIds);
+            return idFields;
         }
          
-        return idFields;
     }
 
 }
