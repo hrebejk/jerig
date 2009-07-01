@@ -254,4 +254,34 @@ public class CollectionsTest {
         assertEquals( s1, s2 );
 
     }
+
+    @Test
+    public void loadAny() throws IOException {
+
+        System.out.println("loadAny");
+
+        List<RecordSmall> d1 = new ArrayList<RecordSmall>();
+        d1.add( new RecordSmall(1, "A"));
+        d1.add(new RecordSmall(2, "B"));
+        d1.add(new RecordSmall(3, "C"));
+
+        String s1 = Pojson.save(d1);
+
+        System.out.println(s1);
+
+        Object o = Pojson.load(Object.class, s1);
+
+        //System.out.println("O " + o);
+
+        assertTrue(o instanceof List );
+
+        RecordSmall rs = new RecordSmall(1, "A");
+        String s2 = Pojson.save(rs);
+
+        o = Pojson.load(Object.class, s2);
+        // System.out.println("O " + o);
+        assertTrue(o instanceof Map );
+
+    }
+
 }

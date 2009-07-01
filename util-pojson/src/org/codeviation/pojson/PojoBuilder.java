@@ -63,6 +63,10 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     @SuppressWarnings("unchecked")
     public T build() throws RuntimeException {
 
+        if ( Object.class.equals(result.getClass())) {
+            return  (T) object;
+        }
+
         if (result.getClass().isArray() ) {
             result = (T) array.toArray( (T[])result );
         }
@@ -78,6 +82,11 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     public PojsonBuilder<T, RuntimeException> hash() throws RuntimeException {
 
         if ( parent == null && fieldName == null ) {
+
+            if ( Object.class.equals(object.getClass() ) ) {
+                object = new HashMap();
+            }
+
             parent = this;
             return this;    // call to hash on root
         }
@@ -144,6 +153,11 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     public PojsonBuilder<T, RuntimeException> array() throws RuntimeException {
 
         if ( parent == null && fieldName == null ) {  // call to array on root
+
+            if ( Object.class.equals(object.getClass() ) ) {
+                object = array = new LinkedList();
+            }
+
             parent = this;
             return this;
         }
