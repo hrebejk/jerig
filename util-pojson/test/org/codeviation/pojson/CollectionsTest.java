@@ -42,19 +42,11 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordComplex;
 import org.codeviation.pojson.records.RecordObjectTypes;

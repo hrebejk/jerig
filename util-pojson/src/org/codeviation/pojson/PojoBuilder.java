@@ -83,8 +83,8 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
 
         if ( parent == null && fieldName == null ) {
 
-            if ( Object.class.equals(object.getClass() ) ) {
-                object = new HashMap();
+            if ( isObjectType(object.getClass() ) ) {
+                object = new LinkedHashMap();
             }
 
             parent = this;
@@ -109,7 +109,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             if ( isPrimitive(fieldType)) {
                 throw new IllegalStateException("Object to primitive field?" + field);
             }
-            else if (isMapType(fieldType)) {
+            else if (isMapType(fieldType) || isObjectType(fieldType)) {
                 Object ni = new LinkedHashMap();
                 set(ni);
                 return new PojoBuilder<T>(this, ni);
@@ -154,7 +154,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
 
         if ( parent == null && fieldName == null ) {  // call to array on root
 
-            if ( Object.class.equals(object.getClass() ) ) {
+            if ( isObjectType(object.getClass() ) ) {
                 object = array = new LinkedList();
             }
 
@@ -186,6 +186,10 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             else if ( isArrayType(fieldType)) {
                 array = new LinkedList<Object>();
                 return new PojoBuilder<T>(this, array, resolveComponentType(field));
+            }
+            else if ( isObjectType(fieldType)) {
+                array = new LinkedList<Object>();
+                return new PojoBuilder<T>(this, array, null);
             }
             else {
                 throw new IllegalStateException("Array to object field?" + field);
@@ -387,6 +391,10 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
 
     private boolean isMapType(Class type) {
         return ClassUtils.isSuperinterface(type, Map.class);
+    }
+
+    private boolean isObjectType( Class type ) {
+        return Object.class.equals(type);
     }
 
     private synchronized Map<String,Field> getFields(Class<?> clazz) {
