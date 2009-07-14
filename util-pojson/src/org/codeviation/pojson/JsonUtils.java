@@ -66,7 +66,7 @@ class JsonUtils {
             return "null";
         }
         else if ( object instanceof Enum ) {
-            return quote(object.toString());
+            return quote(((Enum)object).name());
         }
         else if ( object instanceof Boolean ) {
             return object.toString();
