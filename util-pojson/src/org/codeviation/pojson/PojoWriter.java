@@ -89,7 +89,7 @@ class PojoWriter {
         }
 
         else if ( object instanceof Enum ) {
-            builder = builder.value(object.toString());
+            builder = builder.value(((Enum)object).name());
         }
 
         else if (object instanceof Boolean ) {
