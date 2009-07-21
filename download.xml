@@ -22,7 +22,7 @@
         <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-server/1.1.1-ea/jersey-server-1.1.1-ea.jar" target="jersey-1.1/jersey-server-1.1.1-ea.jar"/>
         <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-server/1.1.1-ea/jersey-server-1.1.1-ea-javadoc.jar" target="jersey-1.1/jersey-server-1.1.1-ea-javadoc.jar"/>
         <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-server/1.1.1-ea/jersey-server-1.1.1-ea-sources.jar" target="jersey-1.1/jersey-server-1.1.1-ea-sources.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.8.6.4/grizzly-servlet-webserver-1.8.6.4.jar" target="jersey-1.1/grizzly-servlet-webserver-1.8.6.4.jar"/>
+<!--        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.8.6.4/grizzly-servlet-webserver-1.8.6.4.jar" target="jersey-1.1/grizzly-servlet-webserver-1.8.6.4.jar"/ -->
 <!--        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.9.14/grizzly-servlet-webserver-1.9.14-javadoc.jar" target="jersey-1.1/grizzly-servlet-webserver-1.9.14-javadoc.jar"/>-->
 <!--        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.9.14/grizzly-servlet-webserver-1.9.14-sources.jar" target="jersey-1.1/grizzly-servlet-webserver-1.9.14-sources.jar"/>-->
         <download url="http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar" target="jersey-1.1/jsr311-api-1.1.jar"/>
