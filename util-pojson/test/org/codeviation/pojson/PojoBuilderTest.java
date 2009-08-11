@@ -50,7 +50,7 @@ public class PojoBuilderTest {
     }
 
     @Test
-    public void testBasicHash() throws Exception {
+    public void testBasicHash() {
         System.out.println("basicHash");
 
         PojsonBuilder<P1,RuntimeException> pbr = PojoBuilder.create( new P1() );
