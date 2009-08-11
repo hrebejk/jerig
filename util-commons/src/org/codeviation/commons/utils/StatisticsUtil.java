@@ -41,15 +41,23 @@
 
 package org.codeviation.commons.utils;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import org.codeviation.commons.patterns.Factory;
 
 /**
  * A utility class that provides some common statistical functions.
  */
-public abstract class Statistics {
+public abstract class StatisticsUtil {
 
     
     public static double average(Collection<? extends Number> values) {
@@ -152,6 +160,156 @@ public abstract class Statistics {
         }
         return Math.sqrt(sum / (data.size() - 1));
     }
-    
-    
+
+    public static Percentile[] histogram( int percentiles, double min, double max, FreqencyCounter<? extends Number> frequencyCounter ) {
+
+        double interval = ((double)( max - min )) / percentiles;
+
+        Percentile[] result = new Percentile[percentiles];
+
+        // initialize percentiles
+        for( int i = 0; i < percentiles; i++ ) {
+            result[i] = new Percentile();
+            result[i].start = i * interval;
+            result[i].end = (i + 1) * interval;
+        }
+
+        for (Map.Entry<? extends Number,Long> e : frequencyCounter) {
+
+            double value = e.getKey().doubleValue();
+            double frequency = e.getValue();
+            int p = (int)( value / interval);
+            p = p > percentiles - 1  ? percentiles - 1 : p; // Just in case
+            result[p].freq += frequency;
+            result[p].sum += value * frequency;
+        }
+
+        return result;
+    }
+
+    public static class FreqencyCounter<T> implements Iterable<Map.Entry<T,Long>> {
+
+        private long count = 0;
+        private Map<T,long[]> result = new HashMap<T, long[]>();
+
+        public long add( T value ) {
+            return add( value, 1l );
+        }
+
+        public long add( T value, long occurences ) {
+
+            long[] vf = result.get(value);
+
+            if ( vf == null ) {
+                vf = new long[] {0l};
+                result.put(value, vf);
+            }
+
+            long oldValue = vf[0];            
+            vf[0] += occurences;
+            count += occurences;
+            return oldValue;
+        }
+
+        public void clear() {
+            result.clear();
+        }
+
+        public long getCount() {
+            return count;
+        }
+
+        public Set<T> getValues() {
+            return result.keySet();
+        }
+
+        public long getFrequency(T value) {
+            long[] vf = result.get(value);
+            if ( vf == null ) {
+                throw new NoSuchElementException("Value " + value + " not found.");
+            }
+            else {
+                return vf[0];
+            }
+        }
+
+        public Iterator<Map.Entry<T, Long>> iterator() {
+            return Iterators.translating(result.entrySet().iterator(), MapEntryFactory.INSTANCE );
+        }
+
+        public int size() {
+            return result.size();
+        }
+
+        public boolean isEmpty() {
+            return result.isEmpty();
+        }
+
+        private static class MapEntryFactory implements Factory<Map.Entry<?,Long>,Map.Entry<?,long[]>> {
+
+            public static final Factory INSTANCE = new MapEntryFactory();
+
+            public Entry<?, Long> create(Entry<?, long[]> param) {
+                return new AbstractMap.SimpleEntry( param.getKey(), param.getValue()[0] );
+            }
+
+        }
+
+    }
+
+    public static class MinimumFinder<T extends Comparable<T>> {
+
+        private T min;
+
+        public boolean add( T item ) {
+            if ( min == null ) {
+                min = item;
+                return true;
+            }
+            else if ( min.compareTo(item) > 0 ) {
+                min = item;
+                return true;
+            }
+
+            return false;
+        }
+
+        public T getMinimum() {
+            return min;
+        }
+
+    }
+
+    public static class MaximumFinder<T extends Comparable<T>> {
+
+        private T min;
+
+        public boolean add( T item ) {
+            if ( min == null ) {
+                min = item;
+                return true;
+            }
+            else if ( min.compareTo(item) < 0 ) {
+                min = item;
+                return true;
+            }
+
+            return false;
+        }
+
+        public T getMaximum() {
+            return min;
+        }
+
+    }
+
+    public static class Percentile {
+
+        public double start;
+        public double end;
+        public long freq;
+        public double sum;
+
+    }
+
 }
