@@ -102,6 +102,15 @@ public class Factories {
         return new MapFactory<T, P>(map);
     }
 
+    /** Creates factory backed by a Map.
+     *
+     * @param map A map to get the objects from.
+     * @return Factory backed by a map.
+     */
+    public static <T, P> Factory<T, P> fromMap(Map<P, T> map, T defaultValue) {
+        return new MapFactory<T, P>(map, defaultValue);
+    }
+
     public static <OT, IT, IP> Factory<OT, IP> chain(Factory<OT, IT> outer, Factory<IT, IP> inner) {
         return new Chain<OT, IT, IP>(outer, inner);
     }
@@ -274,13 +283,20 @@ public class Factories {
     private static class MapFactory<T, P> implements Factory<T, P> {
 
         private Map<P, T> map;
+        private T defautValue;
 
         public MapFactory(Map<P, T> map) {
             this.map = map;
         }
 
+        public MapFactory(Map<P, T> map, T defaultValue) {
+            this( map );
+            this.defautValue = defaultValue;
+        }
+
         public T create(P param) {
-            return map.get(param);
+            T r = map.get(param);
+            return r == null ? defautValue : r;
         }
     }
 
