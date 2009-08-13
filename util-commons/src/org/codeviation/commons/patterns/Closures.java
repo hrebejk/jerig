@@ -5,7 +5,6 @@
 
 package org.codeviation.commons.patterns;
 
-import java.util.Collection;
 import org.codeviation.commons.patterns.Closure.Processor;
 
 /**
@@ -18,22 +17,22 @@ public class Closures {
 
     /** XXX make me to accept iterable as parameter
      */
-    public static <I> Closure<I,RuntimeException> collectionClosure(Collection<I> collection) {
-        return new CollectionClosure(collection);
+    public static <I> Closure<I,RuntimeException> closure(Iterable<I> iterable) {
+        return new IterableClosure(iterable);
     }
 
-    private static class CollectionClosure<I> implements Closure<I, RuntimeException> {
+    private static class IterableClosure<I> implements Closure<I, RuntimeException> {
 
-        Collection<I> collection;
+        private Iterable<I> iterable;
 
-        private CollectionClosure( Collection<I> collection ) {
-            this.collection = collection;
+        private IterableClosure( Iterable<I> iterable ) {
+            this.iterable = iterable;
         }
 
         @Override
         public <R> R apply(Processor<R, ? super I> processor) {
 
-            for (I item : collection) {
+            for (I item : iterable) {
                 if ( !processor.processItem(item) ) {
                     break;
                 }

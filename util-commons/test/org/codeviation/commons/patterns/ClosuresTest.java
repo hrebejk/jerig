@@ -8,6 +8,8 @@ package org.codeviation.commons.patterns;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import org.codeviation.commons.utils.CollectionsUtil;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,7 +48,7 @@ public class ClosuresTest {
         System.out.println("collectionAvg");
 
         List<Integer> l = CollectionsUtil.add(new ArrayList<Integer>(6), 1, 2, 3, 4, 5 ,6);
-        Closure<Integer,RuntimeException> closure = Closures.collectionClosure(l);
+        Closure<Integer,RuntimeException> closure = Closures.closure(l);
         
         Double avgNumber = closure.apply(new NumberAverageProcessor());
         Double avgInteger = closure.apply(new IntegerAverageProcessor());
@@ -58,6 +60,10 @@ public class ClosuresTest {
     // Just to make sure
     private void usage() throws IOException { // should not compile without throwing IOException
         throwingClosure().apply(new NumberAverageProcessor());
+
+//        List<JComponent> l = null;
+//        Closure<JComponent, RuntimeException> closure = Closures.closure(l);
+
     }
 
     private static Closure<Number,IOException> throwingClosure() {
