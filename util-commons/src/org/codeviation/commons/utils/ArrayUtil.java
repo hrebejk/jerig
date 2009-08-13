@@ -83,11 +83,10 @@ public class ArrayUtil {
         return true;    
     }
     
-    public static <T> Iterator<T> iterator(T[] array) {
+    public static <T> Iterator<T> iterator(T... array) {
         return new ArrayIterator<T>(array);
     }
     
- 
     // Private methods ---------------------------------------------------------
     
     private static <T> T[] newArray(T[] original, int lenght) {
@@ -121,6 +120,6 @@ public class ArrayUtil {
         }
         
     }
-    
+
 
 }
