@@ -56,6 +56,7 @@ import static org.junit.Assert.*;
 public class SkipNullsTest {
 
     private static String GOLDEN;
+    private static String GOLDEN_ON_CLASS;
     
     public SkipNullsTest() {
     }
@@ -63,6 +64,7 @@ public class SkipNullsTest {
     @BeforeClass
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/SkipNulls.txt");
+        GOLDEN_ON_CLASS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/SkipNullsOnClass.txt");
     }
 
     @Test
@@ -72,5 +74,16 @@ public class SkipNullsTest {
         RecordSkipNulls record = new RecordSkipNulls();
         assertEquals( GOLDEN, Pojson.save(record));
         
-    } 
+    }
+
+    @Test
+    public void skipNullsOnClass() throws IOException {
+        System.out.println("nullOnClass");
+
+        RecordSkipNulls.OnClass record = new RecordSkipNulls.OnClass();
+        record.t1 = "ahoj";
+        record.t2 = null;
+        assertEquals( GOLDEN_ON_CLASS, Pojson.save(record));
+
+    }
 }

@@ -120,11 +120,15 @@ class PojoWriter {
 
             builder = builder.hash();
 
+            boolean isClassSkipNulls = object.getClass().isAnnotationPresent(Pojson.SkipNullValues.class);
+
             for( Field field : getFields( object.getClass()) ) {
                 try {
                     field.setAccessible(true);
                     Object o = field.get(object);
-                    if ( !( o == null && field.isAnnotationPresent(Pojson.SkipNullValues.class))) {
+                    if ( !( o == null &&
+                            ( field.isAnnotationPresent(Pojson.SkipNullValues.class) || isClassSkipNulls )
+                        )) {
                         builder = builder.field(PojsonUtils.getPojsonFieldName(field));
                         writeAny(o, builder);
                     }
