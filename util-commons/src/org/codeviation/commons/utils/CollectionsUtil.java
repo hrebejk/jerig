@@ -145,7 +145,7 @@ public class CollectionsUtil {
     }
 
     
-    public static <T, Q extends T> Collection<T> filter(Collection<T> target, Iterable<Q> it, Filter<Q> filter) {
+    public static <T, R extends Collection<T>, Q extends T> R filter(R target, Iterable<Q> it, Filter<Q> filter) {
         
         for (Q t : it) {
             if ( filter.accept(t)) {
