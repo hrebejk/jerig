@@ -75,6 +75,12 @@ public class RecordSkipNulls {
     
     @Pojson.SkipNullValues
     public RecordPrimitiveTypes rpt = null;
-    
-    
+
+    @Pojson.SkipNullValues
+    public static class OnClass {
+
+        public String t1;
+
+        public String t2;
+    }
 }
