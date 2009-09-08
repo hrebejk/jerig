@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 
 /** Convenience methods for working with collections.
  *
@@ -90,7 +91,11 @@ public class CollectionsUtil {
         }
         return s;
     }
-    
+
+    public static <V> V get( Map m, Class<V> clazz, Object key ) {
+        Object o = m.get(key);
+        return clazz.isInstance(o) ? clazz.cast(o) : null;
+    }
     
     public static <T, C extends Collection<T>, Q extends T> C add(C target, Q... params) {
         for (T p : params) {
