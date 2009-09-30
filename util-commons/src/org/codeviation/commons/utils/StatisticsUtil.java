@@ -163,22 +163,22 @@ public abstract class StatisticsUtil {
 
     public static Percentile[] histogram( int percentiles, double min, double max, FreqencyCounter<? extends Number> frequencyCounter ) {
 
-        double interval = ((double)( max - min )) / percentiles;
+        double pSize = ((double)( max - min )) / percentiles;
 
         Percentile[] result = new Percentile[percentiles];
 
         // initialize percentiles
         for( int i = 0; i < percentiles; i++ ) {
             result[i] = new Percentile();
-            result[i].start = i * interval;
-            result[i].end = (i + 1) * interval;
+            result[i].start = min + i * pSize;
+            result[i].end = min + (i + 1) * pSize;
         }
 
         for (Map.Entry<? extends Number,Long> e : frequencyCounter) {
 
             double value = e.getKey().doubleValue();
             double frequency = e.getValue();
-            int p = (int)( value / interval);
+            int p = (int)( ( value - min ) / pSize);
             p = p > percentiles - 1  ? percentiles - 1 : p; // Just in case
             result[p].freq += frequency;
             result[p].sum += value * frequency;
