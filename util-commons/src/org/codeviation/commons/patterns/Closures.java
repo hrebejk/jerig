@@ -5,8 +5,6 @@
 
 package org.codeviation.commons.patterns;
 
-import org.codeviation.commons.patterns.Closure.Processor;
-
 /**
  *
  * @author phrebejk
@@ -17,20 +15,20 @@ public class Closures {
 
     /** XXX make me to accept iterable as parameter
      */
-    public static <I> Closure<I,RuntimeException> closure(Iterable<I> iterable) {
-        return new IterableClosure(iterable);
+    public static <I> Closure.WorkingSet<I,RuntimeException> workingSet(Iterable<I> iterable) {
+        return new IterableWorkingSet(iterable);
     }
 
-    private static class IterableClosure<I> implements Closure<I, RuntimeException> {
+    private static class IterableWorkingSet<I> implements Closure.WorkingSet<I, RuntimeException> {
 
         private Iterable<I> iterable;
 
-        private IterableClosure( Iterable<I> iterable ) {
+        private IterableWorkingSet( Iterable<I> iterable ) {
             this.iterable = iterable;
         }
 
         @Override
-        public <R> R apply(Processor<R, ? super I> processor) {
+        public <R> R apply(Closure<R, ? super I> processor) {
 
             for (I item : iterable) {
                 if ( !processor.processItem(item) ) {

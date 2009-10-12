@@ -1,25 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.codeviation.commons.patterns;
 
-/** Applies processor to all items until the processor return false from
- *  the processItem method.
- *
- * @author phrebejk
- */
-public interface Closure<I, E extends Throwable> {
+public interface Closure<PR, PI> {
 
-    public <R> R apply( Processor<R,? super I> processor ) throws E;
+    boolean processItem(PI param);
 
-    public static interface Processor<PR, PI> {
+    PR getResult();
 
-        boolean processItem(PI param);
+    public static interface WorkingSet<I, E extends Throwable> {
 
-        PR getResult();
+        public <R> R apply( Closure<R,? super I> processor ) throws E;
 
     }
-
 }
