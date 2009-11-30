@@ -46,6 +46,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -67,6 +68,10 @@ public class TypeInformationTest {
         Field f = c.getField("cs");
         Type t = f.getGenericType();
         System.out.println("t" + t);
+
+        f = c.getField("ms");
+        t = f.getGenericType();
+        System.out.println("t" + t);
         
         f = c.getField("lt");
         t = f.getGenericType();
@@ -79,6 +84,9 @@ public class TypeInformationTest {
     private static class Record<T> {
         
         public Collection<String> cs;
+
+        public Map<String,Record<T>> ms;
+
         public List<T> lt;
         
         
