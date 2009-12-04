@@ -5,6 +5,10 @@
 
 package org.codeviation.commons.patterns;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  *
  * @author phrebejk
@@ -17,6 +21,10 @@ public class Closures {
      */
     public static <I> Closure.WorkingSet<I,RuntimeException> workingSet(Iterable<I> iterable) {
         return new IterableWorkingSet(iterable);
+    }
+
+    public static <T> Closure<List<T>,T> listCollector() {
+        return new Collector(new ArrayList<T>() );
     }
 
     private static class IterableWorkingSet<I> implements Closure.WorkingSet<I, RuntimeException> {
@@ -38,6 +46,25 @@ public class Closures {
             return processor.getResult();
         }
 
+    }
+
+    public static class Collector<C extends Collection<T>, T, E> implements Closure<C, T> {
+
+        private C result;
+
+        public Collector(C result) {
+            this.result = result;
+        }
+
+        public boolean processItem(T param) {
+            result.add(param);
+            return true;
+        }
+
+        public C getResult() {
+            return result;
+        }
 
     }
+
 }
