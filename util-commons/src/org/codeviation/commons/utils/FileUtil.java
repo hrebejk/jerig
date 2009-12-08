@@ -103,7 +103,37 @@ public final class FileUtil {
         os.close();
 
     }
+
+    /** Tests whether file/folder is empty. For files return true if the file
+     * length is 0, for folders returns true if it contains zero files / folders.
+     *
+     * @param f File to test
+     * @return true if empty false otherwise.
+     */
+    public static boolean isEmpty(File f) {
+        if ( f.isFile() ) {
+            return f.length() == 0;
+        }
+        if ( f.isDirectory() ) {
+            String[] l = f.list();
+            return l == null || l.length == 0;
+        }
+
+        return false;
+    }
     
+    /** Removes all given file/folder and if the parent becomes empty removes the parent recursivelly 
+     * till non empty folder is found.
+     * 
+     * @param folder
+     */
+    public static void removeEmpty( File file ) {
+        if ( isEmpty(file) ) {
+            file.delete();
+            removeEmpty(file.getParentFile());
+        }
+    }
+
     public static void fromString( File f, String... strings) throws FileNotFoundException, IOException {
         
         OutputStream os = new BufferedOutputStream( new FileOutputStream(f) );
