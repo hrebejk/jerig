@@ -108,7 +108,7 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
                 processEvent(e);
             }
             catch (Throwable ex) {
-               Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, "Exception is when " + name + "was proecessing event " + e + "", ex);
+               Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, "Exception was thrown when " + name + " was proecessing event " + e + "", ex);
             }
             finally {
                 if ( s != null) {
