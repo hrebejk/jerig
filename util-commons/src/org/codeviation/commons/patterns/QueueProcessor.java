@@ -104,11 +104,18 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
         
         public void run() {
             rt++;
-            processEvent(e);
-            if ( s != null) {
-                s.release(); // Put back the permit
+            try {
+                processEvent(e);
             }
-            rt--;
+            catch (Throwable ex) {
+               Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, "Exception is when " + name + "was proecessing event " + e + "", ex);
+            }
+            finally {
+                if ( s != null) {
+                    s.release(); // Put back the permit
+                }
+                rt--;
+            }
         }
 
     }
