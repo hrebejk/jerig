@@ -89,6 +89,10 @@ public class Filters {
     public static <T> Filter<T> NotNull() {
         return new Filters.NotNullFilter<T>();
     }
+
+    public static <T> Filter<T> Equals(T object) {
+        return new EqualsFilter<T>(object);
+    }
     
     public static <T> Filter<T> IsIn(Collection<? extends T> container) {
         return new Filters.IsIn<T>(container);
@@ -185,7 +189,22 @@ public class Filters {
         }
         
     }
-    
+
+    private static class EqualsFilter<T> implements Filter<T> {
+
+        private T o;
+
+        public EqualsFilter(T o) {
+            this.o = o;
+        }
+
+        public boolean accept(T object) {
+            return o.equals(object);
+        }
+
+
+    }
+
     private static class IsIn<T> implements Filter<T> {
 
         private Collection container;
