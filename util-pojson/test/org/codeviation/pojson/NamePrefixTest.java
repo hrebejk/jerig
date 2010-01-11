@@ -48,6 +48,7 @@ import org.codeviation.pojson.records.RecordArrays;
 import org.codeviation.pojson.records.RecordComplex;
 import org.codeviation.pojson.records.RecordObjectTypes;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -67,6 +68,7 @@ public class NamePrefixTest {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/ComplexNamePrefix.txt");
     }
 
+    @Ignore("@NamePrefix javadoc says it's currently not working")
     @Test
     public void namePrefixSave() throws IOException {
         System.out.println("namePrefixSave");
