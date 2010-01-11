@@ -45,19 +45,19 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
         }
     }
 
-    public void add( E e ) {
+    public synchronized void add( E e ) {
         q.add(e);
     }
 
-    public int size() {
+    public synchronized int size() {
         return q.size();
     }
 
-    public int runningTasks() {
+    public synchronized int runningTasks() {
         return rt;
     }
 
-    public Iterator<E> iterator() {
+    public synchronized Iterator<E> iterator() {
         return q.iterator();
     }
     
@@ -65,7 +65,7 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
      *
      * @return
      */
-    public boolean isDone() {
+    public synchronized boolean isDone() {
         return q.isEmpty() && ( !s.hasQueuedThreads() ) ;
     }
 
@@ -89,7 +89,7 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
                 Processor p = new Processor(e);
                 new Thread(p).start();
             } catch (InterruptedException ex) {
-                // Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(QueueProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -104,6 +104,8 @@ public abstract class QueueProcessor<E> implements Runnable, Iterable<E> {
         
         public void run() {
             rt++;
+            assert rt <= permits;
+            
             try {
                 processEvent(e);
             }
