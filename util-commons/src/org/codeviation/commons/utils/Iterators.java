@@ -41,8 +41,11 @@
 
 package org.codeviation.commons.utils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import org.codeviation.commons.patterns.Factory;
 
 /**
@@ -52,7 +55,11 @@ import org.codeviation.commons.patterns.Factory;
 public class Iterators {
 
     private Iterators() {}
-    
+
+    public static <T> Iterator<T> sequence(Iterator<? extends T>... iterators) {
+        return new SequenceIterator<T>(iterators);
+    }
+
     public static <T,P> Iterator<T> translating(Iterator<P> iterator, Factory<T,P> factory) {
         return new TranslatingIterator<T, P>(iterator, factory);
     }
@@ -111,5 +118,55 @@ public class Iterators {
         }
 
     }
+
+    private static class SequenceIterator<T> implements Iterator<T> {
+
+        private Iterator<Iterator<? extends T>> itit;
+        private Iterator<? extends T> current;
+
+        public SequenceIterator(Iterator<? extends T>... its) {
+
+            if ( its == null ) {
+                throw new NullPointerException();
+            }
+
+            if ( its.length > 0 ) {
+                this.itit = Arrays.asList(its).iterator();
+                this.current = its[0];
+            }
+            else {
+                this.itit = Collections.EMPTY_LIST.iterator();
+                this.current = Collections.EMPTY_LIST.iterator();
+            }
+        }
+
+        public boolean hasNext() {
+            if ( current.hasNext() ) {
+                return true;
+            }
+
+            if ( itit.hasNext() ) {
+                current = itit.next();
+                return hasNext();
+            }
+
+            return false;
+        }
+
+        public T next() {
+            if ( !hasNext() ) {
+                throw new NoSuchElementException();
+            }
+
+            return current.next();
+
+        }
+
+        public void remove() {
+            current.remove();
+        }
+
+    }
+
     
 }
