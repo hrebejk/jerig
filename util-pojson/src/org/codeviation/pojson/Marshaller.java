@@ -62,10 +62,11 @@ import org.codeviation.commons.patterns.Filter;
  * @author Petr Hrebejk
  */
 public final class Marshaller<T> {
-    
+
     private Filter<String> fieldFilter;
     private String indentation = "    ";
     private int indentLevel = 0;
+    private boolean autoClose;
 
     private PojoWriter pw;
 
@@ -76,7 +77,12 @@ public final class Marshaller<T> {
     public Marshaller(String indentation, int indentLevel) {
         this();
         this.indentation = indentation;
-        this.indentLevel = indentLevel;        
+        this.indentLevel = indentLevel;
+    }
+
+    private Marshaller(String indentation, int indentLevel, boolean autoClose) {
+        this(indentation, indentLevel);
+        this.autoClose = autoClose;
     }
 
     /** Saves an object to string */
@@ -94,9 +100,14 @@ public final class Marshaller<T> {
 
     public void save( T object, Writer writer ) throws IOException {
         BufferedWriter bw = new BufferedWriter( writer );
-        doWrite(object, writer);
-        bw.flush();
-        bw.close();
+        try {
+            doWrite(object, writer);
+        }
+        finally {
+            if ( autoClose ) {
+                bw.close();
+            }
+        }
     }
 
     public void save( T object, OutputStream outputStream ) throws IOException {
@@ -105,7 +116,9 @@ public final class Marshaller<T> {
             save( object, osw);
         }
         finally {
-            osw.close();
+            if ( autoClose ) {
+                osw.close();
+            }
         }
     }
 
@@ -134,17 +147,17 @@ public final class Marshaller<T> {
     void setFieldFilter(Filter<String> fieldFilter) {
         this.fieldFilter = fieldFilter;
     }
-    
+
     /** Sets the string which will be used as indetation
-     * 
+     *
      * @param indentation The indentation string.
      */
     public void setIndentation(String indentation) {
         this.indentation = indentation;
     }
-    
+
     /** Sets the initial level of indentation.
-     * 
+     *
      * @param startIndentLevel Number of indentation string repeats
      */
     public void setIndentLevel(int startIndentLevel) {
