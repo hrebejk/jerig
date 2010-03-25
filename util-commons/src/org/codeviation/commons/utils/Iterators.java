@@ -48,7 +48,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import org.codeviation.commons.patterns.Factory;
 
-/**
+/** XXX maybe add Array - from, length and support negative lenth to reverse
  *
  * @author phrebejk
  */
@@ -58,6 +58,10 @@ public class Iterators {
 
     public static <T> Iterator<T> array( T[] array ) {
         return new ArrayIterator<T>(array);
+    }
+
+    public static <T> Iterator<T> array( T[] array, int length ) {
+        return new ArrayIterator<T>(array, length);
     }
 
     public static <T> Iterator<T> sequence(Iterator<? extends T>... iterators) {
@@ -175,20 +179,20 @@ public class Iterators {
      private static class ArrayIterator<T> implements Iterator<T> {
 
         private T[] array;
-        private int size = 0;
+        private int length = 0;
         private int index = 0;
 
         public ArrayIterator(T[] array) {
             this( array, array.length );
         }
 
-        public ArrayIterator(T[] array, int size) {
+        public ArrayIterator(T[] array, int length) {
             this.array = array;
-            this.size = size;
+            this.length = length > array.length ? array.length : length;
         }
 
         public boolean hasNext() {
-            return index < size;
+            return index < length;
         }
 
         public T next() {
