@@ -51,6 +51,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.codeviation.commons.patterns.Factory;
+import org.codeviation.commons.patterns.Filter;
 
 /** XXX maybe add Array - from, length and support negative lenth to reverse
  *
@@ -66,6 +67,10 @@ public class Iterators {
 
     public static <T> Iterator<T> array( T[] array, int length ) {
         return new ArrayIterator<T>(array, length);
+    }
+
+    public static <T> Iterator<T> filter( Iterator<? extends T> iterator, Filter<? super T> filter ) {
+        return new FilterIterator<T>(iterator, filter);
     }
 
     public static <T extends Comparable> Iterator<T> merging(Iterator<? extends T>... iterators) {
@@ -324,5 +329,57 @@ public class Iterators {
             }
         }
 
+    }
+
+    private static class FilterIterator<T> implements Iterator<T> {
+
+        private Filter<? super T> filter;
+        private Iterator<? extends T> iterator;
+
+        private T current;
+
+        private boolean hasNext;
+
+
+        public FilterIterator(Iterator<? extends T> iterator, Filter<? super T> filter ) {
+            this.iterator = iterator;
+            this.filter = filter;
+
+            nextInIterator();
+        }
+
+
+        public boolean hasNext() {
+            return hasNext;
+        }
+
+        public T next() {
+            if ( hasNext() ) {
+                T r = current;
+                nextInIterator();
+                return r;
+            }
+            throw new NoSuchElementException();
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+
+        private void nextInIterator() {
+            while( iterator.hasNext() ) {
+
+                current = iterator.next();
+                if ( filter.accept(current)) {
+                    hasNext = true;
+                    return;
+                }
+
+            }
+
+            hasNext = false;
+
+        }
     }
 }
