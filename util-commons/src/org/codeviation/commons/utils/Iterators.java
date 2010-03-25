@@ -41,10 +41,14 @@
 
 package org.codeviation.commons.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.codeviation.commons.patterns.Factory;
 
@@ -62,6 +66,14 @@ public class Iterators {
 
     public static <T> Iterator<T> array( T[] array, int length ) {
         return new ArrayIterator<T>(array, length);
+    }
+
+    public static <T extends Comparable> Iterator<T> merging(Iterator<? extends T>... iterators) {
+        return new MergingIterator<T>(ComparationUtil.comparablesComparator(), true, iterators);
+    }
+
+    public static <T> Iterator<T> merging(Comparator<? super T> comparator, Iterator<? extends T>... iterators) {
+        return new MergingIterator<T>(comparator, true, iterators);
     }
 
     public static <T> Iterator<T> sequence(Iterator<? extends T>... iterators) {
@@ -207,5 +219,110 @@ public class Iterators {
         }
 
     }
-    
+
+
+    /** XXX check nulls
+     *  XXX check sort order
+     *
+     * @author phrebejk
+     */
+    private static class MergingIterator<T> implements Iterator<T> {
+
+        private Comparator<? super T> comparator;
+        private Iterator<? extends T>[] iterators;
+        private boolean checkSorting;
+
+        private List<T> lastElements;
+        private List<T> mins;
+
+        private BitSet hasNext;
+
+
+        public MergingIterator(Comparator<? super T> comparator, Iterator<? extends T>... iterators ) {
+            this( comparator, false, iterators );
+        }
+
+        public MergingIterator(Comparator<? super T> comparator, boolean checkSorting, Iterator<? extends T>... iterators ) {
+            this.comparator = comparator;
+            this.iterators = iterators;
+            this.mins = new ArrayList<T>( iterators.length );
+            this.hasNext = new BitSet(iterators.length);
+            this.checkSorting = checkSorting;
+
+            this.mins = new ArrayList<T>( iterators.length );
+            this.hasNext = new BitSet(iterators.length);
+
+            if ( checkSorting ) {
+                this.lastElements = new ArrayList<T>(iterators.length);
+            }
+
+            for(int i = 0; i < iterators.length; i++ ) {
+                mins.add(i, null);
+                nextInIterator(i);
+            }
+
+        }
+
+        public boolean hasNext() {
+            return !hasNext.isEmpty();
+        }
+
+        public T next() {
+            if ( hasNext() ) {
+                int minIndex = findMinimumIndex();
+                T r = mins.get(minIndex);
+                nextInIterator(minIndex);
+                return r;
+            }
+            throw new NoSuchElementException();
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        private int findMinimumIndex() {
+
+            int minIndex = -1;
+
+            for (int i = 0; i < mins.size(); i++) {
+
+                if ( hasNext.get(i) ) {
+                    if ( minIndex == -1 || comparator.compare(mins.get(i), mins.get(minIndex)) < 0 ) {
+                        minIndex = i;
+                    }
+                }
+            }
+
+            return minIndex;
+        }
+
+        private void nextInIterator(int index) {
+            if ( iterators[index].hasNext() ) {
+                mins.set(index, iterators[index].next());
+
+                if ( checkSorting ) {
+                    if ( lastElements.size() > index ) {
+                        if ( comparator.compare(lastElements.get(index), mins.get(index)) > 0 ) {
+                            throw new IllegalStateException( "Iterator " + index + " bad sorting at element : " + mins.get(index));
+                        }
+                        lastElements.set(index, mins.get(index));
+                    }
+                    else {
+                        lastElements.add(index, mins.get(index));
+                    }
+                }
+
+                hasNext.set(index);
+            }
+            else {
+                mins.set(index, null);
+                if ( checkSorting && lastElements.size() <= index  ) {
+                    lastElements.add(index, null);
+                }
+                hasNext.clear(index);
+            }
+        }
+
+    }
 }
