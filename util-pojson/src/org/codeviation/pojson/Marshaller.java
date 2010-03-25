@@ -49,8 +49,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.codeviation.commons.patterns.Filter;
@@ -58,7 +56,9 @@ import org.codeviation.commons.patterns.Filter;
 /** Good for saving objects in Json format.
  *
  * XXX Hold the builders to make caching working
- *
+ * XXX Maybe do not close the stream after writing to be symetric with UnMarshaller
+ * XXX Add field filter
+ * 
  * @author Petr Hrebejk
  */
 public final class Marshaller<T> {
