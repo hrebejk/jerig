@@ -56,6 +56,10 @@ public class Iterators {
 
     private Iterators() {}
 
+    public static <T> Iterator<T> array( T[] array ) {
+        return new ArrayIterator<T>(array);
+    }
+
     public static <T> Iterator<T> sequence(Iterator<? extends T>... iterators) {
         return new SequenceIterator<T>(iterators);
     }
@@ -168,5 +172,36 @@ public class Iterators {
 
     }
 
+     private static class ArrayIterator<T> implements Iterator<T> {
+
+        private T[] array;
+        private int size = 0;
+        private int index = 0;
+
+        public ArrayIterator(T[] array) {
+            this( array, array.length );
+        }
+
+        public ArrayIterator(T[] array, int size) {
+            this.array = array;
+            this.size = size;
+        }
+
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        public T next() {
+            if ( !hasNext() ) {
+                throw new NoSuchElementException();
+            }
+            return array[index++];
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+    }
     
 }

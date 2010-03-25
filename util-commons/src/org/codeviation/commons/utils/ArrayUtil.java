@@ -84,7 +84,7 @@ public class ArrayUtil {
     }
     
     public static <T> Iterator<T> iterator(T... array) {
-        return new ArrayIterator<T>(array);
+        return Iterators.array(array);
     }
     
     // Private methods ---------------------------------------------------------
@@ -97,29 +97,5 @@ public class ArrayUtil {
         return a;        
         
     }
-    
-    private static class ArrayIterator<T> implements Iterator<T> {
-
-        private T[] array;
-        private int i = 0;
-
-        public ArrayIterator(T[] array) {
-            this.array = array;
-        }
-        
-        public boolean hasNext() {
-            return array.length > i;
-        }
-
-        public T next() {
-            return array[i++];
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-    }
-
 
 }
