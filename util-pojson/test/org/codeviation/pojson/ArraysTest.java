@@ -46,7 +46,6 @@ import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.commons.utils.CollectionsUtil;
 import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -210,7 +209,6 @@ public class ArraysTest {
 
     }
 
-    @Ignore("This is really a failing test that probably needs to be fixed.")
     @Test
     public void arraysMultidimensionalLoad() throws IOException {
         System.out.println("arraysMultiDimensionalLoad");

@@ -207,8 +207,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
                 throw new IllegalStateException( "Array into array of maps?");
             }
             else if ( isArrayType(componentType) ) {
-                array = new ArrayList<Object>();
-                return new PojoBuilder<T>(this, array, componentType /*XXX Wrong*/);
+                return new PojoBuilder<T>(this, new ArrayList<Object>(), componentType.getComponentType());
             }
             else {
                 throw new IllegalStateException( "Array into array of objects?");
@@ -250,20 +249,17 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     }
 
     public PojsonBuilder<T, RuntimeException> up() throws RuntimeException {
-
-        if ( parent != null ) {
-            parent.resolveTemporaryArray();
+        if ( parent != null) {
+            if (parent.fieldName != null) {
+                parent.set(parent.array);
+            } else if (componentType != null && parent != this) {
+                parent.set(object);
+            }
         }
         if ( parent == this) {
             parent = null;
         }
         return parent == null ? this : parent;
-    }
-
-    private void resolveTemporaryArray() {
-        if ( fieldName != null ) {
-            set( array );
-        }
     }
 
     @SuppressWarnings("unchecked")
