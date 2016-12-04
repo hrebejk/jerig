@@ -12,35 +12,10 @@
                      <param name="imported.basedir" value="${imported.basedir}" />
                  </antcall>
              </sequential>
-        </macrodef>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-client/1.1.1-ea/jersey-client-1.1.1-ea.jar" target="jersey-1.1/jersey-client-1.1.1-ea.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-client/1.1.1-ea/jersey-client-1.1.1-ea-javadoc.jar" target="jersey-1.1/jersey-client-1.1.1-ea-javadoc.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-client/1.1.1-ea/jersey-client-1.1.1-ea-sources.jar" target="jersey-1.1/jersey-client-1.1.1-ea-sources.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-core/1.1.1-ea/jersey-core-1.1.1-ea.jar" target="jersey-1.1/jersey-core-1.1.1-ea.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-core/1.1.1-ea/jersey-core-1.1.1-ea-javadoc.jar" target="jersey-1.1/jersey-core-1.1.1-ea-javadoc.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-core/1.1.1-ea/jersey-core-1.1.1-ea-sources.jar" target="jersey-1.1/jersey-core-1.1.1-ea-sources.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-server/1.1.1-ea/jersey-server-1.1.1-ea.jar" target="jersey-1.1/jersey-server-1.1.1-ea.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-server/1.1.1-ea/jersey-server-1.1.1-ea-javadoc.jar" target="jersey-1.1/jersey-server-1.1.1-ea-javadoc.jar"/>
-        <download url="http://download.java.net/maven/2/com/sun/jersey/jersey-server/1.1.1-ea/jersey-server-1.1.1-ea-sources.jar" target="jersey-1.1/jersey-server-1.1.1-ea-sources.jar"/>
-<!--        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.8.6.4/grizzly-servlet-webserver-1.8.6.4.jar" target="jersey-1.1/grizzly-servlet-webserver-1.8.6.4.jar"/ -->
-<!--        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.9.14/grizzly-servlet-webserver-1.9.14-javadoc.jar" target="jersey-1.1/grizzly-servlet-webserver-1.9.14-javadoc.jar"/>-->
-<!--        <download url="http://download.java.net/maven/2/com/sun/grizzly/grizzly-servlet-webserver/1.9.14/grizzly-servlet-webserver-1.9.14-sources.jar" target="jersey-1.1/grizzly-servlet-webserver-1.9.14-sources.jar"/>-->
-        <download url="http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar" target="jersey-1.1/jsr311-api-1.1.jar"/>
-        <download url="http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1-javadoc.jar" target="jersey-1.1/jsr311-api-1.1-javadoc.jar"/>
-        <download url="http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1-sources.jar" target="jersey-1.1/jsr311-api-1.1-sources.jar"/>
-
-        <download url="http://repo1.maven.org/maven2/org/apache/lucene/lucene-core/2.9.0/lucene-core-2.9.0.jar" target="lucene-2.9.0/lucene-core-2.9.0.jar" />
-        <download url="http://repo1.maven.org/maven2/org/apache/lucene/lucene-core/2.9.0/lucene-core-2.9.0-javadoc.jar" target="lucene-2.9.0/lucene-core-2.9.0-javadoc.jar" />
-        <download url="http://repo1.maven.org/maven2/org/apache/lucene/lucene-core/2.9.0/lucene-core-2.9.0-sources.jar" target="lucene-2.9.0/lucene-core-2.9.0-sources.jar" />
-
-        <download url="http://repo1.maven.org/maven2/junit/junit/4.5/junit-4.5.jar" target="junit_4/junit-4.5.jar" />
-        <download url="http://dfn.dl.sourceforge.net/sourceforge/junit/junit4.5.zip" target="junit_4/junit-4.5-api.zip" />
-        <download url="http://repo1.maven.org/maven2/junit/junit/4.5/junit-4.5-sources.jar" target="junit_4/junit-4.5-src.jar" />
+        </macrodef>      
+        <download url="http://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar" target="junit_4/junit-4.12.jar" />
+        <download url="http://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12-sources.jar" target="junit_4/junit-4.12-src.jar" />
         
-        <download url="http://repo1.maven.org/maven2/junit/junit/3.8.2/junit-3.8.2.jar" target="junit/junit-3.8.2.jar" />
-        <download url="http://repo1.maven.org/maven2/junit/junit/3.8.2/junit-3.8.2-javadoc.jar" target="junit/junit-3.8.2-javadoc.jar" />
-        <download url="http://repo1.maven.org/maven2/junit/junit/3.8.2/junit-3.8.2-sources.jar" target="junit/junit-3.8.2-sources.jar" />
-
         <download url="http://bits.netbeans.org/netbeans/6.5/extra_ant_tasks/org-netbeans-modules-java-j2seproject-copylibstask.jar" target="CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar" />
         
     </target>
