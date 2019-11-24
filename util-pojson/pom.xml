@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <!-- parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">  
+    <modelVersion>4.0.0</modelVersion>
     <groupId>org.codeviation</groupId>
-    <artifactId>jerig</artifactId>
+    <artifactId>jerig-pojson</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent -->
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.codeviation</groupId> 	
-  <artifactId>jerig-pojson</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>JSON/POJO databinding</name>
-  <description>Annotation-based JSON/POJO databinding library</description>
+    <packaging>jar</packaging>
+    <name>JSON/POJO databinding</name>
+    <description>Annotation-based JSON/POJO databinding library</description>
 
 
-  <build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -33,11 +27,11 @@
     </build>
 
     <dependencies>
-	<dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>jerig-commons</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jerig-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
