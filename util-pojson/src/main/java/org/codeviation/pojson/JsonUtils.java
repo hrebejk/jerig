@@ -110,7 +110,7 @@ class JsonUtils {
         char         c = 0;
         int          i;
         int          len = string.length();
-        StringBuffer sb = new StringBuffer(len + 4);
+        StringBuilder sb = new StringBuilder(len + 4);
         String       t;
 
         sb.append('"');
@@ -147,7 +147,7 @@ class JsonUtils {
             default:
                 if (c < ' ') {
                     t = "000" + Integer.toHexString(c);
-                    sb.append("\\u" + t.substring(t.length() - 4));
+                    sb.append("\\u").append(t.substring(t.length() - 4));
                 } else {
                     sb.append(c);
                 }
@@ -222,8 +222,8 @@ class JsonUtils {
     
     private static class ReflectiveArrayIterator implements Iterator {
 
-        private Object a;
-        private int len;
+        private final Object a;
+        private final int len;
         private int ci = 0;
         
         ReflectiveArrayIterator(Object a) {
@@ -232,15 +232,18 @@ class JsonUtils {
         }
         
         
+        @Override
         public boolean hasNext() {
             return  ci < len;
         }
 
+        @Override
         public Object next() {
             ci++;
             return Array.get(a, ci - 1);            
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -286,30 +289,30 @@ class JsonUtils {
             Number n = (Number)object;
         
             if ( Byte.class.equals(type) ) {
-                return new Byte(n.byteValue());
+                return n.byteValue();
             }        
             else if ( Short.class.equals(type) ) {
-                return new Short(n.shortValue());
+                return n.shortValue();
             }
             else if ( Integer.class.equals(type) ) {
-                return new Integer(n.intValue());
+                return n.intValue();
             }
             else if ( Long.class.equals(type) ) {                        
-                return new Long(n.longValue());
+                return n.longValue();
             }
             else if ( Float.class.equals(type) ) {
-                return new Float(n.floatValue());                
+                return n.floatValue();                
             }
             else if ( Date.class.equals(type) || ClassUtils.isSuperclass(type, Date.class) ) {
                 return new Date( n.longValue() );
             }
             else {
-                return new Double(n.doubleValue());            
+                return n.doubleValue();            
             }
             // XXX add big integers and big decimals
         }
         else if (Character.class.equals(type)) {
-            return Character.valueOf(((String)object).charAt(0));
+            return ((String)object).charAt(0);
         }
         else if ( URL.class.equals(type)) {
             try {

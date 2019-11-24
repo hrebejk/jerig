@@ -52,7 +52,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URL;
 
@@ -82,14 +81,14 @@ public class Pojson {
      * @return String containing JSON representation of the object.
      */
     public static String save( Object object ) {
-        return new Marshaller<Object>().save(object);
+        return new Marshaller<>().save(object);
     }
 
     /** Writes JSON representation of the object into a Writer. This is a
      * convenience method, which uses standard formating and does not cache
      * information about serialized classes. If you need more control of the
      * formating the marshalling process or if you want to achieve slightly better
-     * better performance please use the {@link Marshaller} class.<BR/>
+     * better performance please use the {@link Marshaller} class.<BR>
      * This method does NOT close the Writer after it writes to it.
      *
      * @param object Object to be marshaled to JSON format.
@@ -97,14 +96,14 @@ public class Pojson {
      * @throws IOException when it can't write the object for some reason.
      */
     public static void save( Object object, Writer writer ) throws IOException {
-        new Marshaller<Object>().save(object, writer);
+        new Marshaller<>().save(object, writer);
     }
 
     /** Writes JSON representation of the object into a Stream. This is a
      * convenience method, which uses standard formating and does not cache
      * information about serialized classes. If you need more control of the
      * formating the marshalling process or if you want to achieve slightly better
-     * better performance please use the {@link Marshaller} class.<BR/>
+     * better performance please use the {@link Marshaller} class.<BR>
      * This method does NOT close the Stream after it writes to it.
      *
      * @param object Object to be marshaled to JSON format.
@@ -112,14 +111,14 @@ public class Pojson {
      * @throws IOException when it can't write the object for some reason.
      */
     public static void save( Object object, OutputStream outputStream ) throws IOException {
-        new Marshaller<Object>().save(object, outputStream);
+        new Marshaller<>().save(object, outputStream);
     }
 
     /** Writes JSON representation of the object into a File. This is a
      * convenience method, which uses standard formating and does not cache
      * information about serialized classes. If you need more control of the
      * formating the marshalling process or if you want to achieve slightly better
-     * better performance please use the {@link Marshaller} class.<BR/>
+     * better performance please use the {@link Marshaller} class.<BR>
      * This method does NOT close the Stream after it writes to it.
      *
      * @param object Object to be marshaled to JSON format.
@@ -127,7 +126,7 @@ public class Pojson {
      * @throws IOException when it can't write the object for some reason.
      */
     public static void save( Object object, File file ) throws IOException {
-        new Marshaller<Object>().save(object, file);
+        new Marshaller<>().save(object, file);
     }
 
     public static <T> T load( Class<T> clazz, String string ) {
@@ -261,7 +260,7 @@ public class Pojson {
      * set of fields all fields which match the {@link ModifierPositive} filter
      * are taken into account and then thos fields which match the
      * {@link ModifierNegative} filter are subtracted from the set.
-     * <br/></br>
+     * <br>
      * If the annotation is not used then all fields are taken into account.
      */
     @Retention(RetentionPolicy.RUNTIME)
@@ -275,7 +274,7 @@ public class Pojson {
      * set of fields all fields which match the {@link ModifierPositive} filter
      * are taken into account and then thos fields which match the
      * {@link ModifierNegative} filter are subtracted from the set.
-     * <br/></br>
+     * <br>
      * If the annotation is not used then fields { {@link java.lang.reflect.Modifier.TRANSIENT},
      * and {@link java.lang.reflect.Modifier.STATIC} } are ignored by default.
      */

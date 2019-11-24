@@ -76,10 +76,10 @@ class Parser2<E extends Exception> {
     private static final int FALSE_START = FALSE.charAt(0);
     private static final int NULL_START = NULL.charAt(0);
         
-    private Stack<Where> where;
+    private final Stack<Where> where;
     private Error error;
     private Handler<E> handler;
-    private PushbackReader reader;
+    private final PushbackReader reader;
     
     
     public static <E extends Exception> void parse( InputStream stream, PojsonBuilder<?,E> builder ) throws IOException, E {
@@ -87,21 +87,21 @@ class Parser2<E extends Exception> {
     }
     
     public static <E extends Exception> void parse( Reader reader, PojsonBuilder<?,E> builder ) throws IOException, E {
-          Parser2<E> jp = new Parser2<E>(reader, builder);
+          Parser2<E> jp = new Parser2<>(reader, builder);
           jp.parse(false);
     }
      
     /** For testing purposes only */
     static void parse( Reader reader, Handler<RuntimeException> handler ) throws IOException {
-        Parser2<RuntimeException> jp = new Parser2<RuntimeException>(reader, null);
+        Parser2<RuntimeException> jp = new Parser2<>(reader, null);
         jp.handler = handler;
         jp.parse(false);
     }
 
     private Parser2( Reader reader, PojsonBuilder<?,E> builder ) {
-        this.where = new Stack<Parser2.Where>();
+        this.where = new Stack<>();
         this.where.push(Where.OUT);
-        this.handler = new Handler<E>( builder );
+        this.handler = new Handler<>( builder );
         this.reader = new PushbackReader(reader, 1);
     }
         
@@ -295,7 +295,7 @@ class Parser2<E extends Exception> {
 
     private void handleNumberValue() throws IOException, E {
         StringBuilder sb = new StringBuilder();
-        int cc = -1;
+        int cc;
         boolean isFloatingPoint = false;
         while( ( cc = reader.read() ) != -1 ) {
            char c = (char)cc; 
@@ -334,7 +334,7 @@ class Parser2<E extends Exception> {
     
     
     private String handleStringValue() throws IOException {
-        int cc = -1;
+        int cc;
         StringBuilder sb = new StringBuilder();
 //        System.out.println("");
         while( ( cc = reader.read() ) != -1 ) {
@@ -425,7 +425,7 @@ class Parser2<E extends Exception> {
     }
     
     private void handleComment(boolean line) throws IOException, E {
-        int cc = -1;
+        int cc;
         StringBuilder sb = new StringBuilder();
         while( ( cc = reader.read() ) != -1 ) {
             if (line && ( cc == '\n' || cc == '\r') ) {

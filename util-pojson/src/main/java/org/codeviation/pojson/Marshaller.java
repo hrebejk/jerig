@@ -85,7 +85,7 @@ public final class Marshaller<T> {
         this.autoClose = autoClose;
     }
 
-    /** Saves an object to string */
+    // Saves an object to string
     public String save( T object ) {
 
         StringWriter sw = new StringWriter(2048);
@@ -124,17 +124,10 @@ public final class Marshaller<T> {
 
     public void save( T object, File file ) throws IOException  {
 
-        FileWriter fw = null;
-
-        try {
-            fw = new FileWriter(file);
+        try (FileWriter fw = new FileWriter(file)) {
             save( object, fw);
         }
-        finally {
-            if ( fw != null) {
-                fw.close();
-            }
-        }
+        
     }
 
     void save( T object, ZipOutputStream zipOutputStream, String entryName) throws IOException {

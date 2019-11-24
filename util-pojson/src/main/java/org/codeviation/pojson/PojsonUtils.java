@@ -41,7 +41,6 @@ package org.codeviation.pojson;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.Map;
 import org.codeviation.commons.patterns.Filter;
 import org.codeviation.commons.reflect.FieldUtils;
@@ -169,7 +168,7 @@ final class PojsonUtils {
 
             Pojson.ModifierNegative mn = clazz.getAnnotation(Pojson.ModifierNegative.class);
             if ( mn != null ) {
-                negative = mp.value();
+                negative = mn.value();
                 if (negative.length == 0) {
                     negative = null;
                 }
@@ -180,6 +179,7 @@ final class PojsonUtils {
 
         }
 
+        @Override
         public boolean accept(Field field) {
 
             if (field.isSynthetic() ||

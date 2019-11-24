@@ -26,7 +26,7 @@ import org.codeviation.commons.reflect.ClassUtils;
  */
 class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
 
-    private Map<Class<?>,Map<String,Field>> fieldsCache = new HashMap<Class<?>, Map<String,Field>>();
+    private Map<Class<?>,Map<String,Field>> fieldsCache = new HashMap<>();
 
     private String fieldName;
     
@@ -49,11 +49,11 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     }
 
     public static <T> PojsonBuilder<T,RuntimeException> create(T object) {
-        PojoBuilder<T> pb = new PojoBuilder<T>( null, object );
+        PojoBuilder<T> pb = new PojoBuilder<>( null, object );
         pb.result = object;
 
         if ( object.getClass().isArray() ) {
-            pb.array = new ArrayList<Object>();
+            pb.array = new ArrayList<>();
             pb.object = pb.array;
             pb.componentType = object.getClass().getComponentType();
         }
@@ -62,6 +62,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public T build() throws RuntimeException {
 
         if ( Object.class.equals(result.getClass())) {
@@ -75,11 +76,13 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
         return result;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> field(String name) throws RuntimeException {
         fieldName = name;
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> hash() throws RuntimeException {
 
         if ( parent == null && fieldName == null ) {
@@ -96,13 +99,13 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             if ( isMapType(object.getClass())) {
                 Object ni = new LinkedHashMap();
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
 
             Field field = getField( object, fieldName );
 
             if ( field == null ) {
-                return new IgnoringBuilder<T,RuntimeException>(this).hash();
+                return new IgnoringBuilder<>(this).hash();
             }
 
             Class<?> fieldType = getFieldType(field);
@@ -113,7 +116,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             else if (isMapType(fieldType) || isObjectType(fieldType)) {
                 Object ni = new LinkedHashMap();
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
             else if (isArrayType(fieldType)) {
                 throw new IllegalStateException("Hash into array type " + field );
@@ -121,7 +124,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             else {
                 Object ni = Factories.NEW_INSTANCE.create(fieldType);
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
         }
         else { // Call to hash in array
@@ -129,28 +132,29 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             if ( componentType == null ) { // Array does not know it's type and we are creating a hash
                 Object ni = new LinkedHashMap();
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
             else if ( isMapType(componentType)) {
                 Object ni = new LinkedHashMap();
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
             else if ( isPrimitive(componentType) ) {
                 throw new IllegalStateException( "Hash in primitive array");
             }
             else if ( isArrayType(componentType) ) {
-                array = new ArrayList<Object>();
-                return new PojoBuilder<T>(this, array, null /** XXX wrong **/);
+                array = new ArrayList<>();
+                return new PojoBuilder<>(this, array, null /** XXX wrong **/);
             }
             else {
                 Object ni = Factories.NEW_INSTANCE.create(componentType);
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
         }
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> array() throws RuntimeException {
 
         if ( parent == null && fieldName == null ) {  // call to array on root
@@ -167,13 +171,13 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             if ( isMapType(object.getClass())) {
                 Object ni = new LinkedList();
                 set(ni);
-                return new PojoBuilder<T>(this, ni);
+                return new PojoBuilder<>(this, ni);
             }
 
             Field field = getField( object, fieldName );
 
             if ( field == null ) {
-                return new IgnoringBuilder<T,RuntimeException>(this).array();
+                return new IgnoringBuilder<>(this).array();
             }
 
             Class<?> fieldType = getFieldType(field);
@@ -185,12 +189,12 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
                 throw new IllegalStateException("Array to map field?" + field);
             }
             else if ( isArrayType(fieldType)) {
-                array = new LinkedList<Object>();
-                return new PojoBuilder<T>(this, array, resolveComponentType(field));
+                array = new LinkedList<>();
+                return new PojoBuilder<>(this, array, resolveComponentType(field));
             }
             else if ( isObjectType(fieldType)) {
-                array = new LinkedList<Object>();
-                return new PojoBuilder<T>(this, array, null);
+                array = new LinkedList<>();
+                return new PojoBuilder<>(this, array, null);
             }
             else {
                 throw new IllegalStateException("Array to object field?" + field);
@@ -208,7 +212,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
                 throw new IllegalStateException( "Array into array of maps?");
             }
             else if ( isArrayType(componentType) ) {
-                return new PojoBuilder<T>(this, new ArrayList<Object>(), componentType.getComponentType());
+                return new PojoBuilder<>(this, new ArrayList<>(), componentType.getComponentType());
             }
             else {
                 throw new IllegalStateException( "Array into array of objects?");
@@ -219,36 +223,43 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
         return null;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> value() throws RuntimeException {
         set( null );
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> value(String value) throws RuntimeException {
         set(value);
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> value(boolean value) throws RuntimeException {
         set(value);
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> value(long value) throws RuntimeException {
         set(value);
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> value(float value) throws RuntimeException {
         set(value);
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> value(double value) throws RuntimeException {
         set(value);
         return this;
     }
 
+    @Override
     public PojsonBuilder<T, RuntimeException> up() throws RuntimeException {
         if ( parent != null) {
             if (parent.fieldName != null) {
@@ -386,7 +397,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
 
         Map<String,Field> fields = fieldsCache.get(clazz);
         if ( fields == null ) {
-            fields = new HashMap<String, Field>();
+            fields = new HashMap<>();
             for (Field f : PojsonUtils.getFields(clazz).values()) {
                 fields.put(PojsonUtils.getPojsonFieldName(f), f);
             }

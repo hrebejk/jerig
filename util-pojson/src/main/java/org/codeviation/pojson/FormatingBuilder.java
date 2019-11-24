@@ -15,12 +15,12 @@ import static org.codeviation.pojson.PojsonUtils.*;
  */
 class FormatingBuilder implements PojsonBuilder<Void,IOException> {
 
-    private Writer w;
-    private FormatingBuilder parent;
-    private char endingChar;
+    private final Writer w;
+    private final FormatingBuilder parent;
+    private final char endingChar;
     private boolean needsComma;
     private boolean isField;
-    private String indent;
+    private final String indent;
     private int level;
 
     private FormatingBuilder(Writer w, FormatingBuilder parent, char endingChar, String indent, int level) {
@@ -39,10 +39,12 @@ class FormatingBuilder implements PojsonBuilder<Void,IOException> {
         return new FormatingBuilder(w, null, (char)-1, indent, level);
     }
 
+    @Override
     public Void build() throws IOException {
         return null;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> field(String name) throws IOException {
         comma();
         nl();
@@ -54,6 +56,7 @@ class FormatingBuilder implements PojsonBuilder<Void,IOException> {
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> hash() throws IOException {
         comma();
         if ( !isField && parent != null ) {
@@ -65,6 +68,7 @@ class FormatingBuilder implements PojsonBuilder<Void,IOException> {
         return new FormatingBuilder(w, this, '}', indent, level + 1);
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> array() throws IOException {
         comma();
         if ( needsComma ) { nl(); }
@@ -73,36 +77,43 @@ class FormatingBuilder implements PojsonBuilder<Void,IOException> {
         return new FormatingBuilder(w, this, ']', indent, level + 1);
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> value() throws IOException {
         writeValue("null");
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> value(String value) throws IOException {
         writeValue(encode(value));
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> value(boolean value) throws IOException {
         writeValue(encode(value));
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> value(long value) throws IOException {
         writeValue(encode(value));
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> value(float value) throws IOException {
         writeValue(encode(value));
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> value(double value) throws IOException {
         writeValue(encode(value));
         return this;
     }
 
+    @Override
     public PojsonBuilder<Void, IOException> up() throws IOException {
         if ( needsComma ) { 
             nl();

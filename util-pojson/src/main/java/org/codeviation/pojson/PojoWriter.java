@@ -23,9 +23,14 @@ import java.util.Map;
  */
 class PojoWriter {
 
-    private Map<Class<?>,Collection<Field>> fieldCache = new HashMap<Class<?>, Collection<Field>>();
+    private final Map<Class<?>,Collection<Field>> fieldCache;
 
-    private Map<Object,Object> cycleDetector = new IdentityHashMap<Object, Object>();
+    private final Map<Object,Object> cycleDetector;
+
+    PojoWriter() {
+        this.fieldCache = new HashMap<>();
+        this.cycleDetector = new IdentityHashMap<>();
+    }
 
     public <T,X,E extends Exception> T writeTo(T object, PojsonBuilder<X,E> builder) throws E {
         writeAny(object, builder);
