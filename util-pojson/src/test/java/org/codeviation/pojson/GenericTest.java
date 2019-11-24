@@ -61,7 +61,7 @@ public class GenericTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Generic.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Generic.txt");
     }
     
     @Test

@@ -66,8 +66,8 @@ public class JsonTypesTest {
     
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypes.txt");
-        GOLDEN_OBJECTS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonObjectTypes.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/JsonTypes.txt");
+        GOLDEN_OBJECTS = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/JsonObjectTypes.txt");
         RECORD_PRIMITIVES = new RecordPrimitiveTypes().init();
         RECORD_OBJECTS = new RecordObjectTypes().init();
     }

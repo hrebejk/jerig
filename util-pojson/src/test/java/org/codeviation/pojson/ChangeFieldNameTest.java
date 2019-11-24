@@ -60,7 +60,7 @@ public class ChangeFieldNameTest {
     public void changeFieldNameSave() throws IOException {
         System.out.println("changeFieldNameSave");
 
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/ChangeFieldName.txt"),
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/ChangeFieldName.txt"),
                       Pojson.save(new RecordsChangeFieldName().init()));
         
     }
@@ -69,7 +69,7 @@ public class ChangeFieldNameTest {
     public void changeFieldNameLoad() throws IOException {
         System.out.println("changeFieldNameLoad");
 
-        String t = ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/ChangeFieldName.txt");
+        String t = ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/ChangeFieldName.txt");
 
         RecordsChangeFieldName r = Pojson.load(RecordsChangeFieldName.class, t);
 

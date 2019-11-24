@@ -5,10 +5,6 @@
 
 package org.codeviation.pojson;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Writer;
-import org.codeviation.commons.patterns.Filter;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSmall;
 import org.junit.After;
@@ -34,9 +30,9 @@ public class MarshallerTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        GOLDEN = ClassUtils.getResourceAsString(MarshallerTest.class, "goldenfiles/RecordSmall.txt");
-        GOLDEN_L1 = ClassUtils.getResourceAsString(MarshallerTest.class, "goldenfiles/RecordSmallIndentLevel1.txt");
-        GOLDEN_S1 = ClassUtils.getResourceAsString(MarshallerTest.class, "goldenfiles/RecordSmallIndentSpace.txt");
+        GOLDEN = ClassUtils.getResourceAsString(MarshallerTest.class, "/goldenfiles/RecordSmall.txt");
+        GOLDEN_L1 = ClassUtils.getResourceAsString(MarshallerTest.class, "/goldenfiles/RecordSmallIndentLevel1.txt");
+        GOLDEN_S1 = ClassUtils.getResourceAsString(MarshallerTest.class, "/goldenfiles/RecordSmallIndentSpace.txt");
     }
 
     @AfterClass

@@ -62,7 +62,7 @@ public class HidingTest {
     
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(HidingTest.class, "goldenfiles/Hiding.txt");
+        GOLDEN = ClassUtils.getResourceAsString(HidingTest.class, "/goldenfiles/Hiding.txt");
     }
 
     @Test

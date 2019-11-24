@@ -62,7 +62,7 @@ public class ArraysTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Arrays.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Arrays.txt");
     }
     
     @Test

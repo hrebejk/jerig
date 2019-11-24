@@ -73,7 +73,7 @@ public class IterablesTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Arrays.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Arrays.txt");
         RA = new RecordArrays().init();
     }
     
@@ -96,7 +96,7 @@ public class IterablesTest {
     public void simpleSet() throws IOException {
         System.out.println("simpleList");
         
-        Set<String> s = new HashSet<String>();
+        Set<String> s = new LinkedHashSet<String>();
         s.add("jedna");
         s.add("dve");
         s.add("tri");

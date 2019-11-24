@@ -61,7 +61,7 @@ public class ComplexTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Complex.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Complex.txt");
     }
     
     @Test

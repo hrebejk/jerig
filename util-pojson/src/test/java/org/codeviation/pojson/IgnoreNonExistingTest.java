@@ -65,11 +65,11 @@ public class IgnoreNonExistingTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        WITH_NON_EXISTING_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/ComplexIgnoreNonExisting.txt");
-        GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Complex.txt");
+        WITH_NON_EXISTING_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/ComplexIgnoreNonExisting.txt");
+        GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Complex.txt");
 
-        WITH_NON_EXISTING_JSON = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypesIgnoreNonExisting.txt");
-        GOLDEN_JSON = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypes.txt");
+        WITH_NON_EXISTING_JSON = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/JsonTypesIgnoreNonExisting.txt");
+        GOLDEN_JSON = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/JsonTypes.txt");
     }
     
     @Test

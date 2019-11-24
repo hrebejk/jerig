@@ -65,9 +65,9 @@ public class NullsTest {
     
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN_OBJECT_TYPES = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Nulls.txt");
-        GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/NullComplex.txt");
-        GOLDEN_ARRAYS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/NullArrays.txt");
+        GOLDEN_OBJECT_TYPES = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Nulls.txt");
+        GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/NullComplex.txt");
+        GOLDEN_ARRAYS = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/NullArrays.txt");
     }
 
     @Test

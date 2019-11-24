@@ -105,15 +105,15 @@ public class ZipSaverTest {
         ZipFile zf = new ZipFile(file);
 
         assertEquals( 
-            ClassUtils.getResourceAsString(ZipSaverTest.class, "goldenfiles/JsonTypes.txt"),
+            ClassUtils.getResourceAsString(ZipSaverTest.class, "/goldenfiles/JsonTypes.txt"),
             StreamUtil.asString(zf.getInputStream(zf.getEntry("primitive/r.json"))));
         
         assertEquals( 
-            ClassUtils.getResourceAsString(ZipSaverTest.class, "goldenfiles/Arrays.txt"),
+            ClassUtils.getResourceAsString(ZipSaverTest.class, "/goldenfiles/Arrays.txt"),
             StreamUtil.asString(zf.getInputStream(zf.getEntry("arrays/r.json"))));
         
         assertEquals( 
-            ClassUtils.getResourceAsString(ZipSaverTest.class, "goldenfiles/Complex.txt"),
+            ClassUtils.getResourceAsString(ZipSaverTest.class, "/goldenfiles/Complex.txt"),
             StreamUtil.asString(zf.getInputStream(zf.getEntry("complex/r.json"))));
         
     }

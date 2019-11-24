@@ -41,12 +41,9 @@
 
 package org.codeviation.pojson;
 
-import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import org.codeviation.commons.reflect.ClassUtils;
-import org.codeviation.pojson.records.RecordFilter;
-import org.codeviation.pojson.records.RecordObjectTypes;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -65,7 +62,7 @@ public class BeanTest {
     
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN_DEFAULT = ClassUtils.getResourceAsString(BeanTest.class, "goldenfiles/DefaultFilter.txt");
+        GOLDEN_DEFAULT = ClassUtils.getResourceAsString(BeanTest.class, "/goldenfiles/DefaultFilter.txt");
         
     }
 

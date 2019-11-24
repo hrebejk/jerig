@@ -61,7 +61,7 @@ public class SkipFieldsTest {
         System.out.println("skipFieldsFirst");
         
         RecordsSkipFields.First record = new RecordsSkipFields.First();
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsFirst.txt"), 
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/SkipFieldsFirst.txt"),
                       Pojson.save(record));
     }
     
@@ -70,7 +70,7 @@ public class SkipFieldsTest {
         System.out.println("skipFieldsLast");
         
         RecordsSkipFields.Last record = new RecordsSkipFields.Last();
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsLast.txt"), 
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/SkipFieldsLast.txt"),
                       Pojson.save(record));
     }
     
@@ -79,7 +79,7 @@ public class SkipFieldsTest {
         System.out.println("skipFieldsMid");
         
         RecordsSkipFields.Mid record = new RecordsSkipFields.Mid();
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsMid.txt"), 
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/SkipFieldsMid.txt"),
                       Pojson.save(record));
     }
     
@@ -88,7 +88,7 @@ public class SkipFieldsTest {
         System.out.println("skipFieldsMore");
         
         RecordsSkipFields.More record = new RecordsSkipFields.More();
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsMore.txt"), 
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/SkipFieldsMore.txt"),
                       Pojson.save(record));
     } 
     
@@ -97,7 +97,7 @@ public class SkipFieldsTest {
         System.out.println("skipFieldsAll");
         
         RecordsSkipFields.All record = new RecordsSkipFields.All();
-        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "goldenfiles/SkipFieldsAll.txt"), 
+        assertEquals( ClassUtils.getResourceAsString(this.getClass(), "/goldenfiles/SkipFieldsAll.txt"),
                       Pojson.save(record));
     } 
     

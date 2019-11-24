@@ -159,7 +159,7 @@ public class CollectionsTest {
     public void arrays() throws IOException {
         System.out.println("arrays");
                 
-        String text = ClassUtils.getResourceAsString(CollectionsTest.class, "goldenfiles/Arrays.txt");
+        String text = ClassUtils.getResourceAsString(CollectionsTest.class, "/goldenfiles/Arrays.txt");
         Object o = Pojson.load(HashMap.class, text);
    
         assertEquals(GOLDEN_ARRAYS, o);                

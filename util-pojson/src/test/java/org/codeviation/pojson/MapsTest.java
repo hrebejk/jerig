@@ -63,7 +63,7 @@ public class MapsTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Maps.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Maps.txt");
     }
     
     @Test @SuppressWarnings("unchecked")

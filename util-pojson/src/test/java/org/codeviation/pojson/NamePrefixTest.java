@@ -65,7 +65,7 @@ public class NamePrefixTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/ComplexNamePrefix.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/ComplexNamePrefix.txt");
     }
 
     @Ignore("@NamePrefix javadoc says it's currently not working")

@@ -42,7 +42,6 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
-import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSkipNulls;
 import org.junit.BeforeClass;
@@ -63,8 +62,8 @@ public class SkipNullsTest {
     
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/SkipNulls.txt");
-        GOLDEN_ON_CLASS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/SkipNullsOnClass.txt");
+        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/SkipNulls.txt");
+        GOLDEN_ON_CLASS = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/SkipNullsOnClass.txt");
     }
 
     @Test
