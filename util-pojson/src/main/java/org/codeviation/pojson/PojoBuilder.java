@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.codeviation.commons.patterns.Factories;
 import org.codeviation.commons.reflect.ClassUtils;
 
 /**
@@ -118,7 +119,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
                 throw new IllegalStateException("Hash into array type " + field );
             }
             else {
-                Object ni = createInstance( fieldType );
+                Object ni = Factories.NEW_INSTANCE.create(fieldType);
                 set(ni);
                 return new PojoBuilder<T>(this, ni);
             }
@@ -143,7 +144,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
                 return new PojoBuilder<T>(this, array, null /** XXX wrong **/);
             }
             else {
-                Object ni = createInstance(componentType);
+                Object ni = Factories.NEW_INSTANCE.create(componentType);
                 set(ni);
                 return new PojoBuilder<T>(this, ni);
             }
@@ -306,18 +307,6 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
 
         return f;
 
-    }
-
-    private static <T> T createInstance(Class<T> clazz) {
-        try {
-            return clazz.newInstance();
-        }
-        catch (InstantiationException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        catch (IllegalAccessException ex) {
-            throw new IllegalArgumentException(ex);
-        }
     }
 
     private static Class<?> getFieldType( Field field ) {
