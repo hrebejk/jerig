@@ -11,6 +11,8 @@ package org.codeviation.pojson;
  */
 class IgnoringBuilder<T,E extends Exception> implements PojsonBuilder<T,E> {
 
+    static final Object IGNORED = new Object();
+
     private final PojsonBuilder<T,E> parent;
     private int depth = 0;
 
@@ -71,7 +73,7 @@ class IgnoringBuilder<T,E extends Exception> implements PojsonBuilder<T,E> {
     }
 
     @Override
-    public PojsonBuilder<T, E> up() throws E {
+    public PojsonBuilder<T, E> up() throws E {        
         depth--;
         return depth == 0 ? parent : this;
     }

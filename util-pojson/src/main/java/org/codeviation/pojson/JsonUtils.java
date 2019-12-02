@@ -257,8 +257,6 @@ class JsonUtils {
             return null;
         }
 
-
-
         if ( (type.isInterface() && ClassUtils.isSuperinterface(object.getClass(), type) ) ||
               ClassUtils.isSuperclass(object.getClass(), type) ) {
             return object;

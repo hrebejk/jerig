@@ -64,7 +64,7 @@ public class UnMarshaller {
     }
 
     public <T> T update( T object, Reader reader ) throws IOException {
-        PojsonBuilder<T,RuntimeException> pb = PojoBuilder.create(object);
+        PojsonBuilder<T,RuntimeException> pb = PojoBuilder1.create(object);
         Parser2.parse(reader, pb);
         return pb.build();
     }

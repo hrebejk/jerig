@@ -45,8 +45,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordComplex;
 import org.codeviation.pojson.records.RecordObjectTypes;
@@ -239,6 +241,34 @@ public class CollectionsTest {
         String s2 = Pojson.save(d2);
 
         List<RecordSmall> d3 = new ArrayList<RecordSmall>();
+        d3 = Pojson.update(d3, s1);
+        assertEquals( s1, Pojson.save(d3) );
+//      assertEquals(RecordSmall.class, d3.get(0).getClass());
+
+        assertEquals( s1, s2 );
+
+    }
+
+
+    @Test
+    public void loadSet() throws IOException {
+
+        System.out.println("loadList");
+
+        Set<RecordSmall> d1 = new HashSet<RecordSmall>();
+        d1.add( new RecordSmall(1, "A"));
+        d1.add( new RecordSmall(2, "B"));
+        d1.add( new RecordSmall(3, "C"));
+
+        String s1 = Pojson.save(d1);
+
+        // System.out.println(s1);
+
+        @SuppressWarnings("unchecked")
+        Set<RecordSmall> d2 = Pojson.load(HashSet.class, s1);
+        String s2 = Pojson.save(d2);
+
+        Set<RecordSmall> d3 = new HashSet<RecordSmall>();
         d3 = Pojson.update(d3, s1);
         assertEquals( s1, Pojson.save(d3) );
 //      assertEquals(RecordSmall.class, d3.get(0).getClass());

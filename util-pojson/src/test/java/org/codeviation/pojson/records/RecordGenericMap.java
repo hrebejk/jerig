@@ -39,81 +39,31 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.codeviation.pojson;
+package org.codeviation.pojson.records;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import org.codeviation.commons.reflect.ClassUtils;
-import org.codeviation.pojson.records.RecordGenericMap;
-import org.codeviation.pojson.records.RecordMaps;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author Petr Hrebejk
  */
-public class MapsTest {
-    
-    private static String GOLDEN;
-    
-    public MapsTest() {
-    }
+public class RecordGenericMap {
 
-    @BeforeClass
-    public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Maps.txt");
-    }
-    
-    @Test @SuppressWarnings("unchecked")
-    public void maps() throws IOException {
-        System.out.println("maps");
+    public Map<String,RecordEntry> entries;
+
+    public static class RecordEntry {
+
+        String name;
+
+        public RecordEntry() {
+        }
+
+        public RecordEntry(String name) {
+            this.name = name;
+        }
+
         
-        assertEquals( GOLDEN, Pojson.save(new RecordMaps().init()));
-    }
-
-    @Test
-    public void testMapsPure() throws IOException {
-        System.out.println("mapsPure");
-
-        Map<String,Map<String,Integer>> m = new LinkedHashMap<>();
-        Map<String,Integer>m1 = new LinkedHashMap<>();
-        Map<String,Integer>m2 = new LinkedHashMap<>();
-
-        m.put("m1", m1);
-        m.put("m2", m2);
-        m1.put("M1-1", 11);
-        m1.put("M1-2", 12);
-
-        m2.put("M2-1", 13);
-        m2.put("M2-2", 14);
-
-        Marshaller<Map<String,Map<String,Integer>>> ma = new Marshaller<>(null, 0);
-
-        assertEquals( "{\"m1\":{\"M1-1\":11,\"M1-2\":12},\"m2\":{\"M2-1\":13,\"M2-2\":14}}", ma.save(m));
-
 
     }
 
-    @Test
-    public void testGenericMapField() {
-
-        RecordGenericMap rgm = new RecordGenericMap();
-
-        rgm.entries = new HashMap<>();
-        rgm.entries.put("a", new RecordGenericMap.RecordEntry("A") );
-        rgm.entries.put("b", new RecordGenericMap.RecordEntry("B") );
-
-
-        String s = Pojson.save(rgm);
-
-        RecordGenericMap rgm2 = Pojson.load(RecordGenericMap.class, s);
-
-        assertTrue( rgm2.entries.get("a") instanceof RecordGenericMap.RecordEntry );
-
-    }
-    
 }

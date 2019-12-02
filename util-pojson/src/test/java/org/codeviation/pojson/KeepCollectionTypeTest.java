@@ -42,12 +42,21 @@
 package org.codeviation.pojson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import org.codeviation.commons.reflect.ClassUtils;
-import org.codeviation.pojson.records.RecordGenericMap;
-import org.codeviation.pojson.records.RecordMaps;
+import org.codeviation.pojson.records.RecordComplex;
+import org.codeviation.pojson.records.RecordObjectTypes;
+import org.codeviation.pojson.records.RecordPrimitiveTypes;
+import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -56,64 +65,53 @@ import static org.junit.Assert.*;
  *
  * @author Petr Hrebejk
  */
-public class MapsTest {
+public class KeepCollectionTypeTest {
     
-    private static String GOLDEN;
-    
-    public MapsTest() {
+    public KeepCollectionTypeTest() {
     }
-
+    
+    
     @BeforeClass
     public static void init() throws IOException {
-        GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "/goldenfiles/Maps.txt");
-    }
-    
-    @Test @SuppressWarnings("unchecked")
-    public void maps() throws IOException {
-        System.out.println("maps");
-        
-        assertEquals( GOLDEN, Pojson.save(new RecordMaps().init()));
     }
 
     @Test
-    public void testMapsPure() throws IOException {
-        System.out.println("mapsPure");
+    public void testDirectField() throws IOException {
+        System.out.println("primitive");
 
-        Map<String,Map<String,Integer>> m = new LinkedHashMap<>();
-        Map<String,Integer>m1 = new LinkedHashMap<>();
-        Map<String,Integer>m2 = new LinkedHashMap<>();
+        TR1 tr1 = new TR1().init();
+        String s1 = Pojson.save(tr1);
 
-        m.put("m1", m1);
-        m.put("m2", m2);
-        m1.put("M1-1", 11);
-        m1.put("M1-2", 12);
+        TR1 o = Pojson.load( TR1.class, s1);
+        assertTrue( o.als instanceof ArrayList );
+        assertTrue( o.lls instanceof LinkedList );
+        assertTrue( o.hms instanceof HashMap );
+        assertTrue( o.lms instanceof LinkedHashMap );
+        assertTrue( o.tms instanceof TreeMap );
+    }
 
-        m2.put("M2-1", 13);
-        m2.put("M2-2", 14);
 
-        Marshaller<Map<String,Map<String,Integer>>> ma = new Marshaller<>(null, 0);
+    public static class TR1 {
 
-        assertEquals( "{\"m1\":{\"M1-1\":11,\"M1-2\":12},\"m2\":{\"M2-1\":13,\"M2-2\":14}}", ma.save(m));
+        ArrayList<String> als;
+        LinkedList<String> lls;
 
+        HashMap<String,String> hms;
+        LinkedHashMap<String,String> lms;
+        TreeMap<String,String> tms;
+
+
+        TR1 init() {
+            als = new ArrayList<>();
+            lls = new LinkedList<>();
+            hms = new HashMap<>();
+            lms = new LinkedHashMap<>();
+            tms = new TreeMap<>();
+
+            return this;
+        }
 
     }
 
-    @Test
-    public void testGenericMapField() {
 
-        RecordGenericMap rgm = new RecordGenericMap();
-
-        rgm.entries = new HashMap<>();
-        rgm.entries.put("a", new RecordGenericMap.RecordEntry("A") );
-        rgm.entries.put("b", new RecordGenericMap.RecordEntry("B") );
-
-
-        String s = Pojson.save(rgm);
-
-        RecordGenericMap rgm2 = Pojson.load(RecordGenericMap.class, s);
-
-        assertTrue( rgm2.entries.get("a") instanceof RecordGenericMap.RecordEntry );
-
-    }
-    
 }

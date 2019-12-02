@@ -97,7 +97,7 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
         else if ( fieldName != null ) { // call to hash in an object field
 
             if ( isMapType(object.getClass())) {
-                Object ni = new LinkedHashMap();
+                Object ni = componentType != null ? Factories.NEW_INSTANCE.create(componentType) : new LinkedHashMap();
                 set(ni);
                 return new PojoBuilder<>(this, ni);
             }
@@ -113,7 +113,13 @@ class PojoBuilder<T> implements PojsonBuilder<T,RuntimeException> {
             if ( isPrimitive(fieldType)) {
                 throw new IllegalStateException("Object to primitive field?" + field);
             }
-            else if (isMapType(fieldType) || isObjectType(fieldType)) {
+            else if (isMapType(fieldType)) {
+                Class<?> componentType = resolveComponentType(field);
+                Object ni = new LinkedHashMap(); 
+                set(ni);
+                return new PojoBuilder<>(this, ni, componentType);
+            }
+            else if ( isObjectType(fieldType)) {
                 Object ni = new LinkedHashMap();
                 set(ni);
                 return new PojoBuilder<>(this, ni);

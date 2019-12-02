@@ -43,10 +43,8 @@ package org.codeviation.commons.reflect;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import org.codeviation.commons.utils.StreamUtil;
 
 /**
@@ -115,19 +113,7 @@ public class ClassUtils {
         InputStream is = clazz.getResourceAsStream(resourceName);
         return is == null ? null : StreamUtil.asString(is);
     }
-    
-    // XXX Should be removed
-    public static Vector arrayToVector(Object array) {
-        int len = Array.getLength(array);
-        Vector result = new Vector(len);
         
-        for( int i = 0; i <len; i++) {
-            result.add(Array.get(array, i));
-        }
-        
-        return result;
-    }
-    
     public static Class primitive2Object( Class clazz ) {
 
         if ( !clazz.isPrimitive() ) {
