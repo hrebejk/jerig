@@ -57,6 +57,7 @@ import org.codeviation.pojson.records.RecordSmall;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -251,6 +252,7 @@ public class CollectionsTest {
 
 
     @Test
+    @Ignore( "Sets are not supported yet." )
     public void loadSet() throws IOException {
 
         System.out.println("loadList");
