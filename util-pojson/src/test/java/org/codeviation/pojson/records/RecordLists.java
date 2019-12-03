@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.codeviation.pojson.Util;
 
 /**
  *
@@ -61,16 +62,16 @@ public class RecordLists {
     public List empty;
 
     public RecordLists init() {
-        charList = List.of( 'x','y','z' );
-        intList = List.of( 1,2,3 );
-        stringList = List.of( "A","B","C" );
-        enumList = List.of( RetentionPolicy.CLASS, RetentionPolicy.RUNTIME );
-        recordList = List.of(
+        charList = Util.listOf( 'x','y','z' );
+        intList = Util.listOf( 1,2,3 );
+        stringList = Util.listOf( "A","B","C" );
+        enumList = Util.listOf( RetentionPolicy.CLASS, RetentionPolicy.RUNTIME );
+        recordList = Util.listOf(
                new RecordSmall(1, "A"),
                new RecordSmall(2, "B"),
                new RecordSmall(3, "C")
         );
-        recordArrayList = List.of(
+        recordArrayList = Util.listOf(
                new RecordSmall[] { new RecordSmall(1, "A"), new RecordSmall(2, "B") },
                new RecordSmall[] { new RecordSmall(3, "C") },
                new RecordSmall[] { }

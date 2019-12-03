@@ -41,6 +41,8 @@
 
 package org.codeviation.pojson;
 
+import java.util.Arrays;
+import java.util.List;
 import org.codeviation.commons.patterns.Filter;
 import org.codeviation.commons.patterns.Filters;
 
@@ -69,5 +71,9 @@ public class Util {
                 
         return sb.toString();
     }
-    
+
+    public static <T> List<T> listOf( T... a ) {
+        return Arrays.asList(a);
+    }
+
 }

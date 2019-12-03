@@ -164,7 +164,7 @@ public class TypeUtilsTest {
         assertTrue( isJsonPrimitiveType( String.class ));
         assertTrue( isJsonPrimitiveType( Date.class ));
 
-        assertTrue( isJsonPrimitiveType( new byte[0].getClass().componentType() ) );
+        assertTrue( isJsonPrimitiveType( new byte[0].getClass().getComponentType() ) );
 
         Field ff1 = this.getClass().getDeclaredField("f1");
         assertFalse( isJsonPrimitiveType( ff1.getType() ) );
@@ -187,7 +187,7 @@ public class TypeUtilsTest {
     @Test
     public void testBuildArray() {
 
-        int[] ia = (int[])buildArray( Integer.TYPE, List.of( 1, 2, 3) );
+        int[] ia = (int[])buildArray( Integer.TYPE, Util.listOf( 1, 2, 3) );
 
         assertEquals(2l, ia[1]);
 
