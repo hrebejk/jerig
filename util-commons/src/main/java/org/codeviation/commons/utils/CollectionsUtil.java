@@ -41,7 +41,8 @@
 
 package org.codeviation.commons.utils;
 
-import org.codeviation.commons.patterns.*;
+// import org.codeviation.commons.patterns.*; // Filter will be replaced by Predicate
+import java.util.function.Predicate; // Added for Predicate
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -64,10 +65,10 @@ public class CollectionsUtil {
         return s;
     }
     
-    public static <T> HashSet<T> hashSet(Collection<? extends T> original,  Filter<T> filter) {
+    public static <T> HashSet<T> hashSetIf(Collection<? extends T> original,  Predicate<T> filter) { // Renamed and Predicate
         HashSet<T> s = new HashSet<T>(original.size());
         for (T p : original) {
-            if ( filter.accept(p)) {
+            if ( filter.test(p)) { // filter.test
                 s.add(p);
             }
         }
@@ -82,10 +83,10 @@ public class CollectionsUtil {
         return s;
     }
     
-    public static <T,Q extends T> ArrayList<T> arrayList(Collection<Q> original,  Filter<T> filter) {
+    public static <T,Q extends T> ArrayList<T> arrayListIf(Collection<Q> original,  Predicate<T> filter) { // Renamed and Predicate
         ArrayList<T> s = new ArrayList<T>(original.size());
         for (T p : original) {
-            if ( filter.accept(p)) {
+            if ( filter.test(p)) { // filter.test
                 s.add(p);
             }
         }
@@ -117,9 +118,9 @@ public class CollectionsUtil {
         return add(target, it.iterator());
     }
     
-    public static <T, C extends Collection<T>, Q extends Collection<? extends T>> C add(C target, Q source, Filter<? super T> filter) {
+    public static <T, C extends Collection<T>, Q extends Collection<? extends T>> C addIf(C target, Q source, Predicate<? super T> filter) { // Renamed and Predicate
         for (T t : source) {
-            if (filter.accept(t)) {
+            if (filter.test(t)) { // filter.test
                 target.add(t);
             }
         }
@@ -139,21 +140,31 @@ public class CollectionsUtil {
         }
     }
     
-    public static <T, Q extends T> Collection<Q> remove(Collection<Q> target, Filter<? super T> filter) {
-        for (T t : target) {
-            if (filter.accept(t)) {
-                target.remove(t);
+    // Note: The original signature was Collection<Q> remove(Collection<Q> target, Filter<? super T> filter)
+    // This could lead to issues if Q is a subtype of T, and filter operates on T.
+    // Changing to Predicate<? super Q> makes more sense for Collection<Q> target.
+    // Also, removing from a collection while iterating over it with an external iterator
+    // is dangerous and can lead to ConcurrentModificationException.
+    // The correct way is to use Iterator.remove() or Collection.removeIf().
+    // For now, I will rename and change to Predicate, but this method is problematic.
+    public static <Q> Collection<Q> removeIf(Collection<Q> target, Predicate<? super Q> filter) { // Renamed and Predicate
+        // This implementation is problematic and prone to ConcurrentModificationException.
+        // It should be refactored to use target.removeIf(filter) if the Java version allows,
+        // or an iterator with iterator.remove().
+        Iterator<Q> it = target.iterator();
+        while (it.hasNext()) {
+            if (filter.test(it.next())) {
+                it.remove();
             }
         }
-
         return target;
     }
 
     
-    public static <T, R extends Collection<T>, Q extends T> R filter(R target, Iterable<Q> it, Filter<Q> filter) {
+    public static <T, R extends Collection<T>, Q extends T> R filterCollection(R target, Iterable<Q> it, Predicate<Q> filter) { // Renamed and Predicate
         
         for (Q t : it) {
-            if ( filter.accept(t)) {
+            if ( filter.test(t)) { // filter.test
                 target.add(t);
             }
         }

@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate; // Added for Predicate
 
 /** Miscelaneous useful factories
  *
@@ -89,7 +90,7 @@ public class Factories {
         return new ArrayFactory<T, P>(elementFactory, null, ArrayFactory.getProductClass(productClass));
     }
 
-    public static <T, P> Factory<T[], P[]> array(Factory<T, P> elementFactory, Filter<P> filter, Class... productClass) {
+    public static <T, P> Factory<T[], P[]> array(Factory<T, P> elementFactory, Predicate<P> filter, Class... productClass) {
         return new ArrayFactory<T, P>(elementFactory, filter, ArrayFactory.getProductClass(productClass));
     }
 
@@ -179,10 +180,10 @@ public class Factories {
     private static class ArrayFactory<T, P> implements Factory<T[], P[]> {
 
         private Factory<T, P> elementFactory;
-        private Filter<P> filter;
+        private Predicate<P> filter;
         private Class productClass;
     
-        public ArrayFactory(Factory<T, P> elementFactory, Filter<P> filter, Class productClass) {
+        public ArrayFactory(Factory<T, P> elementFactory, Predicate<P> filter, Class productClass) {
             this.filter = filter;
             this.elementFactory = elementFactory;
 
@@ -244,7 +245,7 @@ public class Factories {
             ArrayList<T> al = new ArrayList<T>(param.length);
 
             for (P p : param) {
-                if (filter.accept(p)) {
+                if (filter.test(p)) {
                     al.add(elementFactory.create(p));
                 }
             }

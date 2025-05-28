@@ -41,8 +41,8 @@
 
 package org.codeviation.pojson;
 
-import org.codeviation.commons.patterns.Filter;
-import org.codeviation.commons.patterns.Filters;
+import java.util.function.Predicate;
+// import org.codeviation.commons.patterns.Filters; // No longer needed
 
 /**
  *
@@ -53,16 +53,20 @@ public class Util {
     
     public static String removeFormating(String text, Character... toRemove) {
         
+        final Character[] effectivelyFinalToRemove;
         if ( toRemove == null || toRemove.length == 0 ) {
-            toRemove = new Character[] { ' ', '\n', '\t' };
+            effectivelyFinalToRemove = new Character[] { ' ', '\n', '\t' };
+        } else {
+            effectivelyFinalToRemove = toRemove;
         }
         
         StringBuilder sb = new StringBuilder();
-        Filter<Character> filter = Filters.Not(Filters.IsIn(toRemove));
+        // Explicit cast to Predicate<Character> might be needed if type inference struggles.
+        Predicate<Character> filter = ((Predicate<Character>) (x -> java.util.Arrays.asList(effectivelyFinalToRemove).contains(x))).negate();
         
         for( int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if ( filter.accept(c) ) {
+            if ( filter.test(c) ) {
                 sb.append(c);
             }
         }

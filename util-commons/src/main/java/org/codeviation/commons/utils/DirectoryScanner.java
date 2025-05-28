@@ -6,7 +6,7 @@
 package org.codeviation.commons.utils;
 
 import java.io.File;
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 
 /** XXX Needs a nicer API.
  *
@@ -18,7 +18,7 @@ public abstract class DirectoryScanner {
 
     private String[] relPath;
 
-    private Filter<File> filter;
+    private Predicate<File> filter;
 
     public DirectoryScanner(File directory) {
         if ( !directory.isDirectory() ) {
@@ -28,7 +28,7 @@ public abstract class DirectoryScanner {
         this.relPath = new String[0];
     }
 
-    public DirectoryScanner( File directory, Filter<File> filter) {
+    public DirectoryScanner( File directory, Predicate<File> filter) {
         this(directory);
         this.filter = filter;
     }
@@ -49,7 +49,7 @@ public abstract class DirectoryScanner {
 
     private void scan( File f ) {
 
-        if ( filter != null && !filter.accept(f) ) {
+        if ( filter != null && !filter.test(f) ) {
             return;
         }
 

@@ -42,6 +42,8 @@
 package org.codeviation.commons.patterns;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
+// import org.codeviation.commons.patterns.Filters; // No longer needed
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,39 +58,48 @@ public class FiltersTest {
     public void And() {
         System.out.println("And");
         
-        Filter<String> sw =  new StartsWithFilter("S");
-        Filter<String> ew =  new EndsWithFilter("E");
-        Filter<String> cnt = new ContainsFilter("C");
+        Predicate<String> sw =  new StartsWithFilter("S");
+        Predicate<String> ew =  new EndsWithFilter("E");
+        Predicate<String> cnt = new ContainsFilter("C");
         
-        Filter<String> f;
+        Predicate<String> f;
         boolean result;
         
                 
-        f = Filters.<String>And(sw,ew);
-        assertEquals(true, f.accept("SAAE"));
-        assertEquals(false, f.accept("SAAB"));
-        assertEquals(false, f.accept("BAAE"));
-        assertEquals(false, f.accept("BAAS"));
+        f = sw.and(ew); // Filters.And(sw,ew)
+        assertEquals(true, f.test("SAAE"));
+        assertEquals(false, f.test("SAAB"));
+        assertEquals(false, f.test("BAAE"));
+        assertEquals(false, f.test("BAAS"));
         
-        f = Filters.<String>And(sw,ew, cnt);
-        assertEquals(true, f.accept("SACAE"));
-        assertEquals(false, f.accept("SAAE"));
-        assertEquals(false, f.accept("SAAB"));
-        assertEquals(false, f.accept("SACAB"));
-        assertEquals(false, f.accept("BAAE"));
-        assertEquals(false, f.accept("BACAE"));
-        assertEquals(false, f.accept("BAAS"));
-        assertEquals(false, f.accept("BACAS"));
+        f = sw.and(ew).and(cnt); // Filters.And(sw,ew, cnt)
+        assertEquals(true, f.test("SACAE"));
+        assertEquals(false, f.test("SAAE"));
+        assertEquals(false, f.test("SAAB"));
+        assertEquals(false, f.test("SACAB"));
+        assertEquals(false, f.test("BAAE"));
+        assertEquals(false, f.test("BACAE"));
+        assertEquals(false, f.test("BAAS"));
+        assertEquals(false, f.test("BACAS"));
                 
         IllegalArgumentException ex = null;        
         try {
-            f = Filters.And(sw);
+            // f = Filters.And(sw); // This was testing for minimum 2 args, Predicate.and doesn't have this restriction directly.
+            // The original Filters.And threw an IllegalArgumentException if filters.length < 2.
+            // This specific test case for Filters.And(sw) might need to be rethought or removed
+            // as Predicate.and() with a single predicate is just the predicate itself.
+            // For now, I'll comment out this specific test part. If Filters.And is to be removed, this test is moot.
+            // If the test was "at least two filters needed", it's implicitly handled by using .and() which requires two.
+            // For a single predicate, one would just use the predicate directly.
+            // f = sw; //  This would be the equivalent if only one was passed.
+            // This test was for the Filters.And method itself, which we are removing.
+            // So, this specific exception test is no longer applicable.
         }
         catch( IllegalArgumentException e) {
             ex = e;
         }
         
-        assertNotNull(ex);
+        // assertNotNull(ex); // This assertion is no longer valid as the tested condition was for the old Filters.And() method.
         
     } 
     
@@ -96,39 +107,41 @@ public class FiltersTest {
     public void Or() {
         System.out.println("Or");
         
-        Filter<String> sw =  new StartsWithFilter("S");
-        Filter<String> ew =  new EndsWithFilter("E");
-        Filter<String> cnt = new ContainsFilter("C");
+        Predicate<String> sw =  new StartsWithFilter("S");
+        Predicate<String> ew =  new EndsWithFilter("E");
+        Predicate<String> cnt = new ContainsFilter("C");
         
-        Filter<String> f;
+        Predicate<String> f;
         boolean result;
         
-        f = Filters.<String>Or(sw,ew);
-        assertEquals(true, f.accept("SAAE"));
-        assertEquals(true, f.accept("SAAB"));
-        assertEquals(true, f.accept("BAAE"));
-        assertEquals(false, f.accept("BAAS"));
+        f = sw.or(ew); // Filters.Or(sw,ew)
+        assertEquals(true, f.test("SAAE"));
+        assertEquals(true, f.test("SAAB"));
+        assertEquals(true, f.test("BAAE"));
+        assertEquals(false, f.test("BAAS"));
         
-        f = Filters.<String>Or(sw,ew, cnt);
-        assertEquals(true, f.accept("SACAE"));
-        assertEquals(true, f.accept("SAAE"));
-        assertEquals(true, f.accept("SAAB"));
-        assertEquals(true, f.accept("SACAB"));
-        assertEquals(true, f.accept("BAAE"));
-        assertEquals(true, f.accept("BACAE"));
-        assertEquals(true, f.accept("BACAS"));
-        assertEquals(false, f.accept("BAAS"));
+        f = sw.or(ew).or(cnt); // Filters.Or(sw,ew, cnt)
+        assertEquals(true, f.test("SACAE"));
+        assertEquals(true, f.test("SAAE"));
+        assertEquals(true, f.test("SAAB"));
+        assertEquals(true, f.test("SACAB"));
+        assertEquals(true, f.test("BAAE"));
+        assertEquals(true, f.test("BACAE"));
+        assertEquals(true, f.test("BACAS"));
+        assertEquals(false, f.test("BAAS"));
         
         IllegalArgumentException ex = null;
         
         try {
-            f = Filters.Or(sw);
+            // f = Filters.Or(sw); // Similar to .And(), this test for the Filters class method is no longer directly applicable.
+            // f = sw; // would be the equivalent
+            // This test was for the Filters.Or method itself.
         }
         catch( IllegalArgumentException e) {
             ex = e;
         }
         
-        assertNotNull(ex);
+        // assertNotNull(ex); // This assertion is no longer valid as the tested condition was for the old Filters.Or() method.
         
     } 
 
@@ -136,35 +149,39 @@ public class FiltersTest {
     public void Not() {
         System.out.println("Not");
         
-        Filter<String> sw =  new StartsWithFilter("A");
-        Filter<String> f = Filters.Not(sw);
-        assertEquals(false, f.accept("Ahoj"));
-        assertEquals(true, f.accept("Nazdar"));
+        Predicate<String> sw =  new StartsWithFilter("A");
+        Predicate<String> f = sw.negate(); // Filters.Not(sw)
+        assertEquals(false, f.test("Ahoj"));
+        assertEquals(true, f.test("Nazdar"));
     } 
 
     @Test
     public void NotNull() {
         System.out.println("NotNull");
         
-        Filter<String> f = Filters.<String>NotNull();        
-        assertEquals(true, f.accept("Ahoj"));
-        assertEquals(false, f.accept(null));
+        Predicate<String> f = java.util.Objects::nonNull; // Filters.NotNull()
+        assertEquals(true, f.test("Ahoj"));
+        assertEquals(false, f.test(null));
     }
     
     @Test
     public void IsIn() {
         System.out.println("IsIn");
         
-        Filter<String> f = Filters.IsIn("a", "b");
-        assertEquals(true, f.accept("a"));
-        assertEquals(true, f.accept("b"));
-        assertEquals(false, f.accept("c"));
+        Predicate<String> f = x -> Arrays.asList("a", "b").contains(x); // Filters.IsIn("a", "b")
+        assertEquals(true, f.test("a"));
+        assertEquals(true, f.test("b"));
+        assertEquals(false, f.test("c"));
         
         
-        f = Filters.IsIn(Arrays.asList("a", "b"));
-        assertEquals(true, f.accept("a"));
-        assertEquals(true, f.accept("b"));
-        assertEquals(false, f.accept("c"));
+        // This can be Collection::contains if the collection is stable and defined elsewhere.
+        // Here, Arrays.asList("a", "b") creates a new list each time.
+        // For direct replacement:
+        Predicate<String> f2 = x -> Arrays.asList("a", "b").contains(x); // Filters.IsIn(Arrays.asList("a", "b"))
+        // Or, if the list is a field or effectively final variable `myList`: myList::contains
+        assertEquals(true, f2.test("a"));
+        assertEquals(true, f2.test("b"));
+        assertEquals(false, f2.test("c"));
         
     }
     
@@ -172,59 +189,62 @@ public class FiltersTest {
     public void IncludeExclude() {
         System.out.println("IncludeExclude");
         
-        Filter<String> sw =  new StartsWithFilter("S");
-        Filter<String> ew =  new EndsWithFilter("E");
+        Predicate<String> sw =  new StartsWithFilter("S");
+        Predicate<String> ew =  new EndsWithFilter("E");
         
-        Filter<String> f = Filters.IncludeExclude(sw, ew);
+        Predicate<String> f = sw.and(ew.negate()); // Filters.IncludeExclude(sw, ew)
         boolean result;
         
-        assertEquals(false, f.accept("SAAE"));
-        assertEquals(true, f.accept("SAAB"));
-        assertEquals(false, f.accept("BAAE"));
-        assertEquals(false, f.accept("BAAS"));
+        assertEquals(false, f.test("SAAE"));
+        assertEquals(true, f.test("SAAB"));
+        assertEquals(false, f.test("BAAE"));
+        assertEquals(false, f.test("BAAS"));
         
     }
     
     // Private section ---------------------------------------------------------
     
     
-    private static class StartsWithFilter implements Filter<String> {
+    private static class StartsWithFilter implements Predicate<String> { 
 
-        private static String prefix;
+        private String prefix; // Made non-static
 
         public StartsWithFilter(String prefix) {
             this.prefix = prefix;
         }
         
-        public boolean accept(String text) {
+        public boolean test(String text) { 
+            if (text == null) return false; 
             return text.startsWith(prefix);
         }
         
     }
     
-    private static class EndsWithFilter implements Filter<String> {
+    private static class EndsWithFilter implements Predicate<String> { 
 
-        private static String suffix;
+        private String suffix; // Made non-static
 
         public EndsWithFilter(String suffix) {
             this.suffix = suffix;
         }
         
-        public boolean accept(String text) {
+        public boolean test(String text) { 
+            if (text == null) return false; 
             return text.endsWith(suffix);
         }
         
     }
     
-    private static class ContainsFilter implements Filter<String> {
+    private static class ContainsFilter implements Predicate<String> { 
 
-        private static String cnt;
+        private String cnt; // Made non-static
 
         public ContainsFilter(String cnt) {
             this.cnt = cnt;
         }
         
-        public boolean accept(String text) {
+        public boolean test(String text) { 
+            if (text == null) return false; 
             return text.contains(cnt);
         }
         

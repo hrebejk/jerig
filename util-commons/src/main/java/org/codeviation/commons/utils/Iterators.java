@@ -50,8 +50,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 import org.codeviation.commons.patterns.Factory;
-import org.codeviation.commons.patterns.Filter;
 
 /** XXX maybe add Array - from, length and support negative lenth to reverse
  *
@@ -69,7 +69,7 @@ public class Iterators {
         return new ArrayIterator<T>(array, length);
     }
 
-    public static <T> Iterator<T> filter( Iterator<? extends T> iterator, Filter<? super T> filter ) {
+    public static <T> Iterator<T> filter( Iterator<? extends T> iterator, Predicate<? super T> filter ) {
         return new FilterIterator<T>(iterator, filter);
     }
 
@@ -333,7 +333,7 @@ public class Iterators {
 
     private static class FilterIterator<T> implements Iterator<T> {
 
-        private Filter<? super T> filter;
+        private Predicate<? super T> filter;
         private Iterator<? extends T> iterator;
 
         private T current;
@@ -341,7 +341,7 @@ public class Iterators {
         private boolean hasNext;
 
 
-        public FilterIterator(Iterator<? extends T> iterator, Filter<? super T> filter ) {
+        public FilterIterator(Iterator<? extends T> iterator, Predicate<? super T> filter ) {
             this.iterator = iterator;
             this.filter = filter;
 
@@ -371,7 +371,7 @@ public class Iterators {
             while( iterator.hasNext() ) {
 
                 current = iterator.next();
-                if ( filter.accept(current)) {
+                if ( filter.test(current)) {
                     hasNext = true;
                     return;
                 }

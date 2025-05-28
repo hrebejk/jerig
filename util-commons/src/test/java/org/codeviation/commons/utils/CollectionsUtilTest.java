@@ -44,7 +44,7 @@ package org.codeviation.commons.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,8 +89,8 @@ public class CollectionsUtilTest {
         ArrayList<Integer> ali = new ArrayList<Integer>();        
        
         
-        Filter<Number> fn = null;
-        Filter<Integer> fi = null;
+        Predicate<Number> fn = null;
+        Predicate<Integer> fi = null;
         
         // Additions
         ln = add(ln, 3, 7.5f, 3.2);
@@ -103,9 +103,9 @@ public class CollectionsUtilTest {
         ali = add(ali, 3, 5, 8);
         
         // Removals
-        remove(ln, 3.4f, 5.6, 7);
-        remove(ln, fn);
-        remove(li, fi);
+        remove(ln, 3.4f, 5.6, 7); // This one is okay, uses varargs version
+        removeIf(ln, fn); // Changed to removeIf
+        removeIf(li, fi); // Changed to removeIf
         
     }
     

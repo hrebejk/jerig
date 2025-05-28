@@ -52,8 +52,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.function.Predicate;
 import org.codeviation.commons.patterns.Factory;
-import org.codeviation.commons.patterns.Filter;
 
 /**
  *
@@ -182,7 +182,7 @@ public final class FileUtil {
     }
     
     /** File factory which will only find files which satisfy given filter */
-    public static Factory<File,String> fileFactory(File root, Filter<File> filter) {
+    public static Factory<File,String> fileFactory(File root, Predicate<File> filter) {
         return new FileFactory(root, filter);
     }
 
@@ -339,9 +339,9 @@ public final class FileUtil {
     private static class FileFactory implements Factory<File,String> {
 
         private File root;
-        private Filter<File> filter;
+        private Predicate<File> filter;
 
-        public FileFactory(File root, Filter<File> filter) {
+        public FileFactory(File root, Predicate<File> filter) {
             this.root = root;
             this.filter = filter;
         }
@@ -360,7 +360,7 @@ public final class FileUtil {
                 return r;
             }
             else {            
-                return filter.accept(r) ? r : null;
+                return filter.test(r) ? r : null;
             }
         }
     }

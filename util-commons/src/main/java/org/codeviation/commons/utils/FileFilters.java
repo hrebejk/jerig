@@ -43,8 +43,7 @@ package org.codeviation.commons.utils;
 
 import java.io.File;
 import java.io.FileFilter;
-import org.codeviation.commons.patterns.Filter;
-import org.codeviation.commons.patterns.Filters;
+import java.util.function.Predicate;
 
 /** 
  *
@@ -52,22 +51,22 @@ import org.codeviation.commons.patterns.Filters;
  */
 public class FileFilters {
     
-    public static final Filter<File> EXISTS = new UniversalFF(UniversalFF.EXISTS);
-    public static final Filter<File> CAN_READ = new UniversalFF(UniversalFF.CAN_READ);
-    public static final Filter<File> CAN_WRITE = new UniversalFF(UniversalFF.CAN_WRITE);
+    public static final Predicate<File> EXISTS = new UniversalFF(UniversalFF.EXISTS);
+    public static final Predicate<File> CAN_READ = new UniversalFF(UniversalFF.CAN_READ);
+    public static final Predicate<File> CAN_WRITE = new UniversalFF(UniversalFF.CAN_WRITE);
     // Requires 1.6
-    //public static final Filter<File> CAN_EXECUTE = new UniversalFF(UniversalFF.CAN_EXECUTE);
-    public static final Filter<File> IS_FILE = new UniversalFF(UniversalFF.IS_FILE);
-    public static final Filter<File> IS_DIRECTORY = new UniversalFF(UniversalFF.IS_DIRECTORY);
-    public static final Filter<File> IS_HIDDEN = new UniversalFF(UniversalFF.IS_HIDDEN);
+    //public static final Predicate<File> CAN_EXECUTE = new UniversalFF(UniversalFF.CAN_EXECUTE);
+    public static final Predicate<File> IS_FILE = new UniversalFF(UniversalFF.IS_FILE);
+    public static final Predicate<File> IS_DIRECTORY = new UniversalFF(UniversalFF.IS_DIRECTORY);
+    public static final Predicate<File> IS_HIDDEN = new UniversalFF(UniversalFF.IS_HIDDEN);
     
     private FileFilters() {}
 
-    public static Filter<File> name(String regexp) {
+    public static Predicate<File> name(String regexp) {
         return new UniversalFF(regexp);
     }
 
-    public static Filter<File> extension(String extension) {
+    public static Predicate<File> extension(String extension) {
         UniversalFF ff =  new UniversalFF(-1);
         ff.extension = extension;
         return ff;
@@ -75,7 +74,7 @@ public class FileFilters {
             
     /** Contverts File&lt;Filter&gt; to java.io.FileFilter.
      */
-    public static FileFilter asFileFilter(Filter<File> filter) {
+    public static FileFilter asFileFilter(Predicate<File> filter) {
         if ( filter instanceof FileFilter ) {
             return (FileFilter)filter;
         }
@@ -84,7 +83,7 @@ public class FileFilters {
         }
     }
          
-    private static class UniversalFF implements Filter<File>, FileFilter {
+    private static class UniversalFF implements Predicate<File>, FileFilter {
 
         public static final int EXISTS = 0;
         public static final int CAN_READ = EXISTS + 1;
@@ -96,8 +95,8 @@ public class FileFilters {
 
         
         private int kind = -1;
-        private Filter<String> rf;
-        private Filter<File> df;
+        private Predicate<String> rf;
+        private Predicate<File> df;
         private String extension;
         
         public UniversalFF(int kind) {
@@ -105,22 +104,27 @@ public class FileFilters {
         }
         
         public UniversalFF(String regexp) {
-            this.rf = Filters.Regexp(regexp);
+            this.rf = x -> java.util.regex.Pattern.compile(regexp).matcher(x).matches();
         }
 
 
-        public UniversalFF(Filter<File> df) {
+        public UniversalFF(Predicate<File> df) {
             this.df = df;
         }
                        
-        public boolean accept(File file) {
+        public boolean test(File file) {
             
             if ( df != null ) {
-                return df.accept(file);
+                // This will also require df to be a Predicate and have a 'test' method.
+                // This should be fine if df is an instance of UniversalFF itself (which implements Predicate)
+                // or if Filters.Regexp is updated.
+                return df.test(file);
             }
             
             if ( rf != null ) {
-                return rf.accept(file.getName());                 
+                // This will also require rf to be a Predicate and have a 'test' method.
+                // This should be fine if Filters.Regexp is updated.
+            return rf.test(file.getName());
             }
 
             if ( extension != null ) {
@@ -146,6 +150,12 @@ public class FileFilters {
                 default:
                     throw new IllegalStateException("Should never happen");
             }
+        }
+
+        // This method is from the FileFilter interface, not from our Filter/Predicate.
+        // So it should remain 'accept'.
+        public boolean accept(File pathname) {
+            return test(pathname);
         }
         
     }

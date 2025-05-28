@@ -51,7 +51,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 
 /** Good for saving objects in Json format.
  *
@@ -63,7 +63,7 @@ import org.codeviation.commons.patterns.Filter;
  */
 public final class Marshaller<T> {
 
-    private Filter<String> fieldFilter;
+    private Predicate<String> fieldFilter;
     private String indentation = "    ";
     private int indentLevel = 0;
     private boolean autoClose;
@@ -144,7 +144,7 @@ public final class Marshaller<T> {
         w.flush();
     }
 
-    void setFieldFilter(Filter<String> fieldFilter) {
+    void setFieldFilter(Predicate<String> fieldFilter) {
         this.fieldFilter = fieldFilter;
     }
 

@@ -53,7 +53,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 
 /**
  *
@@ -84,7 +84,7 @@ public class FieldUtilsTest {
     public void getDeclared() {
         System.out.println("getDeclared");
         
-        Filter<Field> filter = null;
+        Predicate<Field> filter = null;
         Set<String> result = fields2names(
                 FieldUtils.getDeclared(TestRecord2.class, null));
         Set<String> expResult = createStringSet(
@@ -98,7 +98,7 @@ public class FieldUtilsTest {
     public void getAll() {
         System.out.println("getAll");
         
-        Filter<Field> filter = null;
+        Predicate<Field> filter = null;
         Set<String> result = fields2names(
                 FieldUtils.getAll(TestRecord2.class, null, null).values());
         Set<String> expResult = createStringSet(
@@ -112,7 +112,7 @@ public class FieldUtilsTest {
     public void getAllStopAt() {
         System.out.println("getAllStopAt");
         
-        Filter<Field> filter = null;
+        Predicate<Field> filter = null;
         Set<String> result = fields2names(
                 FieldUtils.getAll(TestRecord3.class, TestRecord2.class, null).values());
         Set<String> expResult = createStringSet(                
@@ -127,7 +127,7 @@ public class FieldUtilsTest {
     public void modifierFilterPositive() {
         System.out.println("modifierFilterPositive");
 
-        Filter<Field> f = FieldUtils.modifierFilterPositive(
+        Predicate<Field> f = FieldUtils.modifierFilterPositive(
                 Modifier.PRIVATE, Modifier.TRANSIENT );        
         Set<String> result = fields2names(
                 FieldUtils.getDeclared(TestRecord1.class, f));
@@ -139,7 +139,7 @@ public class FieldUtilsTest {
     public void modifierFilterNegative() {
         System.out.println("modifierFilterNegative");
         
-        Filter<Field> f = FieldUtils.modifierFilterNegative(
+        Predicate<Field> f = FieldUtils.modifierFilterNegative(
                 Modifier.PRIVATE, Modifier.TRANSIENT );        
         Set<String> result = fields2names(
                 FieldUtils.getDeclared(TestRecord1.class, f));

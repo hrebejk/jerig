@@ -7,8 +7,8 @@ package org.codeviation.commons.utils;
 
 import java.io.File;
 import java.net.URL;
+import java.util.function.Predicate;
 import org.codeviation.commons.patterns.Factory;
-import org.codeviation.commons.patterns.Filter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -102,7 +102,7 @@ public class FileUtilTest {
 //    public void testFileFactory_File_Filter() {
 //        System.out.println("fileFactory");
 //        File root = null;
-//        Filter<File> filter = null;
+//        Predicate<File> filter = null;
 //        Factory<File, String> expResult = null;
 //        Factory<File, String> result = FileUtil.fileFactory(root, filter);
 //        assertEquals(expResult, result);

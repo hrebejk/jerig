@@ -43,7 +43,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 import org.codeviation.commons.reflect.FieldUtils;
 
 /** Utility methods for endocding/decoding values and other parts of Json format.
@@ -150,7 +150,7 @@ final class PojsonUtils {
     }
 
     /** Gets name of a field honoring the Pojson Annotations */
-    private static class FieldFilter implements Filter<Field> {
+    private static class FieldFilter implements Predicate<Field> {
 
         private static final int[] DEFAULT_NEGATIVE = new int[] { Modifier.TRANSIENT, Modifier.STATIC };
 
@@ -180,7 +180,7 @@ final class PojsonUtils {
 
         }
 
-        public boolean accept(Field field) {
+        public boolean test(Field field) {
 
             if (field.isSynthetic() ||
                 field.isAnnotationPresent(Pojson.SuppressStoring.class) ) {

@@ -8,7 +8,8 @@ package org.codeviation.commons.utils;
 import java.util.Iterator;
 import java.util.Arrays;
 import java.util.List;
-import org.codeviation.commons.patterns.Filters;
+import java.util.function.Predicate;
+// import org.codeviation.commons.patterns.Filters; // Filters.IsIn will be replaced by a lambda
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,7 +48,7 @@ public class FilterIteratorTest {
     public void testEmpty() {
         System.out.println("hasNext");
 
-        Iterator<String> fi = Iterators.filter( new ArrayList<String>().iterator(), Filters.IsIn("a", "b") );
+        Iterator<String> fi = Iterators.filter( new ArrayList<String>().iterator(), s -> Arrays.asList("a", "b").contains(s) );
 
         MergingIteratorTest.assertEmpty(fi);
     }
@@ -58,7 +59,7 @@ public class FilterIteratorTest {
 
         Iterator<String> fi = Iterators.filter(
                 Arrays.asList(new String[] {"a", "f", "a", "b", "m" } ).iterator(),
-                Filters.IsIn("a", "b") );
+                s -> Arrays.asList("a", "b").contains(s) );
 
         List<String> actual = MergingIteratorTest.toList(fi);
 
@@ -74,7 +75,7 @@ public class FilterIteratorTest {
 
         Iterator<String> fi = Iterators.filter(
                 Arrays.asList(new String[] {"a", "f", "a", "b", "m" } ).iterator(),
-                Filters.IsIn("f", "b", "m") );
+                s -> Arrays.asList("f", "b", "m").contains(s) );
 
         List<String> actual = MergingIteratorTest.toList(fi);
 

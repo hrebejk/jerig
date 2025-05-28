@@ -8,7 +8,7 @@ package org.codeviation.pojson;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Writer;
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSmall;
 import org.junit.jupiter.api.AfterEach;
@@ -114,7 +114,7 @@ public class MarshallerTest {
 //    @Test
 //    public void testSetFieldFilter() {
 //        System.out.println("setFieldFilter");
-//        Filter<String> fieldFilter = null;
+//        Predicate<String> fieldFilter = null;
 //        Marshaller instance = new Marshaller();
 //        instance.setFieldFilter(fieldFilter);
 //        // TODO review the generated test code and remove the default call to fail.

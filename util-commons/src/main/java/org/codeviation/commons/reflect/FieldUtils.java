@@ -47,7 +47,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.codeviation.commons.patterns.Filter;
+import java.util.function.Predicate;
 
 
 /**
@@ -64,7 +64,7 @@ public class FieldUtils {
      * @param filter Filter for accepring the field or null to accept all.
      * @return List of fields found
      */
-    public static Collection<Field> getDeclared(Class clazz, Filter<Field> filter) {
+    public static Collection<Field> getDeclared(Class clazz, Predicate<Field> filter) {
         
         if ( clazz == null) {
             throw new IllegalArgumentException("Clazz parameter must not be null!" );
@@ -74,7 +74,7 @@ public class FieldUtils {
         Collection<Field> result = new ArrayList<Field>(fields.length);
         
         for (Field field : fields) {
-            if ( filter == null || filter.accept(field)) {
+            if ( filter == null || filter.test(field)) {
                 result.add(field);
             }
         }
@@ -89,7 +89,7 @@ public class FieldUtils {
      * @param filter Filter for accepring the field or null to accept all.
      * @return List of fields found
      */
-    public static Map<String,Field> getAll(Class clazz, Class stopAt, Filter<Field> filter) {
+    public static Map<String,Field> getAll(Class clazz, Class stopAt, Predicate<Field> filter) {
         if ( clazz == null) {
             throw new IllegalArgumentException("Clazz parameter must not be null!" );
         }
@@ -112,7 +112,7 @@ public class FieldUtils {
         
             for( Field field : clazz.getDeclaredFields() ) {
                 if ( name2Field.get(field.getName()) == null &&
-                     ( filter == null || filter.accept(field) ) ) {                
+                     ( filter == null || filter.test(field) ) ) {                
                     name2Field.put(field.getName(), field);
                 }
             }
@@ -130,7 +130,7 @@ public class FieldUtils {
      * @param modifier Modifiers to accept
      * @return Filter for fields
      */
-    public static Filter<Field> modifierFilterPositive(int... modifier) {
+    public static Predicate<Field> modifierFilterPositive(int... modifier) {
         return new FieldModifierFilter(true, modifier);
     }
     
@@ -139,13 +139,13 @@ public class FieldUtils {
      * @param modifier Modifiers to skip
      * @return Filter for fields
      */
-    public static Filter<Field> modifierFilterNegative(int... modifier) {
+    public static Predicate<Field> modifierFilterNegative(int... modifier) {
         return new FieldModifierFilter(false, modifier);
     }
 
     // Private Members ---------------------------------------------------------
     
-    private static class FieldModifierFilter implements Filter<Field> {
+    private static class FieldModifierFilter implements Predicate<Field> {
 
         private boolean isPositive;
         private int modifs;
@@ -157,7 +157,7 @@ public class FieldUtils {
             }
         }
 
-        public boolean accept(Field field) {                     
+        public boolean test(Field field) {                     
             return isPositive ? (field.getModifiers() & modifs ) == modifs : 
                                 (field.getModifiers() & modifs ) == 0 ; 
         }
