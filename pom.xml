@@ -15,8 +15,6 @@
   <inceptionYear>2009</inceptionYear>
 
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
     <resources>
       <resource>
         <directory>src</directory>
@@ -25,14 +23,6 @@
         </includes>
       </resource>
     </resources>
-    <testResources>
-      <testResource>
-        <directory>test</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
