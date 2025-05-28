@@ -44,9 +44,9 @@ import org.codeviation.pojson.records.RecordComplex;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordPrimitiveTypes;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -63,7 +63,7 @@ public class IgnoreNonExistingTest {
     public IgnoreNonExistingTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         WITH_NON_EXISTING_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/ComplexIgnoreNonExisting.txt");
         GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Complex.txt");

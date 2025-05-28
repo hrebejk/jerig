@@ -52,9 +52,9 @@ import org.codeviation.pojson.records.RecordComplex;
 import org.codeviation.pojson.records.RecordObjectTypes;
 import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import org.codeviation.pojson.records.RecordSmall;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -70,7 +70,7 @@ public class CollectionsTest {
     }
     
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         
         Map<String,Object> GOLDEN_SR1 = new HashMap<String,Object>();

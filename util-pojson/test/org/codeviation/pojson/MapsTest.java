@@ -46,9 +46,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordMaps;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -61,7 +61,7 @@ public class MapsTest {
     public MapsTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Maps.txt");
     }

@@ -45,9 +45,9 @@ import org.codeviation.pojson.records.RecordPrimitiveTypes;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordObjectTypes;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -64,7 +64,7 @@ public class JsonTypesTest {
         
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonTypes.txt");
         GOLDEN_OBJECTS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/JsonObjectTypes.txt");

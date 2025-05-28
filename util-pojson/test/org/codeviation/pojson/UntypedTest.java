@@ -48,9 +48,9 @@ import java.util.Map;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSmall;
 import org.codeviation.pojson.records.RecordUntyped;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -64,7 +64,7 @@ public class UntypedTest {
     }
     
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Untyped.txt");
     }

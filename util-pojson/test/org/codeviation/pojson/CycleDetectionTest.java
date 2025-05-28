@@ -46,9 +46,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -61,7 +61,7 @@ public class CycleDetectionTest {
         
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
     
     }

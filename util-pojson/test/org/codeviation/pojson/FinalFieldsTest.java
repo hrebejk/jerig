@@ -43,9 +43,9 @@ package org.codeviation.pojson;
 
 import java.io.IOException;
 import org.codeviation.pojson.records.RecordFinalFields;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -58,7 +58,7 @@ public class FinalFieldsTest {
         
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
     
     }

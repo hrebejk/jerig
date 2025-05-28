@@ -11,12 +11,12 @@ import java.io.Writer;
 import org.codeviation.commons.patterns.Filter;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSmall;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -32,22 +32,22 @@ public class MarshallerTest {
     public MarshallerTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception {
         GOLDEN = ClassUtils.getResourceAsString(MarshallerTest.class, "goldenfiles/RecordSmall.txt");
         GOLDEN_L1 = ClassUtils.getResourceAsString(MarshallerTest.class, "goldenfiles/RecordSmallIndentLevel1.txt");
         GOLDEN_S1 = ClassUtils.getResourceAsString(MarshallerTest.class, "goldenfiles/RecordSmallIndentSpace.txt");
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() throws Exception {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
     }
 

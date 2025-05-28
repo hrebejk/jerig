@@ -44,8 +44,8 @@ package org.codeviation.pojson;
 import org.codeviation.pojson.records.RecordsSkipFields;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *

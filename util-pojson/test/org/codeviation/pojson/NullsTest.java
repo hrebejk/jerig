@@ -46,9 +46,9 @@ import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordArrays;
 import org.codeviation.pojson.records.RecordComplex;
 import org.codeviation.pojson.records.RecordObjectTypes;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -63,7 +63,7 @@ public class NullsTest {
     public NullsTest() {
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN_OBJECT_TYPES = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Nulls.txt");
         GOLDEN_COMPLEX = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/NullComplex.txt");

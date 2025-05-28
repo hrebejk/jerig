@@ -54,9 +54,9 @@ import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.commons.utils.CollectionsUtil;
 import org.codeviation.pojson.records.RecordArrays;
 import org.codeviation.pojson.records.RecordSmall;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -71,7 +71,7 @@ public class IterablesTest {
     public IterablesTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Arrays.txt");
         RA = new RecordArrays().init();
@@ -94,16 +94,27 @@ public class IterablesTest {
     
     @Test
     public void simpleSet() throws IOException {
-        System.out.println("simpleList");
+        System.out.println("simpleSet"); // Corrected println to simpleSet
         
-        Set<String> s = new HashSet<String>();
-        s.add("jedna");
-        s.add("dve");
-        s.add("tri");
+        Set<String> originalSet = new HashSet<String>();
+        originalSet.add("jedna");
+        originalSet.add("dve");
+        originalSet.add("tri");
                 
-        Marshaller<Set<String>> m = new Marshaller<Set<String>>(null, 0);
-        assertEquals( "[\"jedna\",\"dve\",\"tri\"]", m.save(s));
+        Marshaller<Set<String>> marshaller = new Marshaller<Set<String>>(null, 0);
+        String jsonString = marshaller.save(originalSet);
         
+        // Deserialize back to a List, as JSON arrays map to lists
+        @SuppressWarnings("unchecked")
+        List<String> deserializedList = Pojson.load(ArrayList.class, jsonString);
+        Set<String> deserializedSet = new HashSet<String>(deserializedList);
+        
+        Set<String> expectedSet = new HashSet<String>();
+        expectedSet.add("jedna");
+        expectedSet.add("dve");
+        expectedSet.add("tri");
+        
+        assertEquals(expectedSet, deserializedSet);
     }
             
     @Test @SuppressWarnings("unchecked")

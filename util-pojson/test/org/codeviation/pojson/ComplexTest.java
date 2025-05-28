@@ -44,9 +44,9 @@ import org.codeviation.pojson.records.RecordComplex;
 import java.io.IOException;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSmall;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -59,7 +59,7 @@ public class ComplexTest {
     public ComplexTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/Complex.txt");
     }

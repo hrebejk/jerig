@@ -45,9 +45,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -55,7 +55,7 @@ import static org.junit.Assert.*;
  */
 public class MultiFactoryTest {
     
-    @Ignore("presumably Petr is still working on this?")
+    @Disabled("presumably Petr is still working on this?")
     @Test
     public void multi() {
         System.out.println("multi");

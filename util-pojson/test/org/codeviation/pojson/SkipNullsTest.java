@@ -45,9 +45,9 @@ import java.io.IOException;
 import org.codeviation.commons.patterns.Factory;
 import org.codeviation.commons.reflect.ClassUtils;
 import org.codeviation.pojson.records.RecordSkipNulls;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -61,7 +61,7 @@ public class SkipNullsTest {
     public SkipNullsTest() {
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         GOLDEN = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/SkipNulls.txt");
         GOLDEN_ON_CLASS = ClassUtils.getResourceAsString(JsonTypesTest.class, "goldenfiles/SkipNullsOnClass.txt");
